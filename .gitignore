@@ -38,3 +38,7 @@ login.png
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Tool artifacts (skill-internal, brainstorm sessions, etc.)
+.superpowers/
+.claude/
