@@ -1,0 +1,143 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap');
+
+/* ── Design Tokens ── */
+:root {
+  /* Brand */
+  --cactus-green: #1B7A4A;
+  --cactus-forest: #0F2419;
+  --cactus-forest-light: #162E20;
+  --cactus-mint: #E8F5EE;
+  --cactus-mint-strong: #D1EDDB;
+
+  /* Bucket colors — consistent everywhere */
+  --bucket-needs: #2563EB;
+  --bucket-needs-light: #DBEAFE;
+  --bucket-wants: #8B5CF6;
+  --bucket-wants-light: #EDE9FE;
+  --bucket-goals: #10B981;
+  --bucket-goals-light: #D1FAE5;
+
+  /* Semantic */
+  --warning: #F59E0B;
+  --warning-light: #FEF3C7;
+  --danger: #EF4444;
+  --danger-light: #FEE2E2;
+  --success: #10B981;
+  --success-light: #D1FAE5;
+
+  /* Surfaces */
+  --surface: #F8FAFA;
+  --card: #FFFFFF;
+  --sidebar: var(--cactus-forest);
+  --sidebar-hover: var(--cactus-forest-light);
+
+  /* Text */
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --text-on-dark: #E5E7EB;
+  --text-on-dark-muted: #9CA3AF;
+
+  /* Legacy compat */
+  --color-needs: var(--bucket-needs);
+  --color-wants: var(--bucket-wants);
+  --color-goals: var(--bucket-goals);
+  --color-primary: var(--cactus-green);
+  --color-primary-dark: #15803d;
+}
+
+/* ── Base ── */
+body {
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  background-color: var(--surface);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Currency / Financial Numbers ── */
+.font-mono-financial {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  background-color: var(--sidebar);
+  color: var(--text-on-dark);
+}
+
+.sidebar-nav-item {
+  color: var(--text-on-dark-muted);
+  transition: all 150ms ease;
+}
+
+.sidebar-nav-item:hover {
+  color: var(--text-on-dark);
+  background-color: var(--sidebar-hover);
+}
+
+.sidebar-nav-item-active {
+  color: #FFFFFF;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Animations ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 300ms ease-out forwards;
+}
+
+.animate-count-up {
+  animation: countUp 400ms ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slideInRight 250ms ease-out forwards;
+}
+
+/* Stagger children */
+.stagger-children > * {
+  opacity: 0;
+  animation: fadeIn 300ms ease-out forwards;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
+
+/* ── Scrollbar styling ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
+}

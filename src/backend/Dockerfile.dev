@@ -1,0 +1,15 @@
+# Development Dockerfile with hot reload
+FROM mcr.microsoft.com/dotnet/sdk:8.0
+
+WORKDIR /src/Cactus.Api
+
+# Install Entity Framework tools
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
+EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_ENVIRONMENT=Development
+
+# Use dotnet watch for hot reloading, explicitly set URLs
+ENTRYPOINT ["dotnet", "watch", "run", "--project", "/src/Cactus.Api/Cactus.Api.csproj", "--", "--urls", "http://+:8080"]

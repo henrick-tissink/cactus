@@ -1,0 +1,20 @@
+{
+	# self-signed internal CA — Cloudflare SSL mode "Full" accepts this
+	# users see Cloudflare's edge cert; CF→origin is encrypted via this cert
+	# Caddy auto-handles HTTP→HTTPS redirects on port 80
+}
+
+cactusmoney.app, www.cactusmoney.app {
+	tls internal
+
+	encode gzip zstd
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	reverse_proxy frontend:80
+}

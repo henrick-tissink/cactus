@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Cactus.Api/Cactus.Api.csproj" />
+    <Project Path="src/Cactus.Application/Cactus.Application.csproj" />
+    <Project Path="src/Cactus.Domain/Cactus.Domain.csproj" />
+    <Project Path="src/Cactus.Infrastructure/Cactus.Infrastructure.csproj" />
+  </Folder>
+</Solution>

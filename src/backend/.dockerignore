@@ -1,0 +1,14 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+**/.idea/
+**/*.user
+**/*.suo
+**/Thumbs.db
+**/.DS_Store
+**/tests/
+**/*.md
+**/*.log
+.git/
+.gitignore
