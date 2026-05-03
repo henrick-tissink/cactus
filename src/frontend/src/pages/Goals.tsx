@@ -51,8 +51,6 @@ export function GoalsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showProgressModal, setShowProgressModal] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<GoalDto | null>(null);
-  const [showPrimaryPrompt, setShowPrimaryPrompt] = useState(false);
-  const [suggestedNextGoal, setSuggestedNextGoal] = useState<GoalDto | null>(null);
 
   // Fetch goals
   const { data: goals, isLoading } = useQuery({
@@ -80,8 +78,6 @@ export function GoalsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['goals'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
-      setShowPrimaryPrompt(false);
-      setSuggestedNextGoal(null);
     },
   });
 
@@ -89,28 +85,6 @@ export function GoalsPage() {
   const completedGoals = goals?.filter((g) => g.isCompleted) || [];
   const primaryGoal = activeGoals.find((g) => g.isPrimary);
   const nonPrimaryActiveGoals = activeGoals.filter((g) => !g.isPrimary);
-
-  // Find next suggested goal based on recommended sequence (Cactus methodology)
-  const getNextSuggestedGoal = (): GoalDto | null => {
-    if (nonPrimaryActiveGoals.length === 0) return null;
-
-    // Priority order: MiniBuffer -> DebtPayoff -> EmergencyFund -> Savings -> Investment
-    const priorityOrder = [
-      GoalType.MiniBuffer,
-      GoalType.DebtPayoff,
-      GoalType.EmergencyFund,
-      GoalType.Savings,
-      GoalType.Investment,
-    ];
-
-    for (const goalType of priorityOrder) {
-      const goal = nonPrimaryActiveGoals.find((g) => g.goalType === goalType);
-      if (goal) return goal;
-    }
-
-    // Fallback to first non-primary goal
-    return nonPrimaryActiveGoals[0];
-  };
 
   const handleSetPrimary = (goalId: string) => {
     setPrimaryMutation.mutate(goalId);
@@ -241,13 +215,6 @@ export function GoalsPage() {
             goal={primaryGoal}
             isPrimary={true}
             onUpdateProgress={() => openProgressModal(primaryGoal)}
-            onGoalCompleted={() => {
-              const nextGoal = getNextSuggestedGoal();
-              if (nextGoal) {
-                setSuggestedNextGoal(nextGoal);
-                setShowPrimaryPrompt(true);
-              }
-            }}
           />
         </div>
       )}
@@ -313,18 +280,6 @@ export function GoalsPage() {
         />
       )}
 
-      {/* Primary Goal Completion Prompt */}
-      {showPrimaryPrompt && suggestedNextGoal && (
-        <PrimaryGoalPromptModal
-          suggestedGoal={suggestedNextGoal}
-          onConfirm={() => handleSetPrimary(suggestedNextGoal.id)}
-          onClose={() => {
-            setShowPrimaryPrompt(false);
-            setSuggestedNextGoal(null);
-          }}
-          isLoading={setPrimaryMutation.isPending}
-        />
-      )}
     </div>
   );
 }
@@ -341,7 +296,6 @@ function GoalCard({
   isPrimary?: boolean;
   onUpdateProgress?: () => void;
   onSetPrimary?: () => void;
-  onGoalCompleted?: () => void;
 }) {
   const typeInfo = GOAL_TYPE_INFO[goal.goalType];
   const Icon = typeInfo?.icon || Target;
@@ -786,99 +740,3 @@ function UpdateProgressModal({
   );
 }
 
-function PrimaryGoalPromptModal({
-  suggestedGoal,
-  onConfirm,
-  onClose,
-  isLoading,
-}: {
-  suggestedGoal: GoalDto;
-  onConfirm: () => void;
-  onClose: () => void;
-  isLoading: boolean;
-}) {
-  const typeInfo = GOAL_TYPE_INFO[suggestedGoal.goalType];
-  const Icon = typeInfo?.icon || Target;
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-ZA', {
-      style: 'currency',
-      currency: 'ZAR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl w-full max-w-md mx-4 overflow-hidden">
-        <div className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 border-b border-green-100">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 bg-green-100 rounded-full">
-              <Trophy className="w-8 h-8 text-green-600" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-gray-900">Great Work!</h2>
-              <p className="text-sm text-gray-600">You completed your primary goal!</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="p-6">
-          <p className="text-gray-700 mb-4">
-            Would you like to focus on your next goal?
-          </p>
-
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
-            <div className="flex items-center gap-3 mb-2">
-              <div className={`p-2 rounded-lg ${typeInfo?.color || 'bg-gray-100'}`}>
-                <Icon className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900">{suggestedGoal.name}</p>
-                <p className="text-sm text-gray-500">{typeInfo?.label}</p>
-              </div>
-            </div>
-            <div className="mt-3">
-              <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-600">
-                  <span className="font-mono-financial">{formatCurrency(suggestedGoal.currentAmount)}</span> / <span className="font-mono-financial">{formatCurrency(suggestedGoal.targetAmount)}</span>
-                </span>
-                <span className="text-amber-600 font-medium">
-                  {suggestedGoal.progressPercentage.toFixed(0)}%
-                </span>
-              </div>
-              <div className="h-2 bg-amber-100 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-amber-500 transition-all"
-                  style={{ width: `${Math.min(suggestedGoal.progressPercentage, 100)}%` }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <p className="text-sm text-gray-500 mb-4">
-            Based on the Cactus methodology, this goal is recommended as your next focus.
-          </p>
-        </div>
-
-        <div className="p-6 border-t border-gray-100 flex justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-gray-600 hover:text-gray-800"
-          >
-            Not Now
-          </button>
-          <button
-            onClick={onConfirm}
-            disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Star className="w-4 h-4" />
-            {isLoading ? 'Setting...' : 'Focus on This Goal'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
