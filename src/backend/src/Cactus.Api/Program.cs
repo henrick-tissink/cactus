@@ -87,3 +87,6 @@ app.MapControllers();
 app.MapHealthChecks("/health");
 
 app.Run();
+
+// Exposed for WebApplicationFactory<Program> in Cactus.Api.Tests.
+public partial class Program;
