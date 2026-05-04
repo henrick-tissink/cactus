@@ -414,7 +414,7 @@ public class LoginCommandHandlerTests : HandlerTestBase
         var user = TestDataFactory.User("alice@example.test");
         Context.Users.Add(user);
         await Context.SaveChangesAsync(default);
-        _passwordHasher.Verify(user.PasswordHash, "Password123!").Returns(true);
+        _passwordHasher.Verify("Password123!", user.PasswordHash).Returns(true); // signature is Verify(plain, hash)
         var handler = BuildHandler();
 
         var result = await handler.Handle(
@@ -431,7 +431,7 @@ public class LoginCommandHandlerTests : HandlerTestBase
         var user = TestDataFactory.User("alice@example.test");
         Context.Users.Add(user);
         await Context.SaveChangesAsync(default);
-        _passwordHasher.Verify(Arg.Any<string>(), "WrongPassword!").Returns(false);
+        _passwordHasher.Verify("WrongPassword!", Arg.Any<string>()).Returns(false); // signature is Verify(plain, hash)
         var handler = BuildHandler();
 
         var act = () => handler.Handle(
@@ -760,3 +760,16 @@ After this plan was written, I checked it against the Axis A spec § PR 2 and fo
 - CI workflow (PR 4).
 - Coverage gating (PR 7).
 - Testing across providers (Postgres-vs-SQLite divergence) — caught by PR 1's integration tests if it matters.
+
+## Post-execution notes (added 2026-05-05)
+
+Captured for future re-runs of this plan or for dev hygiene as Axis A continues:
+
+- **`IPasswordHasher.Verify` argument order**: signature is `Verify(string password, string hash)` — plain text first. Plan code blocks updated above to match.
+- **SQLite compatibility shims required in `HandlerTestBase`** (not covered by the plan as-written):
+  - A `TestCactusDbContext : CactusDbContext` inner class adds a `ValueConverter<decimal, double>` for all decimal properties so SQLite can `ORDER BY decimal` (correlated subqueries fail otherwise — `Goal.Milestones.OrderBy(m => m.TargetAmount)` was the trigger).
+  - A custom `MathAbsExtension : IDbContextOptionsExtension` + `IMethodCallTranslatorPlugin` mapping `Math.Abs(decimal/double)` to SQLite's `abs()` function. Required because EF8's SQLite provider doesn't translate `Math.Abs(decimal)` natively, and `GetSpendingPlanSuggestionQuery` uses it inside a server-side `GroupBy + Sum`. Caveat: the `SqlFunctionExpression` direct construction is fragile against EF version bumps — add a "see EF source for current preferred construction" comment if EF9/10 changes the constructor shape. Future PRs adding decimal-heavy handler tests on SQLite will likely hit similar walls.
+- **Coverage scope estimate was low**: the plan said "~14 tests" was sufficient for ≥35% coverage. Reality: 24 tests across 13 files were needed (Auth + Goals + Accounts + Transactions + SpendingPlans + Categories + Dashboard + Insights + Onboarding) to land at 0.3757. PR 4/PR 7's coverage gate baselines should plan for ~25 tests at the minimum.
+- **Coverage gaming risk**: 3 of the 10 expansion tests (Dashboard, Insights, SpendingPlanSuggestion) are "empty-user → asserts-defaults". They drive line coverage but don't verify aggregation logic. Particularly: the entire `MathAbsExtension` plugin exists to support a `Math.Abs` server-translation path that no test currently reaches. Queue a meaningful test in a follow-up: seed user + account + ~3 transactions across macro categories + a current SpendingPlan; assert `GetSpendingPlanSuggestionQueryHandler` returns `HasSuggestion = true`.
+- **Refactor candidate**: split `_Common/HandlerTestBase.cs` (now 153 lines, 4 nested classes) into `_Common/HandlerTestBase.cs` (fixture only, ~40 lines) + `_Common/SqliteCompatibility.cs` (TestCactusDbContext + MathAbsExtension + plugin). Keeps each file's purpose understandable in one read.
+- **Test naming convention** to lock in for future PRs: `Method_under_condition_returns_outcome` (snake_case). Slight drift visible in the Round 4 expansion tests; tighten in PR 4's CI/lint gates if possible.
