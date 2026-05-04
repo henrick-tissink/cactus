@@ -1,4 +1,6 @@
 using Cactus.Api.Tests.Fixtures;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Respawn;
 using Xunit;
@@ -21,6 +23,16 @@ public abstract class ApiTestBase : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
+        // Defense-in-depth: assert the configured DB is the testcontainer.
+        // Prevents future config-source reordering from silently letting tests hit a live DB.
+        var configured = Factory.Services.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection");
+        if (configured != Factory.ConnectionString)
+        {
+            throw new InvalidOperationException(
+                $"Refusing to run: configured DefaultConnection does not match the testcontainer. " +
+                $"Got '{configured}', expected '{Factory.ConnectionString}'.");
+        }
+
         await using var connection = new NpgsqlConnection(Factory.ConnectionString);
         await connection.OpenAsync();
 
