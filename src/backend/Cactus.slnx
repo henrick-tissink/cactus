@@ -7,5 +7,6 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Cactus.Api.Tests/Cactus.Api.Tests.csproj" />
+    <Project Path="tests/Cactus.Application.Tests/Cactus.Application.Tests.csproj" />
   </Folder>
 </Solution>
