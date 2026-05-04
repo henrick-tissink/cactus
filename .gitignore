@@ -42,3 +42,6 @@ yarn-error.log*
 # Tool artifacts (skill-internal, brainstorm sessions, etc.)
 .superpowers/
 .claude/
+
+# Git worktrees (project-local isolated workspaces)
+.worktrees/
