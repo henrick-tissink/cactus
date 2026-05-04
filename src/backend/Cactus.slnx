@@ -5,4 +5,7 @@
     <Project Path="src/Cactus.Domain/Cactus.Domain.csproj" />
     <Project Path="src/Cactus.Infrastructure/Cactus.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Cactus.Api.Tests/Cactus.Api.Tests.csproj" />
+  </Folder>
 </Solution>
