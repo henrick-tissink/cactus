@@ -78,9 +78,10 @@ public class CactusApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
 /// <summary>
 /// A drop-in replacement for <see cref="SystemTextJsonOutputFormatter"/> that writes
-/// JSON to the response <see cref="System.IO.Stream"/> rather than the PipeWriter.
-/// This avoids the <c>PipeWriter.UnflushedBytes</c> requirement introduced in .NET 10's
-/// System.Text.Json when running net8.0 tests under a newer runtime.
+/// JSON directly to the response <see cref="System.IO.Stream"/> via
+/// <c>JsonSerializer.SerializeAsync</c>. This avoids the
+/// <c>PipeWriter.UnflushedBytes</c> requirement introduced in .NET 10's System.Text.Json
+/// when running net8.0 tests under a newer runtime.
 /// </summary>
 internal sealed class StreamCompatibleSystemTextJsonOutputFormatter : TextOutputFormatter
 {
@@ -93,14 +94,17 @@ internal sealed class StreamCompatibleSystemTextJsonOutputFormatter : TextOutput
         SupportedMediaTypes.Add("text/json");
         SupportedMediaTypes.Add("application/*+json");
         SupportedEncodings.Add(System.Text.Encoding.UTF8);
-        SupportedEncodings.Add(System.Text.Encoding.Unicode);
     }
 
     public override async Task WriteResponseBodyAsync(
         OutputFormatterWriteContext context, System.Text.Encoding selectedEncoding)
     {
         var httpContext = context.HttpContext;
-        var json = System.Text.Json.JsonSerializer.Serialize(context.Object, context.ObjectType!, _options);
-        await httpContext.Response.WriteAsync(json, selectedEncoding);
+        await System.Text.Json.JsonSerializer.SerializeAsync(
+            httpContext.Response.Body,
+            context.Object,
+            context.ObjectType!,
+            _options,
+            httpContext.RequestAborted);
     }
 }
