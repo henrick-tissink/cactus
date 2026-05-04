@@ -5,16 +5,15 @@ using Cactus.Domain.Enums;
 namespace Cactus.Application.Tests._Common;
 
 /// <summary>
-/// Bogus-backed factories for domain entities. Keep generators deterministic
-/// (fixed seeds) so test runs are reproducible.
+/// Bogus-backed factories for domain entities. Each call returns an entity with
+/// fresh randomized values so multi-entity test fixtures don't collide on unique
+/// indexes (e.g., User.Email). For deterministic test data, pass values
+/// explicitly via the optional parameters.
 /// </summary>
 public static class TestDataFactory
 {
-    private const int Seed = 42;
-
     public static User User(string? email = null) =>
         new Faker<User>()
-            .UseSeed(Seed)
             .RuleFor(u => u.Email, f => email ?? f.Internet.Email().ToLower())
             .RuleFor(u => u.PasswordHash, f => f.Random.AlphaNumeric(60))
             .RuleFor(u => u.FirstName, f => f.Name.FirstName())
@@ -24,7 +23,6 @@ public static class TestDataFactory
 
     public static Goal Goal(Guid userId) =>
         new Faker<Goal>()
-            .UseSeed(Seed)
             .RuleFor(g => g.UserId, userId)
             .RuleFor(g => g.Name, f => f.Lorem.Sentence(3))
             .RuleFor(g => g.GoalType, GoalType.EmergencyFund)
@@ -36,7 +34,6 @@ public static class TestDataFactory
 
     public static Account Account(Guid userId) =>
         new Faker<Account>()
-            .UseSeed(Seed)
             .RuleFor(a => a.UserId, userId)
             .RuleFor(a => a.Name, f => f.Finance.AccountName())
             .RuleFor(a => a.AccountType, AccountType.Cheque)
