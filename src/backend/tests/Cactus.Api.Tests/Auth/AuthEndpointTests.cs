@@ -56,6 +56,27 @@ public class AuthEndpointTests : ApiTestBase
         body!.AccessToken.Should().NotBeNullOrWhiteSpace();
     }
 
+    [Fact]
+    public async Task Login_with_wrong_password_returns_401()
+    {
+        // same email as the register-happy test — proves Respawn cleared state
+        await Client.PostAsJsonAsync("/api/auth/register", new
+        {
+            email = "henrick+test@cactus.app",
+            password = "Password123!",
+            firstName = "Henrick",
+            lastName = "Tissink",
+        });
+
+        var response = await Client.PostAsJsonAsync("/api/auth/login", new
+        {
+            email = "henrick+test@cactus.app",
+            password = "WrongPassword!",
+        });
+
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
     private record RegisterResponse(string UserId, string Email, string AccessToken);
     private record LoginResponse(string AccessToken);
 }
