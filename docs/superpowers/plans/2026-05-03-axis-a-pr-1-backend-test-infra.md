@@ -187,6 +187,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Testcontainers.PostgreSql;
+using Xunit;
 
 namespace Cactus.Api.Tests.Fixtures;
 
@@ -266,6 +267,8 @@ xUnit shares a fixture across multiple test classes via `[Collection]` + `IColle
 - [ ] **Step 1: Create the file with this exact content**
 
 ```csharp
+using Xunit;
+
 namespace Cactus.Api.Tests.Fixtures;
 
 [CollectionDefinition(Name)]
@@ -274,6 +277,8 @@ public class CactusCollection : ICollectionFixture<CactusApiFactory>
     public const string Name = "Cactus";
 }
 ```
+
+(`using Xunit;` is required — `[CollectionDefinition]` and `ICollectionFixture<>` aren't covered by `<ImplicitUsings>enable</ImplicitUsings>`.)
 
 - [ ] **Step 2: Build**
 
@@ -728,6 +733,16 @@ After this plan was written, I checked it against the Axis A spec § PR 1 and fo
 - ✅ Spec § "Backend testing" stack — every package matches (xUnit, FluentAssertions, Testcontainers.PostgreSql, Respawn, coverlet.collector, Microsoft.AspNetCore.Mvc.Testing).
 - ⚠️  No `Cactus.Application.Tests` project — that's PR 2's scope. This plan covers PR 1 only.
 - ⚠️  Coverage gate not set here — that's PR 7. PR 1 just produces coverage data.
+
+## Post-execution notes (added 2026-05-04)
+
+Captured here so a future re-run of this plan inherits the lessons:
+
+- **`using Xunit;` was added to the Task 3 and Task 4 code blocks** above (post-merge correction). xUnit 2.9.x's `IAsyncLifetime`, `[CollectionDefinition]`, and `ICollectionFixture<>` types live in the `Xunit` namespace and are not covered by `<ImplicitUsings>enable</ImplicitUsings>`. Original plan code blocks omitted the import; implementation correctly added it.
+- **Local dev environment quirk**: machines without a .NET 8 runtime (only .NET 9/10 SDKs installed) need `DOTNET_ROLL_FORWARD=LatestMajor` prefixed on `dotnet test` invocations. CI installs .NET 8 cleanly via `actions/setup-dotnet@v4` with `dotnet-version: '8.0.x'`, so this is local-only friction.
+- **Accepted Round 3 deviation — JSON formatter workaround**: when net8.0 binaries run under the .NET 10 runtime (the rollforward path above), System.Text.Json (v10) calls `PipeWriter.UnflushedBytes` on the .NET 8 `Microsoft.AspNetCore.TestHost`'s `ResponseBodyPipeWriter`, which doesn't implement it. All JSON-returning endpoints 500 under TestServer. Implementer added an `internal sealed class StreamCompatibleSystemTextJsonOutputFormatter : TextOutputFormatter` to `CactusApiFactory.cs` that uses `JsonSerializer.SerializeAsync(Stream, …)` directly, bypassing the broken PipeWriter path. CI is unaffected (native .NET 8 doesn't take this path). **Revert when** .NET 8 runtime is installed locally OR all targets advance to net9/net10.
+- **Defense-in-depth guard added during final review**: `ApiTestBase.InitializeAsync` now asserts `Factory.Services.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection") == Factory.ConnectionString` before any test runs. Prevents future config-source reordering from silently letting tests hit a live DB.
+- **Known debt carried forward to later PRs**: Respawner is rebuilt per test instance (hoist to factory-level cache when test count >30); auth tests use `@cactus.app` domain (switch to `.test` TLD); register-precondition assertions missing in `Login_after_register` and `Login_with_wrong_password`.
 
 ## Out of scope for this plan
 
