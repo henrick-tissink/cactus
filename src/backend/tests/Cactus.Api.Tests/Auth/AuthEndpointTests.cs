@@ -30,5 +30,32 @@ public class AuthEndpointTests : ApiTestBase
         body.AccessToken.Should().NotBeNullOrWhiteSpace();
     }
 
+    [Fact]
+    public async Task Login_after_register_returns_200_and_access_token()
+    {
+        // register first
+        await Client.PostAsJsonAsync("/api/auth/register", new
+        {
+            email = "login+test@cactus.app",
+            password = "Password123!",
+            firstName = "Login",
+            lastName = "Test",
+        });
+
+        // then login
+        var response = await Client.PostAsJsonAsync("/api/auth/login", new
+        {
+            email = "login+test@cactus.app",
+            password = "Password123!",
+        });
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var body = await response.Content.ReadFromJsonAsync<LoginResponse>();
+        body.Should().NotBeNull();
+        body!.AccessToken.Should().NotBeNullOrWhiteSpace();
+    }
+
     private record RegisterResponse(string UserId, string Email, string AccessToken);
+    private record LoginResponse(string AccessToken);
 }
