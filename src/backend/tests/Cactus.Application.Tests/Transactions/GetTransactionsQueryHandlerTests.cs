@@ -26,28 +26,28 @@ public class GetTransactionsQueryHandlerTests : HandlerTestBase
         await Context.SaveChangesAsync(default);
 
         var windowStart = new DateTime(2025, 3, 1, 0, 0, 0, DateTimeKind.Utc);
-        var windowEnd   = new DateTime(2025, 3, 31, 23, 59, 59, DateTimeKind.Utc);
+        var windowEnd = new DateTime(2025, 3, 31, 23, 59, 59, DateTimeKind.Utc);
 
         // Transaction inside the requested window
         var txInWindow = new Transaction
         {
-            AccountId       = account.Id,
-            Amount          = 100m,
-            Type            = TransactionType.Debit,
-            Description     = "In-window purchase",
+            AccountId = account.Id,
+            Amount = 100m,
+            Type = TransactionType.Debit,
+            Description = "In-window purchase",
             TransactionDate = new DateTime(2025, 3, 15, 12, 0, 0, DateTimeKind.Utc),
-            IsManual        = true,
+            IsManual = true,
         };
 
         // Transaction outside the requested window (February)
         var txOutside = new Transaction
         {
-            AccountId       = account.Id,
-            Amount          = 200m,
-            Type            = TransactionType.Debit,
-            Description     = "Out-of-window purchase",
+            AccountId = account.Id,
+            Amount = 200m,
+            Type = TransactionType.Debit,
+            Description = "Out-of-window purchase",
             TransactionDate = new DateTime(2025, 2, 10, 12, 0, 0, DateTimeKind.Utc),
-            IsManual        = true,
+            IsManual = true,
         };
 
         Context.Transactions.AddRange(txInWindow, txOutside);
@@ -56,7 +56,7 @@ public class GetTransactionsQueryHandlerTests : HandlerTestBase
         _currentUser.UserId.Returns(user.Id);
 
         var handler = new GetTransactionsQueryHandler(Context, _currentUser);
-        var query   = new GetTransactionsQuery(StartDate: windowStart, EndDate: windowEnd);
+        var query = new GetTransactionsQuery(StartDate: windowStart, EndDate: windowEnd);
 
         // Act
         var result = await handler.Handle(query, CancellationToken.None);

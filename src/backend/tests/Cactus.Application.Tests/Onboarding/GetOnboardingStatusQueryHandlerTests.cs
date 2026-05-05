@@ -22,17 +22,17 @@ public class GetOnboardingStatusQueryHandlerTests : HandlerTestBase
 
         var response1 = new OnboardingResponse
         {
-            UserId     = user.Id,
+            UserId = user.Id,
             StepNumber = 1,
-            StepName   = "Welcome",
-            Response   = "accepted",
+            StepName = "Welcome",
+            Response = "accepted",
         };
         var response2 = new OnboardingResponse
         {
-            UserId     = user.Id,
+            UserId = user.Id,
             StepNumber = 2,
-            StepName   = "Goals",
-            Response   = "save_emergency_fund",
+            StepName = "Goals",
+            Response = "save_emergency_fund",
         };
         Context.OnboardingResponses.AddRange(response1, response2);
         await Context.SaveChangesAsync(default);
