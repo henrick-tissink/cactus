@@ -5,13 +5,12 @@ import { apiClient } from '../api/client';
 export function VerifyEmailPage() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') || '';
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
+    token ? 'loading' : 'error'
+  );
 
   useEffect(() => {
-    if (!token) {
-      setStatus('error');
-      return;
-    }
+    if (!token) return;
 
     apiClient.post('/auth/verify-email', { token })
       .then(() => setStatus('success'))
