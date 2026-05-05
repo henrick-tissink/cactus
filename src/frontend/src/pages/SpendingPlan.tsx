@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '../api/client';
 import { type SpendingPlanDto, type SpendingPlanSuggestionDto } from '../types';
@@ -46,17 +46,19 @@ export function SpendingPlanPage() {
     },
   });
 
-  // Update local state when plan loads
-  useEffect(() => {
-    if (plan) {
-      setPercentages({
-        needs: plan.needsPercentage,
-        wants: plan.wantsPercentage,
-        goals: plan.goalsPercentage,
-      });
-      setIncome(plan.monthlyIncome);
-    }
-  }, [plan]);
+  // Sync local form state when a new plan arrives. The conditional
+  // setState during render is the React 19-recommended pattern (replaces
+  // useEffect-with-setState which the lint rule flags).
+  const [prevPlanId, setPrevPlanId] = useState<string | undefined>(plan?.id);
+  if (plan && plan.id !== prevPlanId) {
+    setPrevPlanId(plan.id);
+    setPercentages({
+      needs: plan.needsPercentage,
+      wants: plan.wantsPercentage,
+      goals: plan.goalsPercentage,
+    });
+    setIncome(plan.monthlyIncome);
+  }
 
   // Save mutation
   const saveMutation = useMutation({
