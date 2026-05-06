@@ -46,7 +46,10 @@ const MONTH_NAMES = [
   'Dec',
 ];
 
-const colorMap: Record<MacroCategoryType, { bg: string; light: string; text: string; hex: string }> = {
+const colorMap: Record<
+  MacroCategoryType,
+  { bg: string; light: string; text: string; hex: string }
+> = {
   [MacroCategoryType.Needs]: {
     bg: 'bg-green-500',
     light: 'bg-green-100',
@@ -229,11 +232,15 @@ function CircularProgress({
       <p className="mt-3 font-medium text-gray-900">{label}</p>
       <p className="text-sm text-gray-500">
         {isAboveGuideline ? (
-          <span className="text-amber-600">+{diff}% above {guideline}% guideline</span>
+          <span className="text-amber-600">
+            +{diff}% above {guideline}% guideline
+          </span>
         ) : percentage === guideline ? (
           <span className="text-green-600">On target ({guideline}%)</span>
         ) : (
-          <span className="text-green-600">{diff}% below {guideline}% guideline</span>
+          <span className="text-green-600">
+            {diff}% below {guideline}% guideline
+          </span>
         )}
       </p>
     </div>
@@ -601,7 +608,9 @@ export function InsightsPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Insights</h1>
-        <p className="text-gray-600">{startMonth} - {endMonth}</p>
+        <p className="text-gray-600">
+          {startMonth} - {endMonth}
+        </p>
       </div>
 
       {/* Trend Summary */}

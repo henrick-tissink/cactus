@@ -39,9 +39,7 @@ export function SpendingPlanPage() {
   const { data: suggestion } = useQuery({
     queryKey: ['spending-plan-suggestion'],
     queryFn: async () => {
-      const response = await apiClient.get<SpendingPlanSuggestionDto>(
-        '/spending-plans/suggestion'
-      );
+      const response = await apiClient.get<SpendingPlanSuggestionDto>('/spending-plans/suggestion');
       return response.data;
     },
   });
@@ -172,9 +170,7 @@ export function SpendingPlanPage() {
                 <Sparkles className="w-4 h-4 text-amber-500" />
                 <h3 className="font-semibold text-gray-900">Suggested Adjustment</h3>
               </div>
-              <p className="text-sm text-gray-600 mb-4 leading-relaxed">
-                {suggestion.explanation}
-              </p>
+              <p className="text-sm text-gray-600 mb-4 leading-relaxed">{suggestion.explanation}</p>
 
               {/* Visual Comparison: Current -> Suggested */}
               <div className="bg-white/60 rounded-lg p-4 mb-4">
@@ -289,7 +285,9 @@ export function SpendingPlanPage() {
               </div>
               <div className="text-right">
                 <span className="text-lg font-semibold text-gray-900">{percentages.needs}%</span>
-                <span className="text-sm text-gray-500 ml-2 font-mono-financial">{formatCurrency(needsAmount)}</span>
+                <span className="text-sm text-gray-500 ml-2 font-mono-financial">
+                  {formatCurrency(needsAmount)}
+                </span>
               </div>
             </div>
             <input
@@ -312,7 +310,9 @@ export function SpendingPlanPage() {
               </div>
               <div className="text-right">
                 <span className="text-lg font-semibold text-gray-900">{percentages.wants}%</span>
-                <span className="text-sm text-gray-500 ml-2 font-mono-financial">{formatCurrency(wantsAmount)}</span>
+                <span className="text-sm text-gray-500 ml-2 font-mono-financial">
+                  {formatCurrency(wantsAmount)}
+                </span>
               </div>
             </div>
             <input
@@ -335,7 +335,9 @@ export function SpendingPlanPage() {
               </div>
               <div className="text-right">
                 <span className="text-lg font-semibold text-gray-900">{percentages.goals}%</span>
-                <span className="text-sm text-gray-500 ml-2 font-mono-financial">{formatCurrency(goalsAmount)}</span>
+                <span className="text-sm text-gray-500 ml-2 font-mono-financial">
+                  {formatCurrency(goalsAmount)}
+                </span>
               </div>
             </div>
             <input
@@ -363,31 +365,36 @@ export function SpendingPlanPage() {
       </div>
 
       {/* Actual Spending Ratios */}
-      {suggestion && (suggestion.actualNeeds > 0 || suggestion.actualWants > 0 || suggestion.actualGoals > 0) && (
-        <div className="mb-6 bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Actual vs Allocated (6-month average)</h2>
-          <div className="grid grid-cols-3 gap-4">
-            <ActualVsAllocated
-              label="Needs"
-              color="blue"
-              allocated={percentages.needs}
-              actual={suggestion.actualNeeds}
-            />
-            <ActualVsAllocated
-              label="Wants"
-              color="purple"
-              allocated={percentages.wants}
-              actual={suggestion.actualWants}
-            />
-            <ActualVsAllocated
-              label="Goals"
-              color="green"
-              allocated={percentages.goals}
-              actual={suggestion.actualGoals}
-            />
+      {suggestion &&
+        (suggestion.actualNeeds > 0 ||
+          suggestion.actualWants > 0 ||
+          suggestion.actualGoals > 0) && (
+          <div className="mb-6 bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Actual vs Allocated (6-month average)
+            </h2>
+            <div className="grid grid-cols-3 gap-4">
+              <ActualVsAllocated
+                label="Needs"
+                color="blue"
+                allocated={percentages.needs}
+                actual={suggestion.actualNeeds}
+              />
+              <ActualVsAllocated
+                label="Wants"
+                color="purple"
+                allocated={percentages.wants}
+                actual={suggestion.actualWants}
+              />
+              <ActualVsAllocated
+                label="Goals"
+                color="green"
+                allocated={percentages.goals}
+                actual={suggestion.actualGoals}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* Quick Tips — only show for new users without a plan */}
       {!plan && (
@@ -399,9 +406,9 @@ export function SpendingPlanPage() {
             <div>
               <h3 className="font-semibold text-gray-900 mb-2">The 50/30/20 Rule</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
-                A popular starting point is 50% for Needs, 30% for Wants, and 20% for Goals.
-                But the best plan is one that works for YOUR situation. If you have debt,
-                consider increasing your Goals allocation to pay it off faster.
+                A popular starting point is 50% for Needs, 30% for Wants, and 20% for Goals. But the
+                best plan is one that works for YOUR situation. If you have debt, consider
+                increasing your Goals allocation to pay it off faster.
               </p>
             </div>
           </div>
@@ -486,7 +493,9 @@ function BudgetBar({
       <div className="flex justify-between items-center mb-2">
         <span className="font-medium text-gray-900">{label}</span>
         <div className="text-sm">
-          <span className={`font-mono-financial ${isOverBudget ? 'text-red-600 font-semibold' : 'text-gray-600'}`}>
+          <span
+            className={`font-mono-financial ${isOverBudget ? 'text-red-600 font-semibold' : 'text-gray-600'}`}
+          >
             {formatCurrency(spent)}
           </span>
           <span className="text-gray-400"> / </span>
@@ -547,7 +556,8 @@ function ActualVsAllocated({
       </div>
       {Math.abs(diff) > 2 && (
         <p className={`text-xs mt-2 ${diff > 0 ? 'text-red-500' : 'text-green-500'}`}>
-          {diff > 0 ? '+' : ''}{diff.toFixed(0)}% {diff > 0 ? 'over' : 'under'}
+          {diff > 0 ? '+' : ''}
+          {diff.toFixed(0)}% {diff > 0 ? 'over' : 'under'}
         </p>
       )}
     </div>

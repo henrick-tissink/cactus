@@ -42,7 +42,7 @@ const steps = [
     name: 'Month-End Status',
     question: 'How do you typically feel at the end of the month?',
     options: [
-      { value: 'comfortable', label: "Comfortable - I have money left over", icon: '😊' },
+      { value: 'comfortable', label: 'Comfortable - I have money left over', icon: '😊' },
       { value: 'tight', label: "It's tight, but I make it work", icon: '😐' },
       { value: 'stressed', label: "Stressed - I'm often short", icon: '😰' },
       { value: 'varies', label: 'It varies month to month', icon: '🎲' },
@@ -106,7 +106,7 @@ const steps = [
 const progressPrompts = [
   "Great start! Let's learn more about your financial situation.",
   "You're doing great! Just a few more questions.",
-  "Almost there! This information helps us personalize your experience.",
+  'Almost there! This information helps us personalize your experience.',
   "Last few questions - you've got this!",
 ];
 
@@ -334,7 +334,8 @@ export function OnboardingPage() {
                     onChange={(e) => {
                       const needs = Number(e.target.value);
                       const remaining = 100 - needs;
-                      const wantsRatio = allocation.wants / (allocation.wants + allocation.goals) || 0.5;
+                      const wantsRatio =
+                        allocation.wants / (allocation.wants + allocation.goals) || 0.5;
                       setAllocation({
                         needs,
                         wants: Math.round(remaining * wantsRatio),
@@ -518,19 +519,20 @@ export function OnboardingPage() {
               Back
             </button>
 
-            {(step.type === 'input' || step.type === 'sliders' || step.type === 'debts' || currentStep === steps.length - 1) && (
+            {(step.type === 'input' ||
+              step.type === 'sliders' ||
+              step.type === 'debts' ||
+              currentStep === steps.length - 1) && (
               <button
                 onClick={handleNext}
                 disabled={completeOnboardingMutation.isPending || saveResponseMutation.isPending}
                 className="flex items-center gap-2 px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {completeOnboardingMutation.isPending ? (
-                  'Completing...'
-                ) : currentStep === steps.length - 1 ? (
-                  'Get Started'
-                ) : (
-                  'Continue'
-                )}
+                {completeOnboardingMutation.isPending
+                  ? 'Completing...'
+                  : currentStep === steps.length - 1
+                    ? 'Get Started'
+                    : 'Continue'}
                 {!completeOnboardingMutation.isPending && <ChevronRight className="w-5 h-5" />}
               </button>
             )}

@@ -181,11 +181,19 @@ export function GoalsPage() {
                         <div className="h-1.5 bg-green-100 rounded-full overflow-hidden">
                           <div
                             className="h-full bg-green-500"
-                            style={{ width: `${Math.min((rec.currentProgress / rec.suggestedAmount) * 100, 100)}%` }}
+                            style={{
+                              width: `${Math.min((rec.currentProgress / rec.suggestedAmount) * 100, 100)}%`,
+                            }}
                           />
                         </div>
                         <p className="text-xs text-gray-400 mt-1">
-                          <span className="font-mono-financial">{formatCurrency(rec.currentProgress)}</span> of <span className="font-mono-financial">{formatCurrency(rec.suggestedAmount)}</span>
+                          <span className="font-mono-financial">
+                            {formatCurrency(rec.currentProgress)}
+                          </span>{' '}
+                          of{' '}
+                          <span className="font-mono-financial">
+                            {formatCurrency(rec.suggestedAmount)}
+                          </span>
                         </p>
                       </div>
                     )}
@@ -279,7 +287,6 @@ export function GoalsPage() {
           }}
         />
       )}
-
     </div>
   );
 }
@@ -353,8 +360,12 @@ function GoalCard({
       {/* Progress Bar */}
       <div className="mb-4">
         <div className="flex justify-between text-sm mb-1">
-          <span className="text-gray-600 font-mono-financial">{formatCurrency(goal.currentAmount)}</span>
-          <span className="text-gray-500 font-mono-financial">{formatCurrency(goal.targetAmount)}</span>
+          <span className="text-gray-600 font-mono-financial">
+            {formatCurrency(goal.currentAmount)}
+          </span>
+          <span className="text-gray-500 font-mono-financial">
+            {formatCurrency(goal.targetAmount)}
+          </span>
         </div>
         <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
           <div
@@ -385,7 +396,11 @@ function GoalCard({
           </div>
           {nextMilestone && !completed && (
             <p className="text-xs text-gray-500">
-              Next: {nextMilestone.name} (<span className="font-mono-financial">{formatCurrency(nextMilestone.targetAmount)}</span>)
+              Next: {nextMilestone.name} (
+              <span className="font-mono-financial">
+                {formatCurrency(nextMilestone.targetAmount)}
+              </span>
+              )
             </p>
           )}
           {completed && (
@@ -434,13 +449,7 @@ function GoalCard({
   );
 }
 
-function CreateGoalModal({
-  onClose,
-  onSuccess,
-}: {
-  onClose: () => void;
-  onSuccess: () => void;
-}) {
+function CreateGoalModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
   const [formData, setFormData] = useState({
     name: '',
     goalType: GoalType.Savings as number,
@@ -639,7 +648,9 @@ function UpdateProgressModal({
           <div className="bg-gray-50 rounded-lg p-4">
             <div className="flex justify-between text-sm mb-2">
               <span className="text-gray-600">Current</span>
-              <span className="font-medium font-mono-financial">{formatCurrency(goal.currentAmount)}</span>
+              <span className="font-medium font-mono-financial">
+                {formatCurrency(goal.currentAmount)}
+              </span>
             </div>
             <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
               <div
@@ -649,15 +660,15 @@ function UpdateProgressModal({
             </div>
             <div className="flex justify-between text-xs text-gray-500 mt-1">
               <span>{goal.progressPercentage.toFixed(0)}%</span>
-              <span><span className="font-mono-financial">{formatCurrency(remaining)}</span> remaining</span>
+              <span>
+                <span className="font-mono-financial">{formatCurrency(remaining)}</span> remaining
+              </span>
             </div>
           </div>
 
           {/* Amount Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Amount to Add
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Amount to Add</label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">R</span>
               <input
@@ -695,8 +706,11 @@ function UpdateProgressModal({
           {parseFloat(amount) > 0 && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-3">
               <p className="text-sm text-green-800">
-                New balance: <span className="font-semibold font-mono-financial">{formatCurrency(newAmount)}</span>
-                {' '}({newPercentage.toFixed(0)}%)
+                New balance:{' '}
+                <span className="font-semibold font-mono-financial">
+                  {formatCurrency(newAmount)}
+                </span>{' '}
+                ({newPercentage.toFixed(0)}%)
               </p>
               {newAmount >= goal.targetAmount && (
                 <p className="text-sm text-green-600 font-medium mt-1 flex items-center gap-1">
@@ -709,9 +723,7 @@ function UpdateProgressModal({
 
           {/* Note */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Note (optional)
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Note (optional)</label>
             <input
               type="text"
               value={note}
@@ -739,4 +751,3 @@ function UpdateProgressModal({
     </div>
   );
 }
-

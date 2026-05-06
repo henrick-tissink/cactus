@@ -162,15 +162,16 @@ export function ImportTransactionsPage() {
   return (
     <div className="p-8 max-w-5xl mx-auto animate-fade-in">
       <h1 className="text-2xl font-bold text-gray-900 mb-2">Import Transactions</h1>
-      <p className="text-gray-500 mb-6">
-        Import your bank statement to get started
-      </p>
+      <p className="text-gray-500 mb-6">Import your bank statement to get started</p>
 
       {error && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
           <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
           <span className="text-sm text-red-700">{error}</span>
-          <button onClick={() => setError(null)} className="ml-auto text-red-400 hover:text-red-600">
+          <button
+            onClick={() => setError(null)}
+            className="ml-auto text-red-400 hover:text-red-600"
+          >
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -226,12 +227,8 @@ export function ImportTransactionsPage() {
 
           <div className="border-2 border-dashed border-gray-200 rounded-xl p-12 text-center">
             <Upload className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-600 mb-2">
-              Drop your bank statement here, or click to browse
-            </p>
-            <p className="text-sm text-gray-400 mb-4">
-              Supported formats: CSV, OFX, QFX
-            </p>
+            <p className="text-gray-600 mb-2">Drop your bank statement here, or click to browse</p>
+            <p className="text-sm text-gray-400 mb-4">Supported formats: CSV, OFX, QFX</p>
             <label className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 cursor-pointer">
               <FileText className="w-4 h-4" />
               Choose File
@@ -274,7 +271,8 @@ export function ImportTransactionsPage() {
               </span>
               {parseResult.duplicateCount > 0 && (
                 <span className="text-amber-600">
-                  <span className="font-medium">{parseResult.duplicateCount}</span> possible duplicates
+                  <span className="font-medium">{parseResult.duplicateCount}</span> possible
+                  duplicates
                 </span>
               )}
               <span className="text-green-600">
@@ -405,11 +403,19 @@ export function ImportTransactionsPage() {
             <p>{commitResult.importedCount} transactions imported</p>
             <p>{commitResult.classifiedCount} auto-classified</p>
             {commitResult.totalDebits > 0 && (
-              <p className="text-red-600">Total debits: <span className="font-mono-financial">{formatCurrency(commitResult.totalDebits)}</span></p>
+              <p className="text-red-600">
+                Total debits:{' '}
+                <span className="font-mono-financial">
+                  {formatCurrency(commitResult.totalDebits)}
+                </span>
+              </p>
             )}
             {commitResult.totalCredits > 0 && (
               <p className="text-green-600">
-                Total credits: <span className="font-mono-financial">{formatCurrency(commitResult.totalCredits)}</span>
+                Total credits:{' '}
+                <span className="font-mono-financial">
+                  {formatCurrency(commitResult.totalCredits)}
+                </span>
               </p>
             )}
           </div>

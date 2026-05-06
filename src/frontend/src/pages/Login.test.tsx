@@ -31,9 +31,7 @@ describe('LoginPage', () => {
 
   it('shows an error message when credentials are rejected', async () => {
     server.use(
-      http.post('/api/auth/login', () =>
-        HttpResponse.json({ message: 'bad' }, { status: 401 })
-      )
+      http.post('/api/auth/login', () => HttpResponse.json({ message: 'bad' }, { status: 401 }))
     );
     const user = userEvent.setup();
     renderWithProviders(<LoginPage />);

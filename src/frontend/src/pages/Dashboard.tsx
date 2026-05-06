@@ -50,7 +50,6 @@ const BUCKET_COLORS: Record<MacroCategoryType, string> = {
   [MacroCategoryType.Goals]: '#10B981',
 };
 
-
 const GOAL_TYPE_INFO: Record<number, { label: string; icon: typeof Target; color: string }> = {
   [GoalType.MiniBuffer]: {
     label: 'Mini Buffer',
@@ -198,8 +197,12 @@ function PrimaryGoalCard({ goal }: { goal: GoalDto }) {
       {/* Progress */}
       <div>
         <div className="flex justify-between text-xs mb-1">
-          <span className="text-gray-600 font-mono-financial">{formatCurrency(goal.currentAmount)}</span>
-          <span className="text-gray-500 font-mono-financial">{formatCurrency(goal.targetAmount)}</span>
+          <span className="text-gray-600 font-mono-financial">
+            {formatCurrency(goal.currentAmount)}
+          </span>
+          <span className="text-gray-500 font-mono-financial">
+            {formatCurrency(goal.targetAmount)}
+          </span>
         </div>
         <div className="h-2 bg-amber-100 rounded-full overflow-hidden">
           <div
@@ -211,7 +214,9 @@ function PrimaryGoalCard({ goal }: { goal: GoalDto }) {
           <span className="text-amber-600 font-medium">
             {goal.progressPercentage.toFixed(0)}% complete
           </span>
-          <span className="text-gray-500 font-mono-financial">{formatCurrency(remaining)} to go</span>
+          <span className="text-gray-500 font-mono-financial">
+            {formatCurrency(remaining)} to go
+          </span>
         </div>
         {goal.currentAmount === 0 && (
           <p className="text-xs text-amber-600 mt-2 italic">
@@ -260,13 +265,19 @@ export function DashboardPage() {
   }
 
   // Empty state: no transactions at all — show onboarding
-  if (summary.recentTransactions.length === 0 && summary.totalSpent === 0 && summary.monthlyIncome === 0) {
+  if (
+    summary.recentTransactions.length === 0 &&
+    summary.totalSpent === 0 &&
+    summary.monthlyIncome === 0
+  ) {
     return <OnboardingChecklist />;
   }
 
   const remaining = summary.monthlyIncome - summary.totalSpent;
   const spentPercentage =
-    summary.monthlyIncome > 0 ? Math.min((summary.totalSpent / summary.monthlyIncome) * 100, 100) : 0;
+    summary.monthlyIncome > 0
+      ? Math.min((summary.totalSpent / summary.monthlyIncome) * 100, 100)
+      : 0;
 
   // Bucket bar calculations
   const totalAllocated = summary.buckets.reduce((sum, b) => sum + b.allocated, 0);
@@ -284,7 +295,8 @@ export function DashboardPage() {
           <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-center gap-3">
             <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
             <p className="text-amber-800">
-              <strong>{summary.unclassifiedCount}</strong> transactions need classifying ({estimateClassifyTime(summary.unclassifiedCount)})
+              <strong>{summary.unclassifiedCount}</strong> transactions need classifying (
+              {estimateClassifyTime(summary.unclassifiedCount)})
             </p>
             <Link
               to="/transactions?filter=unclassified"
@@ -321,7 +333,8 @@ export function DashboardPage() {
             </div>
             {summary.totalSpent > 0 && (
               <p className="text-xs text-gray-500 mt-1.5">
-                <span className="font-mono-financial">R{summary.totalSpent.toLocaleString()}</span> spent
+                <span className="font-mono-financial">R{summary.totalSpent.toLocaleString()}</span>{' '}
+                spent
               </p>
             )}
           </div>

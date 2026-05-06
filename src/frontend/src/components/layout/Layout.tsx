@@ -26,7 +26,10 @@ function CactusLogo({ className = 'w-8 h-8' }: { className?: string }) {
   return (
     <svg viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
       <rect width="64" height="64" rx="16" fill="#1B7A4A" />
-      <path d="M32 12C32 12 28 20 28 32C28 44 32 52 32 52C32 52 36 44 36 32C36 20 32 12 32 12Z" fill="#E8F5EE" />
+      <path
+        d="M32 12C32 12 28 20 28 32C28 44 32 52 32 52C32 52 36 44 36 32C36 20 32 12 32 12Z"
+        fill="#E8F5EE"
+      />
       <path d="M22 24C22 24 26 26 28 32" stroke="#E8F5EE" strokeWidth="3" strokeLinecap="round" />
       <path d="M42 24C42 24 38 26 36 32" stroke="#E8F5EE" strokeWidth="3" strokeLinecap="round" />
       <path d="M20 36C20 36 25 34 28 36" stroke="#E8F5EE" strokeWidth="2.5" strokeLinecap="round" />
@@ -71,7 +74,10 @@ export function Layout() {
                 <CactusLogo className="w-8 h-8" />
                 <span className="text-lg font-bold text-white">Cactus</span>
               </div>
-              <button onClick={() => setMobileNavOpen(false)} className="p-1 text-white/60 hover:text-white">
+              <button
+                onClick={() => setMobileNavOpen(false)}
+                className="p-1 text-white/60 hover:text-white"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -124,9 +130,7 @@ export function Layout() {
               key={path}
               to={path}
               className={`flex-1 flex flex-col items-center gap-0.5 py-2 text-[10px] font-medium transition-colors ${
-                isActive
-                  ? 'text-[var(--cactus-green)]'
-                  : 'text-gray-400'
+                isActive ? 'text-[var(--cactus-green)]' : 'text-gray-400'
               }`}
             >
               <Icon className="w-5 h-5" />
@@ -139,11 +143,18 @@ export function Layout() {
   );
 }
 
-function NavList({ location, onNavigate }: { location: { pathname: string }; onNavigate?: () => void }) {
+function NavList({
+  location,
+  onNavigate,
+}: {
+  location: { pathname: string };
+  onNavigate?: () => void;
+}) {
   return (
     <nav className="flex-1 px-3 py-4 space-y-1">
       {navItems.map(({ path, label, icon: Icon }) => {
-        const isActive = location.pathname === path ||
+        const isActive =
+          location.pathname === path ||
           (path === '/budget' && location.pathname === '/spending-plan');
         return (
           <Link
@@ -151,9 +162,7 @@ function NavList({ location, onNavigate }: { location: { pathname: string }; onN
             to={path}
             onClick={onNavigate}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-              isActive
-                ? 'sidebar-nav-item-active'
-                : 'sidebar-nav-item'
+              isActive ? 'sidebar-nav-item-active' : 'sidebar-nav-item'
             }`}
           >
             <Icon className="w-[18px] h-[18px]" />
@@ -188,12 +197,12 @@ function UserSection({
           {initials}
         </div>
         <div className="flex-1 min-w-0 text-left">
-          <p className="text-sm font-medium text-white/90 truncate">
-            {user?.firstName || 'User'}
-          </p>
+          <p className="text-sm font-medium text-white/90 truncate">{user?.firstName || 'User'}</p>
           <p className="text-xs text-white/50 truncate">{user?.email}</p>
         </div>
-        <ChevronDown className={`w-4 h-4 text-white/40 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+        <ChevronDown
+          className={`w-4 h-4 text-white/40 transition-transform ${showUserMenu ? 'rotate-180' : ''}`}
+        />
       </button>
 
       {/* Dropdown */}
@@ -210,7 +219,10 @@ function UserSection({
               Settings
             </Link>
             <button
-              onClick={() => { setShowUserMenu(false); onLogout(); }}
+              onClick={() => {
+                setShowUserMenu(false);
+                onLogout();
+              }}
               className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
             >
               <LogOut className="w-4 h-4" />
