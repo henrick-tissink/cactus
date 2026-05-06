@@ -23,8 +23,6 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-          cache: true
-          cache-dependency-path: src/backend/**/packages.lock.json
 
       - name: Restore
         run: dotnet restore src/backend/Cactus.slnx
