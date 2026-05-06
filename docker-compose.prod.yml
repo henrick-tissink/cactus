@@ -8,6 +8,8 @@ services:
       POSTGRES_DB: cactus
 
   api:
+    image: ghcr.io/henrick-tissink/cactus-api:${IMAGE_TAG:-latest}
+    pull_policy: always
     restart: unless-stopped
     ports: !reset []
     environment:
@@ -20,6 +22,8 @@ services:
       - Cors__AllowedOrigins__1=https://www.cactusmoney.app
 
   frontend:
+    image: ghcr.io/henrick-tissink/cactus-frontend:${IMAGE_TAG:-latest}
+    pull_policy: always
     restart: unless-stopped
     ports: !reset []
     expose:
