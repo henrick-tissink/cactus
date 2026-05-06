@@ -673,3 +673,19 @@ EOF
 - Task 8: format diff size is unknown until the command runs. Decision branch handles both small and large cases.
 - Task 8/9: local Node + .NET environment quirk (`DOTNET_ROLL_FORWARD=LatestMajor`). CI doesn't have this issue.
 - Settings.tsx, SpendingPlan.tsx, VerifyEmail.tsx have no automated tests in PR 3. Manual smoke is called out in the PR body but is a post-merge action — accepting the risk in this PR's scope.
+
+---
+
+## Post-execution notes (added 2026-05-06)
+
+- **Task 8 — diff size exceeded the 100-line threshold but was still a single-commit case.** Actual: 7 files / 141 lines (71 insertions, 70 deletions). The plan's STOP heuristic correctly fired and the implementer escalated; the controller authorized a single commit because the diff was uniform/mechanical (mostly removing aligned-`=` columns in PR 2's test files written before any format pass existed). Lesson for future first-time format passes on never-formatted projects: the >100-line threshold is a guardrail against "did dotnet format unintentionally rewrite the world," not a hard split rule. Inspecting the diff to confirm uniformity is the right next step.
+- **Backend test count: 28, not the ~38 the plan estimated.** Actual breakdown: 24 in `Cactus.Application.Tests` + 4 in `Cactus.Api.Tests`. Plan estimate added without re-counting; future plans should `grep -c "Fact\|Theory" ...` if a count matters.
+- **`DOTNET_ROLL_FORWARD=LatestMajor` is needed selectively, not always.** On this machine (.NET 9/10 SDK only, no .NET 8 runtime): `dotnet format` and `dotnet build` worked without the env var, but `dotnet test` required it. The plan said the prefix was needed broadly; reality was more nuanced. CI is unaffected — `setup-dotnet` installs the right runtime directly.
+- **Code-quality reviewer flagged two undocumented assumption comments as "Important" (not applied).**
+  - `Settings.tsx`: the deleted-effect refactor relies on "user can only mutate via this form's save mutation" — true today but not future-proof if anything else ever calls `setUser`. A one-line code comment would help.
+  - `VerifyEmail.tsx`: the derived-initial-status refactor relies on "token is immutable for the page lifecycle." True for the current verify-email URL flow but not enforced.
+  - Both are tracked for a future small documentation PR. Not blockers; observable behavior is unchanged today.
+- **SpendingPlan refactor narrowed sync scope from "any plan field changed" to "plan.id changed".** Side effect: same-id refetches (window-focus, post-save invalidation) no longer clobber in-progress edits. The reviewer verified `plan.id` is stable across saves (`UpdateSpendingPlanCommandHandler` updates rows in place). Documented in the PR body but the inline comment at `SpendingPlan.tsx:49-51` could be expanded with the same explanation.
+- **Post-`test:coverage` `npm run lint` warnings about `coverage/lcov-report/*.js` are now silenced** by Task 6's `globalIgnores` addition. Confirmed by running `test:coverage` then `lint` in sequence.
+- **No code-quality review was dispatched for Tasks 8–9** (the `dotnet format` baseline). The change is purely whitespace/import-order with no semantic content; the spec reviewer already verified that no logic snuck in. Skipping the formal quality review saved cycles without losing signal.
+- **Tailwind v4 canonical-class diagnostic surfaced post-edit on `VerifyEmail.tsx:21`** (`bg-gradient-to-br` → `bg-linear-to-br`). IDE-only diagnostic, not from `npm run lint` — out of CI gate scope. The codebase has the same class in many other pages; treat as a separate codemod PR if/when desired.
