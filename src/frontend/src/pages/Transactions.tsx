@@ -196,7 +196,9 @@ export function TransactionsPage() {
           <button
             onClick={() => setShowRecurring(!showRecurring)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${
-              showRecurring ? 'border-purple-500 text-purple-600 bg-purple-50' : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+              showRecurring
+                ? 'border-purple-500 text-purple-600 bg-purple-50'
+                : 'border-gray-200 text-gray-600 hover:bg-gray-50'
             }`}
           >
             <Repeat className="w-4 h-4" />
@@ -205,7 +207,9 @@ export function TransactionsPage() {
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${
-              showFilters ? 'border-green-500 text-green-600 bg-green-50' : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+              showFilters
+                ? 'border-green-500 text-green-600 bg-green-50'
+                : 'border-gray-200 text-gray-600 hover:bg-gray-50'
             }`}
           >
             <Filter className="w-4 h-4" />
@@ -219,7 +223,9 @@ export function TransactionsPage() {
               }
             }}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${
-              bulkClassifyMode ? 'border-green-500 text-green-600 bg-green-50' : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+              bulkClassifyMode
+                ? 'border-green-500 text-green-600 bg-green-50'
+                : 'border-gray-200 text-gray-600 hover:bg-gray-50'
             }`}
           >
             <Tag className="w-4 h-4" />
@@ -296,10 +302,7 @@ export function TransactionsPage() {
             </div>
           </div>
           <div className="flex justify-end gap-3 mt-4">
-            <button
-              onClick={clearFilters}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800"
-            >
+            <button onClick={clearFilters} className="px-4 py-2 text-gray-600 hover:text-gray-800">
               Clear
             </button>
             <button
@@ -316,7 +319,8 @@ export function TransactionsPage() {
       {selectedTransactionIds.size > 0 && (
         <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 flex items-center justify-between">
           <span className="text-green-800 font-medium">
-            {selectedTransactionIds.size} transaction{selectedTransactionIds.size !== 1 ? 's' : ''} selected
+            {selectedTransactionIds.size} transaction{selectedTransactionIds.size !== 1 ? 's' : ''}{' '}
+            selected
           </span>
           <div className="flex gap-3">
             <button
@@ -405,7 +409,8 @@ export function TransactionsPage() {
                               <span className="text-sm text-gray-400">-</span>
                               <span
                                 className={`px-2 py-0.5 text-xs font-medium rounded-full ${getMacroCategoryColor(
-                                  categories?.find((c) => c.id === transaction.macroCategoryId)?.type
+                                  categories?.find((c) => c.id === transaction.macroCategoryId)
+                                    ?.type
                                 )}`}
                               >
                                 {transaction.macroCategoryName}
@@ -540,12 +545,15 @@ function ClassifyModal({
 }) {
   const [step, setStep] = useState<'macro' | 'category' | 'sub'>('macro');
   const [selectedMacro, setSelectedMacro] = useState<MacroCategoryWithCategories | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<{ id: string; name: string } | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<{ id: string; name: string } | null>(
+    null
+  );
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
   const [notes, setNotes] = useState(transaction.notes || '');
   const [error, setError] = useState<string | null>(null);
-  const [userOverrideApplyToSimilar, setUserOverrideApplyToSimilar] =
-    useState<boolean | null>(null);
+  const [userOverrideApplyToSimilar, setUserOverrideApplyToSimilar] = useState<boolean | null>(
+    null
+  );
 
   // Fetch categorization suggestions
   const { data: suggestions, isLoading: suggestionsLoading } = useQuery({
@@ -581,9 +589,7 @@ function ClassifyModal({
   // otherwise auto-enable when similar transactions and a high-confidence
   // suggestion are both present. Replaces a useMemo-with-side-effect that the
   // react-hooks rule flagged as a potential infinite-loop source.
-  const autoApplyToSimilar = !!(
-    similarCount && similarCount.count > 0 && bestSuggestion
-  );
+  const autoApplyToSimilar = !!(similarCount && similarCount.count > 0 && bestSuggestion);
   const applyToSimilar = userOverrideApplyToSimilar ?? autoApplyToSimilar;
 
   const classifyMutation = useMutation({
@@ -715,9 +721,11 @@ function ClassifyModal({
                 <>
                   <span className="text-gray-400">/</span>
                   <span className="text-gray-600">
-                    {selectedMacro.categories
-                      .find((c) => c.id === selectedCategory?.id)
-                      ?.subCategories.find((s) => s.id === selectedSubCategory)?.name}
+                    {
+                      selectedMacro.categories
+                        .find((c) => c.id === selectedCategory?.id)
+                        ?.subCategories.find((s) => s.id === selectedSubCategory)?.name
+                    }
                   </span>
                 </>
               )}
@@ -749,9 +757,7 @@ function ClassifyModal({
                   {Math.round(bestSuggestion.confidence * 100)}% confident
                 </span>
               </div>
-              <p className="text-sm text-amber-700">
-                Based on: "{bestSuggestion.matchedPattern}"
-              </p>
+              <p className="text-sm text-amber-700">Based on: "{bestSuggestion.matchedPattern}"</p>
               <p className="text-xs text-amber-600 mt-1 group-hover:underline">
                 Click to apply this suggestion
               </p>
@@ -760,9 +766,7 @@ function ClassifyModal({
 
           {step === 'macro' && (
             <div className="space-y-3">
-              <p className="text-sm text-gray-500 mb-4">
-                Is this a Need, Want, or Goal?
-              </p>
+              <p className="text-sm text-gray-500 mb-4">Is this a Need, Want, or Goal?</p>
               {categories.map((macro) => (
                 <button
                   key={macro.id}
@@ -799,9 +803,7 @@ function ClassifyModal({
 
           {step === 'sub' && selectedMacro && selectedCategory && (
             <div className="space-y-2">
-              <p className="text-sm text-gray-500 mb-4">
-                Optional: More specific category
-              </p>
+              <p className="text-sm text-gray-500 mb-4">Optional: More specific category</p>
               <button
                 onClick={() => setSelectedSubCategory(null)}
                 className={`w-full p-3 rounded-lg border text-left transition-all ${
@@ -873,10 +875,7 @@ function ClassifyModal({
 
         {/* Footer */}
         <div className="p-6 border-t border-gray-100 flex justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-gray-600 hover:text-gray-800"
-          >
+          <button onClick={onClose} className="px-4 py-2 text-gray-600 hover:text-gray-800">
             Cancel
           </button>
           <button
@@ -1021,7 +1020,9 @@ function AddTransactionModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Merchant (optional)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Merchant (optional)
+            </label>
             <input
               type="text"
               value={formData.merchantName}
@@ -1096,7 +1097,12 @@ function AddTransactionModal({
           </button>
           <button
             onClick={() => createMutation.mutate()}
-            disabled={!formData.accountId || !formData.amount || !formData.description || createMutation.isPending}
+            disabled={
+              !formData.accountId ||
+              !formData.amount ||
+              !formData.description ||
+              createMutation.isPending
+            }
             className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Plus className="w-4 h-4" />
@@ -1122,7 +1128,9 @@ function BulkClassifyModal({
 }) {
   const [step, setStep] = useState<'macro' | 'category' | 'sub'>('macro');
   const [selectedMacro, setSelectedMacro] = useState<MacroCategoryWithCategories | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<{ id: string; name: string } | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<{ id: string; name: string } | null>(
+    null
+  );
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -1134,15 +1142,18 @@ function BulkClassifyModal({
         categoryId: selectedCategory?.id,
         subCategoryId: selectedSubCategory || null,
       }));
-      const response = await apiClient.post<{ successCount: number; failedCount: number; errors: string[] }>(
-        '/transactions/bulk-classify',
-        { classifications }
-      );
+      const response = await apiClient.post<{
+        successCount: number;
+        failedCount: number;
+        errors: string[];
+      }>('/transactions/bulk-classify', { classifications });
       return response.data;
     },
     onSuccess: (data) => {
       if (data.failedCount > 0) {
-        setError(`${data.successCount} classified, ${data.failedCount} failed: ${data.errors.join(', ')}`);
+        setError(
+          `${data.successCount} classified, ${data.failedCount} failed: ${data.errors.join(', ')}`
+        );
       } else {
         onSuccess();
       }
@@ -1195,7 +1206,8 @@ function BulkClassifyModal({
             <div>
               <h2 className="text-lg font-semibold text-gray-900">Bulk Classification</h2>
               <p className="text-sm text-gray-500 mt-1">
-                Classifying {transactionIds.length} transaction{transactionIds.length !== 1 ? 's' : ''}
+                Classifying {transactionIds.length} transaction
+                {transactionIds.length !== 1 ? 's' : ''}
               </p>
             </div>
             <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
@@ -1236,9 +1248,11 @@ function BulkClassifyModal({
                 <>
                   <span className="text-gray-400">/</span>
                   <span className="text-gray-600">
-                    {selectedMacro.categories
-                      .find((c) => c.id === selectedCategory?.id)
-                      ?.subCategories.find((s) => s.id === selectedSubCategory)?.name}
+                    {
+                      selectedMacro.categories
+                        .find((c) => c.id === selectedCategory?.id)
+                        ?.subCategories.find((s) => s.id === selectedSubCategory)?.name
+                    }
                   </span>
                 </>
               )}
@@ -1256,9 +1270,7 @@ function BulkClassifyModal({
           )}
           {step === 'macro' && (
             <div className="space-y-3">
-              <p className="text-sm text-gray-500 mb-4">
-                Is this a Need, Want, or Goal?
-              </p>
+              <p className="text-sm text-gray-500 mb-4">Is this a Need, Want, or Goal?</p>
               {categories.map((macro) => (
                 <button
                   key={macro.id}
@@ -1295,9 +1307,7 @@ function BulkClassifyModal({
 
           {step === 'sub' && selectedMacro && selectedCategory && (
             <div className="space-y-2">
-              <p className="text-sm text-gray-500 mb-4">
-                Optional: More specific category
-              </p>
+              <p className="text-sm text-gray-500 mb-4">Optional: More specific category</p>
               <button
                 onClick={() => setSelectedSubCategory(null)}
                 className={`w-full p-3 rounded-lg border text-left transition-all ${
@@ -1329,10 +1339,7 @@ function BulkClassifyModal({
 
         {/* Footer */}
         <div className="p-6 border-t border-gray-100 flex justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-gray-600 hover:text-gray-800"
-          >
+          <button onClick={onClose} className="px-4 py-2 text-gray-600 hover:text-gray-800">
             Cancel
           </button>
           <button
@@ -1418,7 +1425,11 @@ function RecurringPatternsPanel() {
                   )}
                   {p.nextExpectedDate && (
                     <span className="text-xs text-gray-400">
-                      Next: {new Date(p.nextExpectedDate).toLocaleDateString('en-ZA', { month: 'short', day: 'numeric' })}
+                      Next:{' '}
+                      {new Date(p.nextExpectedDate).toLocaleDateString('en-ZA', {
+                        month: 'short',
+                        day: 'numeric',
+                      })}
                     </span>
                   )}
                 </div>

@@ -6,8 +6,20 @@ const dashboardSummary = {
   monthlyIncome: 50000,
   totalSpent: 12000,
   buckets: [
-    { type: MacroCategoryType.Needs, name: 'Needs', allocated: 25000, spent: 8000, remaining: 17000 },
-    { type: MacroCategoryType.Wants, name: 'Wants', allocated: 15000, spent: 4000, remaining: 11000 },
+    {
+      type: MacroCategoryType.Needs,
+      name: 'Needs',
+      allocated: 25000,
+      spent: 8000,
+      remaining: 17000,
+    },
+    {
+      type: MacroCategoryType.Wants,
+      name: 'Wants',
+      allocated: 15000,
+      spent: 4000,
+      remaining: 11000,
+    },
     { type: MacroCategoryType.Goals, name: 'Goals', allocated: 10000, spent: 0, remaining: 10000 },
   ],
   unclassifiedCount: 0,

@@ -12,7 +12,8 @@ export function VerifyEmailPage() {
   useEffect(() => {
     if (!token) return;
 
-    apiClient.post('/auth/verify-email', { token })
+    apiClient
+      .post('/auth/verify-email', { token })
       .then(() => setStatus('success'))
       .catch(() => setStatus('error'));
   }, [token]);
@@ -23,9 +24,7 @@ export function VerifyEmailPage() {
         <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
           <h1 className="text-3xl font-bold text-green-600 mb-4">🌵 Cactus</h1>
 
-          {status === 'loading' && (
-            <p className="text-gray-600">Verifying your email...</p>
-          )}
+          {status === 'loading' && <p className="text-gray-600">Verifying your email...</p>}
 
           {status === 'success' && (
             <>

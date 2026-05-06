@@ -8,9 +8,7 @@ describe('TransactionsPage', () => {
   it('renders a transaction row from the API', async () => {
     renderWithProviders(<TransactionsPage />);
 
-    expect(
-      await screen.findByText(/woolworths/i)
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/woolworths/i)).toBeInTheDocument();
   });
 
   it('toggles the filters panel when the Filters button is clicked', async () => {
@@ -31,8 +29,6 @@ describe('TransactionsPage', () => {
 
     await user.click(screen.getByRole('button', { name: /add transaction/i }));
 
-    expect(
-      await screen.findByRole('heading', { name: /add transaction/i })
-    ).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /add transaction/i })).toBeInTheDocument();
   });
 });

@@ -5,16 +5,8 @@ import { apiClient } from '../api/client';
 
 function CactusLogo({ className = '' }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 32 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      <path
-        d="M16 4C16 4 14 8 14 14V28H18V14C18 8 16 4 16 4Z"
-        fill="currentColor"
-      />
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M16 4C16 4 14 8 14 14V28H18V14C18 8 16 4 16 4Z" fill="currentColor" />
       <path
         d="M14 16C14 16 10 14 8 12C6 10 6 8 6 8C6 8 6 10 7 12C8 14 10 16 14 17V16Z"
         fill="currentColor"
@@ -100,7 +92,10 @@ export function ResetPasswordPage() {
               <span className="text-2xl font-bold text-[var(--cactus-green)]">Cactus</span>
             </div>
             <p className="text-gray-600 mb-4">Invalid reset link.</p>
-            <Link to="/forgot-password" className="text-[var(--cactus-green)] hover:text-[var(--cactus-forest)] font-medium">
+            <Link
+              to="/forgot-password"
+              className="text-[var(--cactus-green)] hover:text-[var(--cactus-forest)] font-medium"
+            >
               Request a new reset link
             </Link>
           </div>
@@ -132,7 +127,10 @@ export function ResetPasswordPage() {
               <div className="p-3 bg-[var(--cactus-mint)] border border-green-200 rounded-lg text-green-700 text-sm mb-6">
                 Password reset successfully!
               </div>
-              <Link to="/login" className="text-[var(--cactus-green)] hover:text-[var(--cactus-forest)] font-medium">
+              <Link
+                to="/login"
+                className="text-[var(--cactus-green)] hover:text-[var(--cactus-forest)] font-medium"
+              >
                 Sign in with your new password
               </Link>
             </div>
@@ -174,7 +172,10 @@ export function ResetPasswordPage() {
               </div>
 
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Confirm Password
                 </label>
                 <div className="relative">

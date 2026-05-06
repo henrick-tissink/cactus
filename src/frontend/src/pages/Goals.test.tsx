@@ -10,9 +10,7 @@ describe('GoalsPage', () => {
   it("renders the user's goal from the API", async () => {
     renderWithProviders(<GoalsPage />);
 
-    expect(
-      await screen.findByRole('heading', { name: /emergency fund/i })
-    ).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /emergency fund/i })).toBeInTheDocument();
   });
 
   it('shows an empty/zero state when there are no goals', async () => {
@@ -25,9 +23,7 @@ describe('GoalsPage', () => {
 
     // Wait for post-load state, then assert the goal isn't rendered.
     await screen.findByText(/0 active goals?/i);
-    expect(
-      screen.queryByRole('heading', { name: /emergency fund/i })
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /emergency fund/i })).not.toBeInTheDocument();
   });
 
   it('opens the create-goal modal', async () => {
@@ -38,8 +34,6 @@ describe('GoalsPage', () => {
 
     await user.click(screen.getByRole('button', { name: /new goal/i }));
 
-    expect(
-      await screen.findByRole('heading', { name: /create new goal/i })
-    ).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /create new goal/i })).toBeInTheDocument();
   });
 });

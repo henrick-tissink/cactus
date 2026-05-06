@@ -4,16 +4,8 @@ import { apiClient } from '../api/client';
 
 function CactusLogo({ className = '' }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 32 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      <path
-        d="M16 4C16 4 14 8 14 14V28H18V14C18 8 16 4 16 4Z"
-        fill="currentColor"
-      />
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M16 4C16 4 14 8 14 14V28H18V14C18 8 16 4 16 4Z" fill="currentColor" />
       <path
         d="M14 16C14 16 10 14 8 12C6 10 6 8 6 8C6 8 6 10 7 12C8 14 10 16 14 17V16Z"
         fill="currentColor"
@@ -90,7 +82,9 @@ export function ForgotPasswordPage() {
               <span className="text-2xl font-bold text-[var(--cactus-green)]">Cactus</span>
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Reset your password</h1>
-            <p className="text-gray-500">Enter your email and we'll send you a link to get back in.</p>
+            <p className="text-gray-500">
+              Enter your email and we'll send you a link to get back in.
+            </p>
           </div>
 
           {submitted ? (
@@ -98,7 +92,10 @@ export function ForgotPasswordPage() {
               <div className="p-3 bg-[var(--cactus-mint)] border border-green-200 rounded-lg text-green-700 text-sm mb-6">
                 If an account with that email exists, we've sent a password reset link.
               </div>
-              <Link to="/login" className="text-[var(--cactus-green)] hover:text-[var(--cactus-forest)] font-medium">
+              <Link
+                to="/login"
+                className="text-[var(--cactus-green)] hover:text-[var(--cactus-forest)] font-medium"
+              >
                 Back to sign in
               </Link>
             </div>
@@ -131,7 +128,10 @@ export function ForgotPasswordPage() {
 
           <p className="mt-6 text-center text-gray-600">
             Remember your password?{' '}
-            <Link to="/login" className="text-[var(--cactus-green)] hover:text-[var(--cactus-forest)] font-medium">
+            <Link
+              to="/login"
+              className="text-[var(--cactus-green)] hover:text-[var(--cactus-forest)] font-medium"
+            >
               Sign in
             </Link>
           </p>

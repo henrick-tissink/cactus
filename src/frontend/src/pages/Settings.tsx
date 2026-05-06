@@ -193,7 +193,9 @@ export function SettingsPage() {
             <input
               type="password"
               value={passwordForm.currentPassword}
-              onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
+              onChange={(e) =>
+                setPasswordForm({ ...passwordForm, currentPassword: e.target.value })
+              }
               className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               required
             />
@@ -213,11 +215,15 @@ export function SettingsPage() {
             </p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Confirm New Password
+            </label>
             <input
               type="password"
               value={passwordForm.confirmPassword}
-              onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
+              onChange={(e) =>
+                setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })
+              }
               className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               required
             />
@@ -244,7 +250,10 @@ function ResendVerificationButton() {
     mutationFn: async () => {
       await apiClient.post('/auth/resend-verification');
     },
-    onSuccess: () => { setSent(true); setFailed(false); },
+    onSuccess: () => {
+      setSent(true);
+      setFailed(false);
+    },
     onError: () => setFailed(true),
   });
 

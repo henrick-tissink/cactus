@@ -35,12 +35,8 @@ describe('DashboardPage', () => {
     renderWithProviders(<DashboardPage />);
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/let's get your finances in order/i)
-      ).toBeInTheDocument();
+      expect(screen.getByText(/let's get your finances in order/i)).toBeInTheDocument();
     });
-    expect(
-      screen.getByText(/import your first bank statement/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/import your first bank statement/i)).toBeInTheDocument();
   });
 });
