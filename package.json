@@ -11,7 +11,7 @@
   "lint-staged": {
     "src/frontend/src/**/*.{ts,tsx}": [
       "npm exec --prefix src/frontend -- prettier --write",
-      "npm exec --prefix src/frontend -- eslint --fix"
+      "npm exec --prefix src/frontend -- eslint --fix --config src/frontend/eslint.config.js"
     ],
     "src/frontend/src/**/*.{css,json}": [
       "npm exec --prefix src/frontend -- prettier --write"
