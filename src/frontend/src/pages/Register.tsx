@@ -54,7 +54,7 @@ export function RegisterPage() {
       );
 
       navigate('/onboarding');
-    } catch (err) {
+    } catch {
       setError('Email already registered or invalid data');
     } finally {
       setIsLoading(false);

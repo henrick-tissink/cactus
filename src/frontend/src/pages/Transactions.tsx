@@ -544,7 +544,8 @@ function ClassifyModal({
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
   const [notes, setNotes] = useState(transaction.notes || '');
   const [error, setError] = useState<string | null>(null);
-  const [applyToSimilar, setApplyToSimilar] = useState(false);
+  const [userOverrideApplyToSimilar, setUserOverrideApplyToSimilar] =
+    useState<boolean | null>(null);
 
   // Fetch categorization suggestions
   const { data: suggestions, isLoading: suggestionsLoading } = useQuery({
@@ -576,12 +577,14 @@ function ClassifyModal({
   // Auto-check "apply to similar" if there are similar transactions and suggestions found
   const bestSuggestion = suggestions?.find((s) => s.confidence > 0.5);
 
-  // Set applyToSimilar default based on whether there are similar transactions
-  useMemo(() => {
-    if (similarCount && similarCount.count > 0 && bestSuggestion) {
-      setApplyToSimilar(true);
-    }
-  }, [similarCount, bestSuggestion]);
+  // Derive the effective applyToSimilar value: user override takes precedence;
+  // otherwise auto-enable when similar transactions and a high-confidence
+  // suggestion are both present. Replaces a useMemo-with-side-effect that the
+  // react-hooks rule flagged as a potential infinite-loop source.
+  const autoApplyToSimilar = !!(
+    similarCount && similarCount.count > 0 && bestSuggestion
+  );
+  const applyToSimilar = userOverrideApplyToSimilar ?? autoApplyToSimilar;
 
   const classifyMutation = useMutation({
     mutationFn: async () => {
@@ -850,7 +853,7 @@ function ClassifyModal({
                 <input
                   type="checkbox"
                   checked={applyToSimilar}
-                  onChange={(e) => setApplyToSimilar(e.target.checked)}
+                  onChange={(e) => setUserOverrideApplyToSimilar(e.target.checked)}
                   className="mt-0.5 h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
                 />
                 <div>

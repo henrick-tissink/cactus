@@ -93,7 +93,7 @@ export function LoginPage() {
       } else {
         navigate('/onboarding');
       }
-    } catch (err) {
+    } catch {
       setError('Invalid email or password');
     } finally {
       setIsLoading(false);

@@ -24,8 +24,8 @@ public class SaveOnboardingResponseCommandHandlerTests : HandlerTestBase
         var handler = new SaveOnboardingResponseCommandHandler(Context, _currentUser);
         var command = new SaveOnboardingResponseCommand(
             StepNumber: 1,
-            StepName:   "Welcome",
-            Response:   "accepted"
+            StepName: "Welcome",
+            Response: "accepted"
         );
 
         // Act

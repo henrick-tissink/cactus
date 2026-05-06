@@ -25,14 +25,14 @@ public class GetCurrentSpendingPlanQueryHandlerTests : HandlerTestBase
         // Active plan for the current month — should be returned
         var activePlan = new SpendingPlan
         {
-            UserId           = user.Id,
-            Year             = now.Year,
-            Month            = now.Month,
-            MonthlyIncome    = 10_000m,
-            NeedsPercentage  = 50m,
-            WantsPercentage  = 30m,
-            GoalsPercentage  = 20m,
-            IsActive         = true,
+            UserId = user.Id,
+            Year = now.Year,
+            Month = now.Month,
+            MonthlyIncome = 10_000m,
+            NeedsPercentage = 50m,
+            WantsPercentage = 30m,
+            GoalsPercentage = 20m,
+            IsActive = true,
         };
 
         // Plan for a different user — must be ignored (also avoids (user,year,month) unique conflict)
@@ -42,14 +42,14 @@ public class GetCurrentSpendingPlanQueryHandlerTests : HandlerTestBase
 
         var inactivePlan = new SpendingPlan
         {
-            UserId           = otherUser.Id,
-            Year             = now.Year,
-            Month            = now.Month,
-            MonthlyIncome    = 5_000m,
-            NeedsPercentage  = 50m,
-            WantsPercentage  = 30m,
-            GoalsPercentage  = 20m,
-            IsActive         = false,
+            UserId = otherUser.Id,
+            Year = now.Year,
+            Month = now.Month,
+            MonthlyIncome = 5_000m,
+            NeedsPercentage = 50m,
+            WantsPercentage = 30m,
+            GoalsPercentage = 20m,
+            IsActive = false,
         };
 
         Context.SpendingPlans.AddRange(activePlan, inactivePlan);

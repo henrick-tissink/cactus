@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { apiClient } from '../api/client';
 import { useAuthStore } from '../store/authStore';
@@ -11,14 +11,6 @@ export function SettingsPage() {
     lastName: user?.lastName || '',
   });
 
-  useEffect(() => {
-    if (user) {
-      setProfileForm({
-        firstName: user.firstName || '',
-        lastName: user.lastName || '',
-      });
-    }
-  }, [user]);
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: '',
     newPassword: '',

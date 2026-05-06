@@ -19,8 +19,8 @@ public class GetCategoriesQueryHandlerTests : HandlerTestBase
         // Arrange: seed one MacroCategory with one Category
         var macroCategory = new MacroCategory
         {
-            Type        = MacroCategoryType.Needs,
-            Name        = "Housing",
+            Type = MacroCategoryType.Needs,
+            Name = "Housing",
             Description = "Housing and utilities",
             DisplayOrder = 1,
         };
@@ -30,9 +30,9 @@ public class GetCategoriesQueryHandlerTests : HandlerTestBase
         var category = new Category
         {
             MacroCategoryId = macroCategory.Id,
-            Name            = "Rent",
-            DisplayOrder    = 1,
-            IsSystem        = true,
+            Name = "Rent",
+            DisplayOrder = 1,
+            IsSystem = true,
         };
         Context.Categories.Add(category);
         await Context.SaveChangesAsync(default);
