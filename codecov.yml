@@ -1,0 +1,36 @@
+codecov:
+  require_ci_to_pass: true
+
+coverage:
+  status:
+    project:
+      backend:
+        flags: [backend]
+        target: auto
+        threshold: 1%
+      frontend:
+        flags: [frontend]
+        target: auto
+        threshold: 1%
+    patch:
+      backend:
+        flags: [backend]
+        target: auto
+        threshold: 1%
+      frontend:
+        flags: [frontend]
+        target: auto
+        threshold: 1%
+
+flags:
+  backend:
+    paths:
+      - src/backend/
+  frontend:
+    paths:
+      - src/frontend/
+
+comment:
+  layout: "header, diff, flags, files"
+  behavior: default
+  require_changes: false
