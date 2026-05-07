@@ -40,7 +40,7 @@ jobs:
             --results-directory ./coverage
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           directory: ./coverage
           flags: backend
@@ -80,7 +80,7 @@ jobs:
         run: npm run build
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           directory: src/frontend/coverage
           flags: frontend
