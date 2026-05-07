@@ -368,3 +368,19 @@ Final report includes:
 - Task 2 line numbers may have shifted since plan-write time. The grep in Step 1 catches that defensively; STOP-and-report instruction is explicit.
 - Task 4 step 3: `@v5` could behave differently. Symptom + recovery are documented; not a blocker.
 - Branch protection requires status checks to have run at least once before they appear in the dropdown — the runbook explicitly sequences "push first, configure second."
+
+---
+
+## Post-execution notes (added 2026-05-06)
+
+PR 7 merged as squash commit `0ea79c6`. Cleanest PR of Axis A — no plan defects surfaced; CI 4/4 green on first push; Codecov validator returned `Valid!` immediately.
+
+- **Codecov's validator at `https://codecov.io/validate` is genuinely useful and tokenless.** It normalizes `paths:` entries to anchored regex form (`src/backend/` → `^src/backend/.*`) and `require_changes: false` to the internal representation `[0]`. Both are normalization, not violations. Future codecov.yml work should always validate via this endpoint before pushing.
+- **Codecov v5 accepts the legacy `directory:` input** (renamed from `files:` semantically in v5 docs). No deprecation warning seen on the first run. If v6 drops the alias, swap is a one-line change in two places.
+- **Watch-items from the code-quality reviewer's retrospective on the whole Axis A** (worth surfacing to whoever picks up Axis B):
+  - Coverage thresholds via `target: auto + 1%` self-ratchet, but the ratchet only ratchets *upward*. With backend baselines at 17–70% (per project) and frontend `src/pages/` at 25.26%, there's no real pressure to write more tests until product PRs land. Watch the first 2-3 Axis B PRs to confirm coverage trends up; if not, the gate is effectively permissive.
+  - No browser-level E2E test layer (Playwright/Cypress). PR 3 added component tests; nothing exercises the full app stack from a real browser. Deferred per spec; highest-leverage future addition.
+  - `Deploy` workflow is a one-way gate (runs after merge to main, can't block merge). Axis D smoke check pre-merge is the planned answer.
+  - Codecov tokenless upload may be flaky over time on public repos. `CODECOV_TOKEN` fallback is documented in the spec but not pre-staged.
+- **Branch protection's status-check selector requires the checks to have run at least once.** The plan correctly sequenced "push first, configure second" — no surprises here. If status checks ever get renamed (e.g., job name change in `ci.yml`), the branch protection rule needs updating manually; otherwise it'll appear satisfied with a check that no longer exists.
+- **Axis A complete.** Foundation gates in place: backend tests (28), frontend tests (12), lint + format baseline, CI gating PRs, pre-commit hooks, auto-deploy on merge to main, branch protection + coverage gate. 7 PRs over ~4 days. Next phase is product features (Axes B–F per `docs/superpowers/specs/2026-05-03-100x-roadmap.md`).
