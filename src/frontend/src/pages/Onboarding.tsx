@@ -4,6 +4,7 @@ import { ChevronRight, ChevronLeft, Check, AlertCircle, Plus, X } from 'lucide-r
 import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '../store/authStore';
 import { apiClient } from '../api/client';
+import { CactusLogo } from '../components/brand/CactusLogo';
 
 interface SaveResponsePayload {
   stepNumber: number;
@@ -242,18 +243,19 @@ export function OnboardingPage() {
   const promptIndex = Math.floor(currentStep / 2) - 1;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex flex-col">
+    <div className="min-h-screen bg-cactus-sandstone font-cactus flex flex-col">
       {/* Progress bar */}
-      <div className="h-1 bg-green-200">
+      <div className="h-1 bg-cactus-overlay">
         <div
-          className="h-full bg-green-600 transition-all duration-500"
+          className="h-full bg-cactus-sage transition-all duration-500"
           style={{ width: `${progress}%` }}
         />
       </div>
 
       {/* Header */}
-      <div className="p-6">
-        <p className="text-sm text-gray-500">
+      <div className="p-6 flex items-center justify-between">
+        <CactusLogo />
+        <p className="text-sm text-cactus-charcoal/60">
           Step {currentStep + 1} of {steps.length}
         </p>
       </div>
@@ -270,15 +272,15 @@ export function OnboardingPage() {
           )}
 
           {showPrompt && (
-            <div className="mb-6 p-4 bg-green-100 rounded-lg text-green-800 text-center">
-              <Check className="w-5 h-5 inline-block mr-2" />
+            <div className="mb-6 p-4 bg-cactus-needs-bg rounded-lg text-cactus-charcoal text-center">
+              <Check className="w-5 h-5 inline-block mr-2 text-cactus-sage" />
               {progressPrompts[promptIndex]}
             </div>
           )}
 
           <div className="bg-white rounded-2xl shadow-xl p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">{step.question}</h2>
-            {step.description && <p className="text-gray-600 mb-6">{step.description}</p>}
+            <h2 className="text-2xl font-bold text-cactus-charcoal mb-2">{step.question}</h2>
+            {step.description && <p className="text-cactus-charcoal/60 mb-6">{step.description}</p>}
 
             {/* Options */}
             {step.options && (
@@ -289,12 +291,12 @@ export function OnboardingPage() {
                     onClick={() => handleOptionSelect(option.value)}
                     className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
                       responses[step.id] === option.value
-                        ? 'border-green-500 bg-green-50'
-                        : 'border-gray-200 hover:border-green-300 hover:bg-green-50'
+                        ? 'border-cactus-sage bg-cactus-sage-light'
+                        : 'border-gray-200 hover:border-cactus-sage/60 hover:bg-cactus-sandstone'
                     }`}
                   >
                     <span className="text-2xl mr-3">{option.icon}</span>
-                    <span className="font-medium text-gray-900">{option.label}</span>
+                    <span className="font-medium text-cactus-charcoal">{option.label}</span>
                   </button>
                 ))}
               </div>
@@ -311,7 +313,7 @@ export function OnboardingPage() {
                     type="number"
                     value={monthlyIncome}
                     onChange={(e) => setMonthlyIncome(e.target.value)}
-                    className="w-full pl-10 pr-4 py-4 text-2xl font-semibold border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-0"
+                    className="w-full pl-10 pr-4 py-4 text-2xl font-semibold border-2 border-gray-200 rounded-xl focus:border-cactus-sage focus:ring-0"
                     placeholder="30,000"
                   />
                 </div>
@@ -323,8 +325,8 @@ export function OnboardingPage() {
               <div className="mt-6 space-y-6">
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="font-medium text-green-700">Needs</span>
-                    <span className="font-bold text-green-700">{allocation.needs}%</span>
+                    <span className="font-medium text-cactus-sage">Needs</span>
+                    <span className="font-bold text-cactus-sage">{allocation.needs}%</span>
                   </div>
                   <input
                     type="range"
@@ -342,7 +344,7 @@ export function OnboardingPage() {
                         goals: Math.round(remaining * (1 - wantsRatio)),
                       });
                     }}
-                    className="w-full h-2 bg-green-200 rounded-lg appearance-none cursor-pointer accent-green-600"
+                    className="w-full h-2 bg-cactus-overlay rounded-lg appearance-none cursor-pointer accent-cactus-sage"
                   />
                 </div>
                 <div>
@@ -368,12 +370,12 @@ export function OnboardingPage() {
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="font-medium text-blue-700">Goals</span>
-                    <span className="font-bold text-blue-700">{allocation.goals}%</span>
+                    <span className="font-medium text-cactus-prickly">Goals</span>
+                    <span className="font-bold text-cactus-prickly">{allocation.goals}%</span>
                   </div>
-                  <div className="w-full h-2 bg-blue-200 rounded-lg">
+                  <div className="w-full h-2 bg-cactus-overlay rounded-lg">
                     <div
-                      className="h-full bg-blue-500 rounded-lg"
+                      className="h-full bg-cactus-prickly rounded-lg"
                       style={{ width: `${allocation.goals}%` }}
                     />
                   </div>
@@ -526,7 +528,7 @@ export function OnboardingPage() {
               <button
                 onClick={handleNext}
                 disabled={completeOnboardingMutation.isPending || saveResponseMutation.isPending}
-                className="flex items-center gap-2 px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-6 py-3 bg-cactus-sage text-white font-bold rounded-xl hover:brightness-95 transition-all shadow-[0_4px_16px_rgba(119,221,119,0.25)] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {completeOnboardingMutation.isPending
                   ? 'Completing...'
