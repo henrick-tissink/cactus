@@ -1,5 +1,4 @@
 using Cactus.Application.Features.Onboarding.Commands;
-using FluentAssertions;
 using FluentValidation.TestHelper;
 using Xunit;
 
@@ -14,7 +13,7 @@ public class SaveOnboardingResponseCommandValidatorTests
     [InlineData(5)]
     [InlineData(9)]
     [InlineData(13)]
-    public void StepNumber_WithinNewRange_IsValid(int step)
+    public void StepNumber_WithinAllowedRange_IsValid(int step)
     {
         var cmd = new SaveOnboardingResponseCommand(step, "Test step", "value");
         _validator.TestValidate(cmd).ShouldNotHaveValidationErrorFor(c => c.StepNumber);
