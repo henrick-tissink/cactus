@@ -280,7 +280,7 @@ export function OnboardingPage() {
 
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <h2 className="text-2xl font-bold text-cactus-charcoal mb-2">{step.question}</h2>
-            {step.description && <p className="text-gray-600 mb-6">{step.description}</p>}
+            {step.description && <p className="text-cactus-charcoal/60 mb-6">{step.description}</p>}
 
             {/* Options */}
             {step.options && (
