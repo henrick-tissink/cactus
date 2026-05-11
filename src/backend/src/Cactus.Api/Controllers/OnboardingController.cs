@@ -25,6 +25,13 @@ public class OnboardingController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("goal-recommendation")]
+    public async Task<ActionResult<GoalRecommendationResult>> GetGoalRecommendation()
+    {
+        var result = await _mediator.Send(new GetGoalRecommendationQuery());
+        return Ok(result);
+    }
+
     [HttpPost("response")]
     public async Task<ActionResult> SaveResponse([FromBody] SaveOnboardingResponseRequest request)
     {

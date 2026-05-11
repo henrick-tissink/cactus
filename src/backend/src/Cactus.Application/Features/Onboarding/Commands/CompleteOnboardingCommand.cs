@@ -92,9 +92,18 @@ public class CompleteOnboardingCommandHandler : IRequestHandler<CompleteOnboardi
         var debtResponse = responses.FirstOrDefault(r => r.StepNumber == 7);
         var createdDebts = await ProcessDebtResponse(userId, debtResponse, cancellationToken);
 
-        // Create a DebtPayoff goal if any debts were added
-        if (createdDebts.Count > 0)
+        // Determine goal type from step 6 (goal pick); fall back to legacy DebtPayoff-from-debts if step 6 is absent or malformed.
+        var goalPickResponse = responses.FirstOrDefault(r => r.StepNumber == 6);
+        var goalPickValue = ParseGoalPickValue(goalPickResponse?.Response);
+
+        if (goalPickValue != null)
         {
+            var goal = CreateGoalForPick(userId, goalPickValue, createdDebts);
+            if (goal != null) _context.Goals.Add(goal);
+        }
+        else if (createdDebts.Count > 0)
+        {
+            // Legacy fallback: pre-O-4 users finishing old onboarding
             var totalDebt = createdDebts.Sum(d => d.CurrentBalance);
             var debtGoal = new Goal
             {
@@ -113,6 +122,71 @@ public class CompleteOnboardingCommandHandler : IRequestHandler<CompleteOnboardi
 
         await _context.SaveChangesAsync(cancellationToken);
         return Unit.Value;
+    }
+
+    private static string? ParseGoalPickValue(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json)) return null;
+        try
+        {
+            using var doc = System.Text.Json.JsonDocument.Parse(json);
+            if (doc.RootElement.ValueKind == System.Text.Json.JsonValueKind.Array
+                && doc.RootElement.GetArrayLength() > 0)
+            {
+                var value = doc.RootElement[0].GetString();
+                if (value == "save" || value == "debt" || value == "emergency") return value;
+            }
+        }
+        catch
+        {
+            // fall through
+        }
+        return null;
+    }
+
+    private static Goal? CreateGoalForPick(Guid userId, string pick, List<UserDebt> createdDebts)
+    {
+        return pick switch
+        {
+            "save" => new Goal
+            {
+                UserId = userId,
+                Name = "Save more money",
+                GoalType = GoalType.Savings,
+                TargetAmount = 0,
+                CurrentAmount = 0,
+                Priority = 1,
+                IsActive = true,
+                IsCompleted = false,
+                IsPrimary = true
+            },
+            "debt" => new Goal
+            {
+                UserId = userId,
+                Name = "Pay off debt",
+                GoalType = GoalType.DebtPayoff,
+                TargetAmount = createdDebts.Sum(d => d.CurrentBalance),
+                CurrentAmount = 0,
+                Priority = 1,
+                IsActive = true,
+                IsCompleted = false,
+                IsPrimary = true,
+                LinkedDebtId = createdDebts.OrderByDescending(d => d.CurrentBalance).FirstOrDefault()?.Id
+            },
+            "emergency" => new Goal
+            {
+                UserId = userId,
+                Name = "Emergency fund",
+                GoalType = GoalType.EmergencyFund,
+                TargetAmount = 0,
+                CurrentAmount = 0,
+                Priority = 1,
+                IsActive = true,
+                IsCompleted = false,
+                IsPrimary = true
+            },
+            _ => null
+        };
     }
 
     private async Task<List<UserDebt>> ProcessDebtResponse(
