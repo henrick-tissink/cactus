@@ -67,4 +67,35 @@ describe('WelcomePage', () => {
     await user.click(screen.getByRole('button', { name: /credit card debt/i }));
     expect(useOnboardingWizardStore.getState().answers[5]).toEqual(['credit_card']);
   });
+
+  it('back button returns to the previous question and preserves the answer', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<WelcomePage />);
+    await user.click(screen.getByRole('button', { name: /let's do this/i }));
+    await user.click(screen.getByRole('button', { name: /get out of debt/i }));
+    await user.click(screen.getByRole('button', { name: /^next$/i }));
+
+    // Now on Q2; click Back
+    await user.click(screen.getByRole('button', { name: /^back$/i }));
+
+    // Should be back on Q1, with the previous answer preserved
+    expect(screen.getByRole('heading', { name: /what matters most/i })).toBeInTheDocument();
+    expect(useOnboardingWizardStore.getState().answers[1]).toEqual(['debt']);
+  });
+
+  it('single-select question replaces the answer when a different option is picked', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<WelcomePage />);
+    await user.click(screen.getByRole('button', { name: /let's do this/i }));
+    await user.click(screen.getByRole('button', { name: /get out of debt/i }));
+    await user.click(screen.getByRole('button', { name: /^next$/i }));
+    await user.click(screen.getByRole('button', { name: /unexpected expenses/i }));
+    await user.click(screen.getByRole('button', { name: /^next$/i }));
+
+    // On Q3 (single-select). Click "Run out of money" then "Break even".
+    await user.click(screen.getByRole('button', { name: /run out of money/i }));
+    expect(useOnboardingWizardStore.getState().answers[3]).toEqual(['run_out']);
+    await user.click(screen.getByRole('button', { name: /break even/i }));
+    expect(useOnboardingWizardStore.getState().answers[3]).toEqual(['break_even']);
+  });
 });

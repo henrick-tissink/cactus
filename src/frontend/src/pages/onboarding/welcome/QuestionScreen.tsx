@@ -47,9 +47,9 @@ export function QuestionScreen({
         <div className="text-4xl mb-3" aria-hidden="true">
           {question.emoji}
         </div>
-        <h2 className="font-cactus font-bold text-[22px] text-cactus-charcoal m-0 mb-1.5 leading-tight">
+        <h1 className="font-cactus font-bold text-[22px] text-cactus-charcoal m-0 mb-1.5 leading-tight">
           {question.headline}
-        </h2>
+        </h1>
         <p className="font-cactus text-sm text-cactus-charcoal/40 font-medium m-0 mb-2 leading-snug">
           {question.subtitle}
         </p>
