@@ -8,6 +8,7 @@ import { CactusLogo } from '../components/brand/CactusLogo';
 import { Phase2Welcome } from './onboarding/phase2/Phase2Welcome';
 import { Phase2Intro } from './onboarding/phase2/Phase2Intro';
 import { Phase2Slider } from './onboarding/phase2/Phase2Slider';
+import { GoalPickScreen } from './onboarding/goal/GoalPickScreen';
 
 interface SaveResponsePayload {
   stepNumber: number;
@@ -60,13 +61,6 @@ const steps = [
     inputType: 'currency',
   },
   {
-    id: 6,
-    name: 'Allocation Estimate',
-    question: 'How do you think you currently split your spending?',
-    type: 'sliders',
-    description: 'Drag the sliders to estimate your current split between Needs, Wants, and Goals.',
-  },
-  {
     id: 7,
     name: 'High-Interest Debts',
     question: 'Do you have any high-interest debts?',
@@ -94,7 +88,7 @@ const progressPrompts = [
 
 export function OnboardingPage() {
   const [phase, setPhase] = useState<
-    'phase2-welcome' | 'phase2-intro' | 'phase2-slider' | 'questions'
+    'phase2-welcome' | 'phase2-intro' | 'phase2-slider' | 'goal-pick' | 'questions'
   >('phase2-welcome');
   const navigate = useNavigate();
   const { user, setUser } = useAuthStore();
@@ -259,12 +253,15 @@ export function OnboardingPage() {
     return (
       <Phase2Intro
         onContinue={() => setPhase('phase2-slider')}
-        onSkip={() => setPhase('questions')}
+        onSkip={() => setPhase('goal-pick')}
       />
     );
   }
   if (phase === 'phase2-slider') {
-    return <Phase2Slider onContinue={() => setPhase('questions')} />;
+    return <Phase2Slider onContinue={() => setPhase('goal-pick')} />;
+  }
+  if (phase === 'goal-pick') {
+    return <GoalPickScreen onContinue={() => setPhase('questions')} />;
   }
 
   return (
