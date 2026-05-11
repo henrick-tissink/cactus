@@ -59,21 +59,19 @@ export function RegisterPage() {
       // Batched POST of pre-signup wizard answers, if any.
       // Mapped wizard step → backend stepNumber per pages/onboarding/data.ts
       const wizardAnswers = useOnboardingWizardStore.getState().answers;
-      const postPromises = (Object.keys(wizardAnswers) as Array<keyof typeof wizardAnswers>).map(
-        (rawStep) => {
-          const step = Number(rawStep) as WizardStepId;
-          const values = wizardAnswers[step];
-          if (!values || values.length === 0) return Promise.resolve(null);
-          const { stepNumber, stepName } = wizardToBackendMapping[step];
-          return apiClient
-            .post('/onboarding/response', {
-              stepNumber,
-              stepName,
-              response: JSON.stringify(values),
-            })
-            .catch(() => null); // non-fatal: navigate anyway, user re-answers in /onboarding
-        }
-      );
+      const postPromises = Object.keys(wizardAnswers).map((rawStep) => {
+        const step = Number(rawStep) as WizardStepId;
+        const values = wizardAnswers[step];
+        if (!values || values.length === 0) return Promise.resolve(null);
+        const { stepNumber, stepName } = wizardToBackendMapping[step];
+        return apiClient
+          .post('/onboarding/response', {
+            stepNumber,
+            stepName,
+            response: JSON.stringify(values),
+          })
+          .catch(() => null); // non-fatal: navigate anyway, user re-answers in /onboarding
+      });
       await Promise.all(postPromises);
       useOnboardingWizardStore.getState().reset();
 
