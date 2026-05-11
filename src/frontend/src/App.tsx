@@ -15,6 +15,7 @@ import { ForgotPasswordPage } from './pages/ForgotPassword';
 import { ResetPasswordPage } from './pages/ResetPassword';
 import { VerifyEmailPage } from './pages/VerifyEmail';
 import { ImportTransactionsPage } from './pages/ImportTransactions';
+import { WelcomePage } from './pages/onboarding/welcome/WelcomePage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,7 +30,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, user } = useAuthStore();
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/welcome" replace />;
   }
 
   if (user && !user.isOnboardingComplete) {
@@ -63,6 +64,14 @@ function App() {
             element={
               <PublicRoute>
                 <LoginPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/welcome"
+            element={
+              <PublicRoute>
+                <WelcomePage />
               </PublicRoute>
             }
           />
