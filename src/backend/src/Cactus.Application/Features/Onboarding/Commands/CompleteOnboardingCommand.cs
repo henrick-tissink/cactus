@@ -40,6 +40,7 @@ public class CompleteOnboardingCommandHandler : IRequestHandler<CompleteOnboardi
         var existingPlan = await _context.SpendingPlans
             .FirstOrDefaultAsync(s => s.UserId == userId && s.Year == now.Year && s.Month == now.Month, cancellationToken);
 
+        SpendingPlan? newSpendingPlan = null;
         if (existingPlan == null)
         {
             // Get income from onboarding response (step 5)
@@ -85,6 +86,7 @@ public class CompleteOnboardingCommandHandler : IRequestHandler<CompleteOnboardi
                 IsActive = true
             };
 
+            newSpendingPlan = spendingPlan;
             _context.SpendingPlans.Add(spendingPlan);
         }
 
@@ -120,8 +122,108 @@ public class CompleteOnboardingCommandHandler : IRequestHandler<CompleteOnboardi
             _context.Goals.Add(debtGoal);
         }
 
+        // PR O-5: Create UserCategory + BudgetAllocation rows from step 3 + step 4
+        if (newSpendingPlan != null)
+        {
+            var categoriesResponse = responses.FirstOrDefault(r => r.StepNumber == 3);
+            if (categoriesResponse != null)
+            {
+                await ProcessCategoriesAndEstimatesAsync(
+                    userId,
+                    newSpendingPlan,
+                    categoriesResponse.Response,
+                    responses.FirstOrDefault(r => r.StepNumber == 4)?.Response,
+                    cancellationToken
+                );
+            }
+        }
+
         await _context.SaveChangesAsync(cancellationToken);
         return Unit.Value;
+    }
+
+    private async Task ProcessCategoriesAndEstimatesAsync(
+        Guid userId,
+        SpendingPlan plan,
+        string categoriesJson,
+        string? estimatesJson,
+        CancellationToken cancellationToken)
+    {
+        var selectedNames = new List<string>();
+        try
+        {
+            using var doc = System.Text.Json.JsonDocument.Parse(categoriesJson);
+            if (doc.RootElement.TryGetProperty("needs", out var needs)
+                && needs.ValueKind == System.Text.Json.JsonValueKind.Array)
+            {
+                foreach (var n in needs.EnumerateArray())
+                {
+                    var name = n.GetString();
+                    if (!string.IsNullOrWhiteSpace(name)) selectedNames.Add(name);
+                }
+            }
+            if (doc.RootElement.TryGetProperty("wants", out var wants)
+                && wants.ValueKind == System.Text.Json.JsonValueKind.Array)
+            {
+                foreach (var w in wants.EnumerateArray())
+                {
+                    var name = w.GetString();
+                    if (!string.IsNullOrWhiteSpace(name)) selectedNames.Add(name);
+                }
+            }
+        }
+        catch
+        {
+            return;
+        }
+
+        if (selectedNames.Count == 0) return;
+
+        var estimates = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
+        if (!string.IsNullOrWhiteSpace(estimatesJson))
+        {
+            try
+            {
+                using var doc = System.Text.Json.JsonDocument.Parse(estimatesJson);
+                if (doc.RootElement.ValueKind == System.Text.Json.JsonValueKind.Object)
+                {
+                    foreach (var prop in doc.RootElement.EnumerateObject())
+                    {
+                        if (prop.Value.ValueKind == System.Text.Json.JsonValueKind.Number
+                            && prop.Value.TryGetDecimal(out var amount))
+                        {
+                            estimates[prop.Name] = amount;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Estimates are optional; carry on with zeros.
+            }
+        }
+
+        var categories = await _context.Categories
+            .Where(c => selectedNames.Contains(c.Name))
+            .ToListAsync(cancellationToken);
+
+        foreach (var category in categories)
+        {
+            _context.UserCategories.Add(new UserCategory
+            {
+                UserId = userId,
+                CategoryId = category.Id,
+                IsHidden = false,
+            });
+
+            estimates.TryGetValue(category.Name, out var amount);
+            _context.BudgetAllocations.Add(new BudgetAllocation
+            {
+                SpendingPlanId = plan.Id,
+                CategoryId = category.Id,
+                AllocatedAmount = amount,
+            });
+        }
     }
 
     private static string? ParseGoalPickValue(string? json)
