@@ -5,6 +5,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '../store/authStore';
 import { apiClient } from '../api/client';
 import { CactusLogo } from '../components/brand/CactusLogo';
+import { Phase2Welcome } from './onboarding/phase2/Phase2Welcome';
+import { Phase2Intro } from './onboarding/phase2/Phase2Intro';
+import { Phase2Slider } from './onboarding/phase2/Phase2Slider';
 
 interface SaveResponsePayload {
   stepNumber: number;
@@ -90,6 +93,9 @@ const progressPrompts = [
 ];
 
 export function OnboardingPage() {
+  const [phase, setPhase] = useState<
+    'phase2-welcome' | 'phase2-intro' | 'phase2-slider' | 'questions'
+  >('phase2-welcome');
   const navigate = useNavigate();
   const { user, setUser } = useAuthStore();
   const [currentStep, setCurrentStep] = useState(0);
@@ -245,6 +251,21 @@ export function OnboardingPage() {
 
   const showPrompt = currentStep > 0 && currentStep % 2 === 0 && currentStep < steps.length - 1;
   const promptIndex = Math.floor(currentStep / 2) - 1;
+
+  if (phase === 'phase2-welcome') {
+    return <Phase2Welcome onContinue={() => setPhase('phase2-intro')} />;
+  }
+  if (phase === 'phase2-intro') {
+    return (
+      <Phase2Intro
+        onContinue={() => setPhase('phase2-slider')}
+        onSkip={() => setPhase('questions')}
+      />
+    );
+  }
+  if (phase === 'phase2-slider') {
+    return <Phase2Slider onContinue={() => setPhase('questions')} />;
+  }
 
   return (
     <div className="min-h-screen bg-cactus-sandstone font-cactus flex flex-col">
