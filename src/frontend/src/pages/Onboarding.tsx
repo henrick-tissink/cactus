@@ -9,6 +9,8 @@ import { Phase2Welcome } from './onboarding/phase2/Phase2Welcome';
 import { Phase2Intro } from './onboarding/phase2/Phase2Intro';
 import { Phase2Slider } from './onboarding/phase2/Phase2Slider';
 import { GoalPickScreen } from './onboarding/goal/GoalPickScreen';
+import { CategoryScreen } from './onboarding/categories/CategoryScreen';
+import { EstimateScreen } from './onboarding/categories/EstimateScreen';
 
 interface SaveResponsePayload {
   stepNumber: number;
@@ -88,7 +90,13 @@ const progressPrompts = [
 
 export function OnboardingPage() {
   const [phase, setPhase] = useState<
-    'phase2-welcome' | 'phase2-intro' | 'phase2-slider' | 'goal-pick' | 'questions'
+    | 'phase2-welcome'
+    | 'phase2-intro'
+    | 'phase2-slider'
+    | 'goal-pick'
+    | 'categories'
+    | 'estimates'
+    | 'questions'
   >('phase2-welcome');
   const navigate = useNavigate();
   const { user, setUser } = useAuthStore();
@@ -99,6 +107,8 @@ export function OnboardingPage() {
   const [error, setError] = useState<string | null>(null);
   const [hasDebts, setHasDebts] = useState(false);
   const [debts, setDebts] = useState<DebtEntry[]>([]);
+  const [selectedNeeds, setSelectedNeeds] = useState<string[]>([]);
+  const [selectedWants, setSelectedWants] = useState<string[]>([]);
 
   const [hasFastForwarded, setHasFastForwarded] = useState(false);
 
@@ -261,7 +271,27 @@ export function OnboardingPage() {
     return <Phase2Slider onContinue={() => setPhase('goal-pick')} />;
   }
   if (phase === 'goal-pick') {
-    return <GoalPickScreen onContinue={() => setPhase('questions')} />;
+    return <GoalPickScreen onContinue={() => setPhase('categories')} />;
+  }
+  if (phase === 'categories') {
+    return (
+      <CategoryScreen
+        onContinue={(needs, wants) => {
+          setSelectedNeeds(needs);
+          setSelectedWants(wants);
+          setPhase('estimates');
+        }}
+      />
+    );
+  }
+  if (phase === 'estimates') {
+    return (
+      <EstimateScreen
+        selectedNeeds={selectedNeeds}
+        selectedWants={selectedWants}
+        onContinue={() => setPhase('questions')}
+      />
+    );
   }
 
   return (
