@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, ChevronLeft, Check, AlertCircle, Plus, X } from 'lucide-react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '../store/authStore';
 import { apiClient } from '../api/client';
 import { CactusLogo } from '../components/brand/CactusLogo';
@@ -50,27 +50,6 @@ const steps = [
     ],
   },
   {
-    id: 3,
-    name: 'Money Management',
-    question: 'How do you currently track your spending?',
-    options: [
-      { value: 'spreadsheet', label: 'Spreadsheet', icon: '📊' },
-      { value: 'app', label: 'Another app', icon: '📱' },
-      { value: 'mental', label: 'In my head', icon: '🧠' },
-      { value: 'none', label: "I don't track it", icon: '🤷' },
-    ],
-  },
-  {
-    id: 4,
-    name: 'Tracking Preference',
-    question: 'How detailed do you want your budgeting to be?',
-    options: [
-      { value: 'simple', label: 'Keep it simple - just the basics', icon: '🎯' },
-      { value: 'moderate', label: 'Moderate - some categories', icon: '📁' },
-      { value: 'detailed', label: 'Detailed - track everything', icon: '🔬' },
-    ],
-  },
-  {
     id: 5,
     name: 'Monthly Income',
     question: "What's your monthly after-tax income?",
@@ -108,7 +87,6 @@ const progressPrompts = [
   "Great start! Let's learn more about your financial situation.",
   "You're doing great! Just a few more questions.",
   'Almost there! This information helps us personalize your experience.',
-  "Last few questions - you've got this!",
 ];
 
 export function OnboardingPage() {
@@ -121,6 +99,32 @@ export function OnboardingPage() {
   const [error, setError] = useState<string | null>(null);
   const [hasDebts, setHasDebts] = useState(false);
   const [debts, setDebts] = useState<DebtEntry[]>([]);
+
+  const [hasFastForwarded, setHasFastForwarded] = useState(false);
+
+  const { data: onboardingStatus } = useQuery({
+    queryKey: ['/onboarding/status'],
+    queryFn: async () => {
+      const response = await apiClient.get<{
+        isComplete: boolean;
+        currentStep: number;
+        responses: Array<{ stepNumber: number; stepName: string; response: string }>;
+      }>('/onboarding/status');
+      return response.data;
+    },
+  });
+
+  // Derive fast-forward target during render (react-hooks/set-state-in-effect prefers
+  // this pattern over a useEffect that calls setState in response to fetched data).
+  // Once status arrives, jump currentStep past any already-answered slot exactly once.
+  if (onboardingStatus && !hasFastForwarded) {
+    const answeredStepNumbers = new Set(onboardingStatus.responses.map((r) => r.stepNumber));
+    const firstUnansweredIndex = steps.findIndex((s) => !answeredStepNumbers.has(s.id));
+    if (firstUnansweredIndex >= 0 && firstUnansweredIndex !== currentStep) {
+      setCurrentStep(firstUnansweredIndex);
+    }
+    setHasFastForwarded(true);
+  }
 
   const step = steps[currentStep];
   const progress = ((currentStep + 1) / steps.length) * 100;

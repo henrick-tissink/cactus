@@ -16,7 +16,7 @@ public class SaveOnboardingResponseCommandValidator : AbstractValidator<SaveOnbo
 {
     public SaveOnboardingResponseCommandValidator()
     {
-        RuleFor(x => x.StepNumber).InclusiveBetween(1, 8);
+        RuleFor(x => x.StepNumber).InclusiveBetween(1, 13);
         RuleFor(x => x.StepName).NotEmpty().MaximumLength(100);
         RuleFor(x => x.Response).NotEmpty();
     }

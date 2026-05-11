@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authApi } from '../api/auth';
 import { useAuthStore } from '../store/authStore';
+import { apiClient } from '../api/client';
+import { useOnboardingWizardStore } from './onboarding/store';
+import { wizardToBackendMapping, type WizardStepId } from './onboarding/data';
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -53,6 +56,25 @@ export function RegisterPage() {
         response.refreshToken
       );
 
+      // Batched POST of pre-signup wizard answers, if any.
+      // Mapped wizard step → backend stepNumber per pages/onboarding/data.ts
+      const wizardAnswers = useOnboardingWizardStore.getState().answers;
+      const postPromises = Object.keys(wizardAnswers).map((rawStep) => {
+        const step = Number(rawStep) as WizardStepId;
+        const values = wizardAnswers[step];
+        if (!values || values.length === 0) return Promise.resolve(null);
+        const { stepNumber, stepName } = wizardToBackendMapping[step];
+        return apiClient
+          .post('/onboarding/response', {
+            stepNumber,
+            stepName,
+            response: JSON.stringify(values),
+          })
+          .catch(() => null); // non-fatal: navigate anyway, user re-answers in /onboarding
+      });
+      await Promise.all(postPromises);
+      useOnboardingWizardStore.getState().reset();
+
       navigate('/onboarding');
     } catch {
       setError('Email already registered or invalid data');
@@ -62,7 +84,7 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-green-100 py-12">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-green-50 to-green-100 py-12">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Logo */}
