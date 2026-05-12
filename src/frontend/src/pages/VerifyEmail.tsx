@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { AlertCircle, Check } from 'lucide-react';
 import { apiClient } from '../api/client';
+import { CactusLogo } from '../components/brand/CactusLogo';
 
 export function VerifyEmailPage() {
   const [searchParams] = useSearchParams();
@@ -19,19 +21,24 @@ export function VerifyEmailPage() {
   }, [token]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-green-100">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-          <h1 className="text-3xl font-bold text-green-600 mb-4">🌵 Cactus</h1>
+    <div className="min-h-screen flex items-center justify-center bg-cactus-sandstone font-cactus px-6">
+      <div className="w-full max-w-md animate-fade-in">
+        <div className="bg-white rounded-2xl border border-cactus-overlay p-8 text-center">
+          <div className="flex justify-center mb-6">
+            <CactusLogo />
+          </div>
 
-          {status === 'loading' && <p className="text-gray-600">Verifying your email...</p>}
+          {status === 'loading' && (
+            <p className="font-cactus text-cactus-charcoal/60">Verifying your email...</p>
+          )}
 
           {status === 'success' && (
             <>
-              <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm mb-6">
-                Your email has been verified successfully!
+              <div className="bg-cactus-sage-light border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-6 flex items-center gap-2 justify-center">
+                <Check className="w-4 h-4 text-cactus-sage shrink-0" />
+                <span>Your email has been verified successfully!</span>
               </div>
-              <Link to="/" className="text-green-600 hover:text-green-700 font-medium">
+              <Link to="/" className="font-cactus font-semibold text-cactus-sage hover:underline">
                 Go to Dashboard
               </Link>
             </>
@@ -39,10 +46,14 @@ export function VerifyEmailPage() {
 
           {status === 'error' && (
             <>
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm mb-6">
-                Invalid or expired verification link.
+              <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-6 flex items-center gap-2 justify-center">
+                <AlertCircle className="w-4 h-4 text-cactus-prickly shrink-0" />
+                <span>Invalid or expired verification link.</span>
               </div>
-              <Link to="/settings" className="text-green-600 hover:text-green-700 font-medium">
+              <Link
+                to="/settings"
+                className="font-cactus font-semibold text-cactus-sage hover:underline"
+              >
                 Go to Settings to resend
               </Link>
             </>
