@@ -1,8 +1,10 @@
 interface CactusLogoProps {
   className?: string;
+  tone?: 'light' | 'dark';
 }
 
-export function CactusLogo({ className = '' }: CactusLogoProps) {
+export function CactusLogo({ className = '', tone = 'light' }: CactusLogoProps) {
+  const wordmarkClass = tone === 'dark' ? 'text-cactus-mint' : 'text-cactus-charcoal';
   return (
     <div className={`flex items-center gap-1.5 ${className}`}>
       <svg
@@ -34,7 +36,7 @@ export function CactusLogo({ className = '' }: CactusLogoProps) {
         <circle cx="14" cy="3" r="2" className="fill-cactus-prickly" />
         <circle cx="15" cy="2.2" r="0.8" className="fill-cactus-desert" />
       </svg>
-      <span className="font-cactus font-bold text-xl text-cactus-charcoal tracking-tight">
+      <span className={`font-cactus font-bold text-xl ${wordmarkClass} tracking-tight`}>
         cactus
       </span>
     </div>
