@@ -44,38 +44,25 @@ interface DashboardSummaryResponse {
   recentTransactions: RecentTransactionDto[];
 }
 
-const BUCKET_COLORS: Record<MacroCategoryType, string> = {
-  [MacroCategoryType.Needs]: '#2563EB',
-  [MacroCategoryType.Wants]: '#8B5CF6',
-  [MacroCategoryType.Goals]: '#10B981',
+// Tailwind class fragments per bucket (resolve to cactus tokens at build time)
+const BUCKET_FILL_CLASS: Record<MacroCategoryType, string> = {
+  [MacroCategoryType.Needs]: 'bg-cactus-sage',
+  [MacroCategoryType.Wants]: 'bg-cactus-desert',
+  [MacroCategoryType.Goals]: 'bg-cactus-prickly',
 };
 
-const GOAL_TYPE_INFO: Record<number, { label: string; icon: typeof Target; color: string }> = {
-  [GoalType.MiniBuffer]: {
-    label: 'Mini Buffer',
-    icon: Wallet,
-    color: 'bg-amber-100 text-amber-600',
-  },
-  [GoalType.DebtPayoff]: {
-    label: 'Debt Payoff',
-    icon: CreditCard,
-    color: 'bg-red-100 text-red-600',
-  },
-  [GoalType.EmergencyFund]: {
-    label: 'Emergency Fund',
-    icon: PiggyBank,
-    color: 'bg-blue-100 text-blue-600',
-  },
-  [GoalType.Savings]: {
-    label: 'Savings',
-    icon: Target,
-    color: 'bg-green-100 text-green-600',
-  },
-  [GoalType.Investment]: {
-    label: 'Investment',
-    icon: LineChart,
-    color: 'bg-purple-100 text-purple-600',
-  },
+const BUCKET_DOT_CLASS: Record<MacroCategoryType, string> = {
+  [MacroCategoryType.Needs]: 'bg-cactus-sage',
+  [MacroCategoryType.Wants]: 'bg-cactus-desert',
+  [MacroCategoryType.Goals]: 'bg-cactus-prickly',
+};
+
+const GOAL_TYPE_INFO: Record<number, { label: string; icon: typeof Target }> = {
+  [GoalType.MiniBuffer]: { label: 'Mini Buffer', icon: Wallet },
+  [GoalType.DebtPayoff]: { label: 'Debt Payoff', icon: CreditCard },
+  [GoalType.EmergencyFund]: { label: 'Emergency Fund', icon: PiggyBank },
+  [GoalType.Savings]: { label: 'Savings', icon: Target },
+  [GoalType.Investment]: { label: 'Investment', icon: LineChart },
 };
 
 function getMonthTitle(): string {
@@ -90,10 +77,10 @@ function estimateClassifyTime(count: number): string {
 
 function LoadingState() {
   return (
-    <div className="p-8">
+    <div className="p-8 bg-cactus-sandstone font-cactus min-h-full">
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-green-600" />
-        <span className="ml-3 text-gray-600">Loading dashboard...</span>
+        <Loader2 className="w-8 h-8 animate-spin text-cactus-sage" />
+        <span className="ml-3 text-cactus-charcoal/60 font-cactus">Loading dashboard...</span>
       </div>
     </div>
   );
@@ -101,11 +88,13 @@ function LoadingState() {
 
 function ErrorState({ error }: { error: Error }) {
   return (
-    <div className="p-8">
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-        <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <h2 className="text-lg font-semibold text-red-800 mb-2">Failed to load dashboard</h2>
-        <p className="text-red-600">{error.message}</p>
+    <div className="p-8 bg-cactus-sandstone font-cactus min-h-full">
+      <div className="bg-white border border-cactus-overlay rounded-2xl p-6 text-center">
+        <AlertCircle className="w-12 h-12 text-cactus-prickly mx-auto mb-4" />
+        <h2 className="text-lg font-cactus font-bold text-cactus-charcoal mb-2">
+          Failed to load dashboard
+        </h2>
+        <p className="text-cactus-charcoal/60 font-cactus">{error.message}</p>
       </div>
     </div>
   );
@@ -113,38 +102,45 @@ function ErrorState({ error }: { error: Error }) {
 
 function OnboardingChecklist() {
   return (
-    <div className="p-8">
+    <div className="p-8 bg-cactus-sandstone font-cactus min-h-full">
       <div className="animate-fade-in">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">{getMonthTitle()}</h1>
+        <h1 className="text-2xl font-cactus font-bold text-cactus-charcoal mb-2">
+          {getMonthTitle()}
+        </h1>
         <div className="max-w-lg mx-auto mt-12">
-          <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
-            <div
-              className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
-              style={{ backgroundColor: 'var(--cactus-mint, #E8F5EE)' }}
-            >
-              <Upload className="w-8 h-8" style={{ color: 'var(--cactus-green, #1B7A4A)' }} />
+          <div className="bg-white border border-cactus-overlay rounded-2xl p-8 text-center">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 bg-cactus-sage-light">
+              <Upload className="w-8 h-8 text-cactus-sage" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            <h2 className="text-xl font-cactus font-bold text-cactus-charcoal mb-2">
               Let's get your finances in order
             </h2>
-            <p className="text-gray-500 mb-8">Start by importing a bank statement.</p>
+            <p className="text-cactus-charcoal/60 font-cactus mb-8">
+              Start by importing a bank statement.
+            </p>
 
             <div className="space-y-4 text-left">
               <Link
                 to="/import"
-                className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:border-green-300 hover:bg-green-50 transition-colors"
+                className="flex items-center gap-3 p-4 rounded-xl border border-cactus-overlay hover:bg-cactus-sage-light transition-colors"
               >
-                <Circle className="w-5 h-5 text-gray-300 flex-shrink-0" />
-                <span className="font-medium text-gray-900">Import your first bank statement</span>
-                <ArrowRight className="w-4 h-4 text-gray-400 ml-auto" />
+                <Circle className="w-5 h-5 text-cactus-charcoal/40 flex-shrink-0" />
+                <span className="font-cactus font-semibold text-cactus-charcoal">
+                  Import your first bank statement
+                </span>
+                <ArrowRight className="w-4 h-4 text-cactus-charcoal/40 ml-auto" />
               </Link>
-              <div className="flex items-center gap-3 p-4 rounded-lg border border-gray-100 opacity-50">
-                <Circle className="w-5 h-5 text-gray-300 flex-shrink-0" />
-                <span className="font-medium text-gray-500">Classify your transactions</span>
+              <div className="flex items-center gap-3 p-4 rounded-xl border border-cactus-overlay opacity-50">
+                <Circle className="w-5 h-5 text-cactus-charcoal/40 flex-shrink-0" />
+                <span className="font-cactus font-semibold text-cactus-charcoal/40">
+                  Classify your transactions
+                </span>
               </div>
-              <div className="flex items-center gap-3 p-4 rounded-lg border border-gray-100 opacity-50">
-                <Circle className="w-5 h-5 text-gray-300 flex-shrink-0" />
-                <span className="font-medium text-gray-500">Review your budget</span>
+              <div className="flex items-center gap-3 p-4 rounded-xl border border-cactus-overlay opacity-50">
+                <Circle className="w-5 h-5 text-cactus-charcoal/40 flex-shrink-0" />
+                <span className="font-cactus font-semibold text-cactus-charcoal/40">
+                  Review your budget
+                </span>
               </div>
             </div>
           </div>
@@ -170,16 +166,16 @@ function PrimaryGoalCard({ goal }: { goal: GoalDto }) {
   const remaining = goal.targetAmount - goal.currentAmount;
 
   return (
-    <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-5 shadow-sm border border-amber-200 max-w-sm">
+    <div className="bg-cactus-sage-light border border-cactus-overlay rounded-2xl p-5 max-w-sm">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className={`p-1.5 rounded-lg ${typeInfo?.color || 'bg-gray-100'}`}>
-            <Icon className="w-4 h-4" />
+          <div className="p-1.5 rounded-lg bg-white">
+            <Icon className="w-4 h-4 text-cactus-sage" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-gray-900 text-sm">{goal.name}</h3>
-              <div className="px-1.5 py-0.5 bg-amber-100 text-amber-700 text-xs font-medium rounded-full flex items-center gap-0.5">
+              <h3 className="font-cactus font-bold text-cactus-charcoal text-base">{goal.name}</h3>
+              <div className="bg-cactus-sage text-white font-cactus font-bold text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full flex items-center gap-0.5">
                 <Star className="w-2.5 h-2.5 fill-current" />
                 Primary
               </div>
@@ -188,7 +184,7 @@ function PrimaryGoalCard({ goal }: { goal: GoalDto }) {
         </div>
         <Link
           to="/goals"
-          className="text-amber-600 font-medium hover:text-amber-700 flex items-center gap-1 text-xs"
+          className="text-cactus-sage font-cactus font-semibold flex items-center gap-1 text-xs"
         >
           View <ArrowRight className="w-3 h-3" />
         </Link>
@@ -197,29 +193,29 @@ function PrimaryGoalCard({ goal }: { goal: GoalDto }) {
       {/* Progress */}
       <div>
         <div className="flex justify-between text-xs mb-1">
-          <span className="text-gray-600 font-mono-financial">
+          <span className="text-cactus-charcoal/60 font-cactus tabular-nums">
             {formatCurrency(goal.currentAmount)}
           </span>
-          <span className="text-gray-500 font-mono-financial">
+          <span className="text-cactus-charcoal/60 font-cactus tabular-nums">
             {formatCurrency(goal.targetAmount)}
           </span>
         </div>
-        <div className="h-2 bg-amber-100 rounded-full overflow-hidden">
+        <div className="h-2 bg-cactus-overlay rounded-full overflow-hidden">
           <div
-            className="h-full bg-amber-500 transition-all duration-500"
+            className="h-full bg-cactus-sage transition-all duration-500"
             style={{ width: `${Math.min(goal.progressPercentage, 100)}%` }}
           />
         </div>
         <div className="flex justify-between text-xs mt-1">
-          <span className="text-amber-600 font-medium">
+          <span className="text-cactus-charcoal/60 font-cactus">
             {goal.progressPercentage.toFixed(0)}% complete
           </span>
-          <span className="text-gray-500 font-mono-financial">
+          <span className="text-cactus-sage font-cactus font-bold tabular-nums">
             {formatCurrency(remaining)} to go
           </span>
         </div>
         {goal.currentAmount === 0 && (
-          <p className="text-xs text-amber-600 mt-2 italic">
+          <p className="text-xs text-cactus-charcoal/60 font-cactus mt-2 italic">
             Every rand counts. Start your journey today.
           </p>
         )}
@@ -283,24 +279,24 @@ export function DashboardPage() {
   const totalAllocated = summary.buckets.reduce((sum, b) => sum + b.allocated, 0);
 
   return (
-    <div className="p-8">
+    <div className="p-8 bg-cactus-sandstone font-cactus min-h-full">
       <div className="animate-fade-in">
         {/* Header — dynamic month title */}
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">{getMonthTitle()}</h1>
+          <h1 className="text-2xl font-cactus font-bold text-cactus-charcoal">{getMonthTitle()}</h1>
         </div>
 
         {/* Unclassified transactions banner */}
         {summary.unclassifiedCount > 0 && (
-          <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
-            <p className="text-amber-800">
+          <div className="mb-6 p-4 bg-cactus-goals-bg border border-cactus-overlay rounded-2xl flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-cactus-prickly flex-shrink-0" />
+            <p className="text-cactus-charcoal font-cactus">
               <strong>{summary.unclassifiedCount}</strong> transactions need classifying (
               {estimateClassifyTime(summary.unclassifiedCount)})
             </p>
             <Link
               to="/transactions?filter=unclassified"
-              className="ml-auto text-amber-700 font-medium hover:text-amber-800 flex items-center gap-1"
+              className="ml-auto text-cactus-charcoal font-cactus font-semibold underline flex items-center gap-1"
             >
               Classify now <ArrowRight className="w-4 h-4" />
             </Link>
@@ -308,33 +304,30 @@ export function DashboardPage() {
         )}
 
         {/* Hero metric — single remaining amount */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-8">
+        <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mb-8">
           <p
-            className={`text-4xl font-bold font-mono-financial ${remaining >= 0 ? 'text-gray-900' : 'text-red-600'}`}
+            className={`text-4xl font-cactus font-bold tabular-nums ${
+              remaining >= 0 ? 'text-cactus-charcoal' : 'text-cactus-prickly'
+            }`}
           >
             R{remaining.toLocaleString()}
           </p>
-          <p className="text-gray-500 mt-1">
+          <p className="text-cactus-charcoal/40 font-cactus mt-1">
             remaining of{' '}
-            <span className="font-mono-financial">R{summary.monthlyIncome.toLocaleString()}</span>{' '}
-            income
+            <span className="tabular-nums">R{summary.monthlyIncome.toLocaleString()}</span> income
           </p>
 
           {/* Spent vs remaining bar */}
           <div className="mt-4">
-            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-2 bg-cactus-overlay rounded-full overflow-hidden">
               <div
-                className="h-full rounded-full transition-all duration-500"
-                style={{
-                  width: `${spentPercentage}%`,
-                  backgroundColor: 'var(--cactus-green, #1B7A4A)',
-                }}
+                className="h-full bg-cactus-sage rounded-full transition-all duration-500"
+                style={{ width: `${spentPercentage}%` }}
               />
             </div>
             {summary.totalSpent > 0 && (
-              <p className="text-xs text-gray-500 mt-1.5">
-                <span className="font-mono-financial">R{summary.totalSpent.toLocaleString()}</span>{' '}
-                spent
+              <p className="text-xs text-cactus-charcoal/40 font-cactus mt-1.5">
+                <span className="tabular-nums">R{summary.totalSpent.toLocaleString()}</span> spent
               </p>
             )}
           </div>
@@ -342,21 +335,20 @@ export function DashboardPage() {
 
         {/* Buckets — stacked horizontal bar */}
         {summary.buckets.length > 0 && (
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-8">
-            <h2 className="text-sm font-semibold text-gray-900 mb-3">Spending Plan</h2>
+          <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mb-8">
+            <h2 className="text-sm font-cactus font-bold text-cactus-charcoal mb-3">
+              Spending Plan
+            </h2>
 
             {/* Stacked bar */}
-            <div className="h-3 rounded-full overflow-hidden flex bg-gray-100">
+            <div className="h-3 rounded-full overflow-hidden flex bg-cactus-overlay">
               {summary.buckets.map((bucket) => {
                 const widthPct = totalAllocated > 0 ? (bucket.spent / totalAllocated) * 100 : 0;
                 return (
                   <div
                     key={bucket.type}
-                    className="h-full transition-all duration-500 first:rounded-l-full last:rounded-r-full"
-                    style={{
-                      width: `${widthPct}%`,
-                      backgroundColor: BUCKET_COLORS[bucket.type],
-                    }}
+                    className={`h-full transition-all duration-500 first:rounded-l-full last:rounded-r-full ${BUCKET_FILL_CLASS[bucket.type]}`}
+                    style={{ width: `${widthPct}%` }}
                   />
                 );
               })}
@@ -367,15 +359,14 @@ export function DashboardPage() {
               {summary.buckets.map((bucket) => (
                 <div key={bucket.type} className="flex items-center gap-2 text-sm">
                   <span
-                    className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: BUCKET_COLORS[bucket.type] }}
+                    className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${BUCKET_DOT_CLASS[bucket.type]}`}
                   />
-                  <span className="text-gray-600">{bucket.name}</span>
-                  <span className="font-mono-financial text-gray-900">
+                  <span className="text-cactus-charcoal font-cactus">{bucket.name}</span>
+                  <span className="text-cactus-charcoal font-cactus tabular-nums">
                     R{bucket.spent.toLocaleString()}
                   </span>
-                  <span className="text-gray-400">/</span>
-                  <span className="font-mono-financial text-gray-400">
+                  <span className="text-cactus-charcoal/40 font-cactus">/</span>
+                  <span className="text-cactus-charcoal/60 font-cactus tabular-nums">
                     R{bucket.allocated.toLocaleString()}
                   </span>
                 </div>
@@ -387,8 +378,8 @@ export function DashboardPage() {
         {/* Primary Goal Focus */}
         {primaryGoal && (
           <div className="mb-8">
-            <h2 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <Star className="w-4 h-4 text-amber-500" />
+            <h2 className="text-sm font-cactus font-bold text-cactus-charcoal mb-3 flex items-center gap-2">
+              <Star className="w-4 h-4 text-cactus-sage" />
               Current Focus
             </h2>
             <PrimaryGoalCard goal={primaryGoal} />
@@ -396,57 +387,62 @@ export function DashboardPage() {
         )}
 
         {/* Recent transactions */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-          <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-gray-900">Recent Transactions</h2>
+        <div className="bg-white border border-cactus-overlay rounded-2xl">
+          <div className="p-6 border-b border-cactus-overlay flex items-center justify-between">
+            <h2 className="text-sm font-cactus font-bold text-cactus-charcoal">
+              Recent Transactions
+            </h2>
             <div className="flex items-center gap-4">
               <Link
                 to="/import"
-                className="text-gray-500 font-medium hover:text-gray-700 flex items-center gap-1 text-sm"
+                className="text-cactus-sage font-cactus font-semibold flex items-center gap-1 text-sm"
               >
                 <Upload className="w-4 h-4" />
                 Import
               </Link>
               <Link
                 to="/transactions"
-                className="font-medium hover:text-green-700 text-sm"
-                style={{ color: 'var(--cactus-green, #1B7A4A)' }}
+                className="text-cactus-sage font-cactus font-semibold text-sm"
               >
                 View all
               </Link>
             </div>
           </div>
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-cactus-overlay">
             {summary.recentTransactions.length === 0 ? (
-              <div className="p-8 text-center text-gray-500">No recent transactions</div>
+              <div className="p-8 text-center text-cactus-charcoal/60 font-cactus">
+                No recent transactions
+              </div>
             ) : (
               summary.recentTransactions.map((transaction) => (
                 <div
                   key={transaction.id}
                   className={`p-4 flex items-center gap-4 ${
-                    !transaction.isClassified ? 'border-l-[3px] border-l-amber-400' : ''
+                    !transaction.isClassified ? 'border-l-2 border-l-cactus-prickly' : ''
                   }`}
                 >
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      transaction.amount > 0 ? 'bg-green-100' : 'bg-gray-100'
+                      transaction.amount > 0 ? 'bg-cactus-sage-light' : 'bg-cactus-overlay'
                     }`}
                   >
                     {transaction.amount > 0 ? (
-                      <TrendingUp className="w-5 h-5 text-green-600" />
+                      <TrendingUp className="w-5 h-5 text-cactus-sage" />
                     ) : (
-                      <TrendingDown className="w-5 h-5 text-gray-600" />
+                      <TrendingDown className="w-5 h-5 text-cactus-prickly" />
                     )}
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900">{transaction.description}</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="font-cactus font-semibold text-cactus-charcoal">
+                      {transaction.description}
+                    </p>
+                    <p className="text-sm text-cactus-charcoal/50 font-cactus">
                       {new Date(transaction.transactionDate).toLocaleDateString()}
                     </p>
                   </div>
                   <p
-                    className={`font-semibold font-mono-financial ${
-                      transaction.amount > 0 ? 'text-green-600' : 'text-gray-900'
+                    className={`font-cactus font-bold tabular-nums ${
+                      transaction.amount > 0 ? 'text-cactus-sage' : 'text-cactus-prickly'
                     }`}
                   >
                     {transaction.amount > 0 ? '+' : ''}R
