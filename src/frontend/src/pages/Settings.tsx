@@ -2,7 +2,13 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { apiClient } from '../api/client';
 import { useAuthStore } from '../store/authStore';
-import { User, Save, Lock, AlertCircle, Check, Mail, ShieldCheck } from 'lucide-react';
+import { AlertCircle, Check, ShieldCheck } from 'lucide-react';
+
+const inputClass =
+  'w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none transition-colors';
+const labelClass = 'font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5';
+const submitButtonClass =
+  'w-full px-6 py-4 rounded-2xl font-cactus font-bold text-base text-white transition-all bg-cactus-sage shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed';
 
 export function SettingsPage() {
   const { user, setUser } = useAuthStore();
@@ -77,166 +83,158 @@ export function SettingsPage() {
   };
 
   return (
-    <div className="p-8 max-w-2xl mx-auto animate-fade-in">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Settings</h1>
+    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-cactus-charcoal font-cactus font-bold text-2xl mb-6">Settings</h1>
 
-      {/* Email Verification Banner */}
-      {user && user.isEmailVerified === false && (
-        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-center gap-3">
-          <Mail className="w-5 h-5 text-amber-500 flex-shrink-0" />
-          <div className="flex-1">
-            <p className="text-sm text-amber-700">Your email is not verified.</p>
-          </div>
-          <ResendVerificationButton />
-        </div>
-      )}
-
-      {user && user.isEmailVerified === true && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
-          <ShieldCheck className="w-5 h-5 text-green-500 flex-shrink-0" />
-          <p className="text-sm text-green-700">Email verified</p>
-        </div>
-      )}
-
-      {/* Profile Section */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-green-100 rounded-lg">
-            <User className="w-5 h-5 text-green-600" />
-          </div>
-          <h2 className="text-lg font-semibold text-gray-900">Profile</h2>
-        </div>
-
-        {profileError && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
-            <span className="text-sm">{profileError}</span>
+        {/* Email Verification Banner */}
+        {user && user.isEmailVerified === false && (
+          <div className="bg-cactus-goals-bg border border-cactus-overlay rounded-xl p-4 flex items-center gap-3 mb-6">
+            <AlertCircle className="w-5 h-5 text-cactus-prickly shrink-0" />
+            <div className="flex-1">
+              <p className="font-cactus text-sm text-cactus-charcoal">
+                Your email is not verified.
+              </p>
+            </div>
+            <ResendVerificationButton />
           </div>
         )}
 
-        {profileSuccess && (
-          <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2 text-green-700">
-            <Check className="w-4 h-4 flex-shrink-0" />
-            <span className="text-sm">Profile updated successfully</span>
+        {user && user.isEmailVerified === true && (
+          <div className="bg-cactus-sage-light border border-cactus-overlay rounded-xl p-4 flex items-center gap-3 mb-6">
+            <ShieldCheck className="w-5 h-5 text-cactus-sage shrink-0" />
+            <p className="font-cactus text-sm text-cactus-charcoal">Email verified</p>
           </div>
         )}
 
-        <form onSubmit={handleProfileSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              value={user?.email || ''}
-              disabled
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500"
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
+        {/* Profile Section */}
+        <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mb-6">
+          <h2 className="text-cactus-charcoal font-cactus font-bold text-lg mb-4">Profile</h2>
+
+          {profileError && (
+            <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-cactus-prickly shrink-0" />
+              <span>{profileError}</span>
+            </div>
+          )}
+
+          {profileSuccess && (
+            <div className="bg-cactus-sage-light border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
+              <Check className="w-4 h-4 text-cactus-sage shrink-0" />
+              <span>Profile updated successfully</span>
+            </div>
+          )}
+
+          <form onSubmit={handleProfileSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+              <label className={labelClass}>Email</label>
               <input
-                type="text"
-                value={profileForm.firstName}
-                onChange={(e) => setProfileForm({ ...profileForm, firstName: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="First name"
+                type="email"
+                value={user?.email || ''}
+                disabled
+                className={`${inputClass} bg-cactus-overlay/20 text-cactus-charcoal/60 cursor-not-allowed`}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelClass}>First Name</label>
+                <input
+                  type="text"
+                  value={profileForm.firstName}
+                  onChange={(e) => setProfileForm({ ...profileForm, firstName: e.target.value })}
+                  className={inputClass}
+                  placeholder="First name"
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Last Name</label>
+                <input
+                  type="text"
+                  value={profileForm.lastName}
+                  onChange={(e) => setProfileForm({ ...profileForm, lastName: e.target.value })}
+                  className={inputClass}
+                  placeholder="Last name"
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              disabled={updateProfileMutation.isPending}
+              className={submitButtonClass}
+            >
+              {updateProfileMutation.isPending ? 'Saving...' : 'Save Profile'}
+            </button>
+          </form>
+        </div>
+
+        {/* Password Section */}
+        <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mb-6">
+          <h2 className="text-cactus-charcoal font-cactus font-bold text-lg mb-4">
+            Change Password
+          </h2>
+
+          {passwordError && (
+            <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-cactus-prickly shrink-0" />
+              <span>{passwordError}</span>
+            </div>
+          )}
+
+          {passwordSuccess && (
+            <div className="bg-cactus-sage-light border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
+              <Check className="w-4 h-4 text-cactus-sage shrink-0" />
+              <span>Password changed successfully</span>
+            </div>
+          )}
+
+          <form onSubmit={handlePasswordSubmit} className="space-y-4">
+            <div>
+              <label className={labelClass}>Current Password</label>
+              <input
+                type="password"
+                value={passwordForm.currentPassword}
+                onChange={(e) =>
+                  setPasswordForm({ ...passwordForm, currentPassword: e.target.value })
+                }
+                className={inputClass}
+                required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+              <label className={labelClass}>New Password</label>
               <input
-                type="text"
-                value={profileForm.lastName}
-                onChange={(e) => setProfileForm({ ...profileForm, lastName: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="Last name"
+                type="password"
+                value={passwordForm.newPassword}
+                onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
+                className={inputClass}
+                required
+                minLength={8}
+              />
+              <p className="font-cactus text-xs text-cactus-charcoal/60 mt-1">
+                At least 8 characters with uppercase, lowercase, and a digit
+              </p>
+            </div>
+            <div>
+              <label className={labelClass}>Confirm New Password</label>
+              <input
+                type="password"
+                value={passwordForm.confirmPassword}
+                onChange={(e) =>
+                  setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })
+                }
+                className={inputClass}
+                required
               />
             </div>
-          </div>
-          <button
-            type="submit"
-            disabled={updateProfileMutation.isPending}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
-          >
-            <Save className="w-4 h-4" />
-            {updateProfileMutation.isPending ? 'Saving...' : 'Save Profile'}
-          </button>
-        </form>
-      </div>
-
-      {/* Password Section */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-amber-100 rounded-lg">
-            <Lock className="w-5 h-5 text-amber-600" />
-          </div>
-          <h2 className="text-lg font-semibold text-gray-900">Change Password</h2>
+            <button
+              type="submit"
+              disabled={changePasswordMutation.isPending}
+              className={submitButtonClass}
+            >
+              {changePasswordMutation.isPending ? 'Changing...' : 'Change Password'}
+            </button>
+          </form>
         </div>
-
-        {passwordError && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
-            <span className="text-sm">{passwordError}</span>
-          </div>
-        )}
-
-        {passwordSuccess && (
-          <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2 text-green-700">
-            <Check className="w-4 h-4 flex-shrink-0" />
-            <span className="text-sm">Password changed successfully</span>
-          </div>
-        )}
-
-        <form onSubmit={handlePasswordSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
-            <input
-              type="password"
-              value={passwordForm.currentPassword}
-              onChange={(e) =>
-                setPasswordForm({ ...passwordForm, currentPassword: e.target.value })
-              }
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-            <input
-              type="password"
-              value={passwordForm.newPassword}
-              onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              required
-              minLength={8}
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              At least 8 characters with uppercase, lowercase, and a digit
-            </p>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Confirm New Password
-            </label>
-            <input
-              type="password"
-              value={passwordForm.confirmPassword}
-              onChange={(e) =>
-                setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })
-              }
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={changePasswordMutation.isPending}
-            className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 disabled:opacity-50"
-          >
-            <Lock className="w-4 h-4" />
-            {changePasswordMutation.isPending ? 'Changing...' : 'Change Password'}
-          </button>
-        </form>
       </div>
     </div>
   );
@@ -258,18 +256,21 @@ function ResendVerificationButton() {
   });
 
   if (sent) {
-    return <span className="text-sm text-green-600">Sent!</span>;
+    return <span className="font-cactus text-sm text-cactus-sage font-semibold">Sent!</span>;
   }
 
   if (failed) {
-    return <span className="text-sm text-red-600">Failed to send</span>;
+    return (
+      <span className="font-cactus text-sm text-cactus-prickly font-semibold">Failed to send</span>
+    );
   }
 
   return (
     <button
+      type="button"
       onClick={() => resendMutation.mutate()}
       disabled={resendMutation.isPending}
-      className="text-sm text-amber-700 font-medium hover:text-amber-800 disabled:opacity-50"
+      className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 disabled:opacity-50 px-4 py-2 rounded-xl font-cactus font-semibold text-sm transition-colors"
     >
       {resendMutation.isPending ? 'Sending...' : 'Resend'}
     </button>
