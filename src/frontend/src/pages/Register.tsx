@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { AlertCircle } from 'lucide-react';
 import { authApi } from '../api/auth';
 import { useAuthStore } from '../store/authStore';
 import { apiClient } from '../api/client';
+import { CactusLogo } from '../components/brand/CactusLogo';
 import { useOnboardingWizardStore } from './onboarding/store';
 import { wizardToBackendMapping, type WizardStepId } from './onboarding/data';
 
@@ -56,8 +58,6 @@ export function RegisterPage() {
         response.refreshToken
       );
 
-      // Batched POST of pre-signup wizard answers, if any.
-      // Mapped wizard step → backend stepNumber per pages/onboarding/data.ts
       const wizardAnswers = useOnboardingWizardStore.getState().answers;
       const postPromises = Object.keys(wizardAnswers).map((rawStep) => {
         const step = Number(rawStep) as WizardStepId;
@@ -70,7 +70,7 @@ export function RegisterPage() {
             stepName,
             response: JSON.stringify(values),
           })
-          .catch(() => null); // non-fatal: navigate anyway, user re-answers in /onboarding
+          .catch(() => null);
       });
       await Promise.all(postPromises);
       useOnboardingWizardStore.getState().reset();
@@ -83,27 +83,32 @@ export function RegisterPage() {
     }
   };
 
+  const inputClasses =
+    'w-full px-4 py-3 border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl font-cactus text-cactus-charcoal outline-none placeholder:text-cactus-charcoal/30 transition-colors';
+  const labelClasses = 'block font-cactus font-semibold text-sm text-cactus-charcoal mb-1.5';
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-green-50 to-green-100 py-12">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          {/* Logo */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-green-600 mb-2">🌵 Cactus</h1>
-            <p className="text-gray-600">Create your account to get started.</p>
+    <div className="min-h-screen flex items-center justify-center bg-cactus-sandstone font-cactus py-12 px-6">
+      <div className="w-full max-w-md animate-fade-in">
+        <div className="bg-white rounded-2xl border border-cactus-overlay p-8">
+          <div className="flex flex-col items-center mb-8">
+            <CactusLogo />
+            <p className="font-cactus text-cactus-charcoal/60 mt-3 text-center">
+              Create your account to get started.
+            </p>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                {error}
+              <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-cactus-prickly shrink-0" />
+                <span>{error}</span>
               </div>
             )}
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="firstName" className={labelClasses}>
                   First name
                 </label>
                 <input
@@ -111,12 +116,12 @@ export function RegisterPage() {
                   id="firstName"
                   value={formData.firstName}
                   onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className={inputClasses}
                   placeholder="John"
                 />
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="lastName" className={labelClasses}>
                   Last name
                 </label>
                 <input
@@ -124,14 +129,14 @@ export function RegisterPage() {
                   id="lastName"
                   value={formData.lastName}
                   onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className={inputClasses}
                   placeholder="Doe"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className={labelClasses}>
                 Email
               </label>
               <input
@@ -139,14 +144,14 @@ export function RegisterPage() {
                 id="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className={inputClasses}
                 placeholder="you@example.com"
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className={labelClasses}>
                 Password
               </label>
               <input
@@ -154,20 +159,17 @@ export function RegisterPage() {
                 id="password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className={inputClasses}
                 placeholder="••••••••"
                 required
               />
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1.5 text-xs font-cactus text-cactus-charcoal/50">
                 At least 8 characters with uppercase, lowercase, and a number
               </p>
             </div>
 
             <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
+              <label htmlFor="confirmPassword" className={labelClasses}>
                 Confirm password
               </label>
               <input
@@ -175,7 +177,7 @@ export function RegisterPage() {
                 id="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className={inputClasses}
                 placeholder="••••••••"
                 required
               />
@@ -184,16 +186,15 @@ export function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-6 py-4 rounded-2xl font-cactus font-bold text-base text-white transition-all bg-cactus-sage shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed"
             >
               {isLoading ? 'Creating account...' : 'Create account'}
             </button>
           </form>
 
-          {/* Login link */}
-          <p className="mt-6 text-center text-gray-600">
+          <p className="mt-6 text-center font-cactus text-cactus-charcoal/60">
             Already have an account?{' '}
-            <Link to="/login" className="text-green-600 hover:text-green-700 font-medium">
+            <Link to="/login" className="text-cactus-sage font-semibold hover:underline">
               Sign in
             </Link>
           </p>

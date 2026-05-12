@@ -1,8 +1,7 @@
 @import 'tailwindcss';
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
 
-/* ── Cactus brand tokens (prototype palette) — registered with Tailwind v4 ── */
+/* ── Cactus brand tokens — registered with Tailwind v4 ── */
 @theme {
   --color-cactus-charcoal: #333333;
   --color-cactus-sage: #77dd77;
@@ -10,6 +9,7 @@
   --color-cactus-desert: #ffcc00;
   --color-cactus-prickly: #ff6f61;
   --color-cactus-sandstone: #f5f5f1;
+  --color-cactus-mint: #e8f5ee;
   --color-cactus-needs-bg: #e6f9e6;
   --color-cactus-wants-bg: #fff5e0;
   --color-cactus-goals-bg: #ffe8e8;
@@ -31,95 +31,22 @@
   }
 }
 
-/* ── Design Tokens ── */
+/* Auth brand panel keeps the deep forest tone — only callers: AuthBrandPanel.tsx */
 :root {
-  /* Brand */
-  --cactus-green: #1b7a4a;
   --cactus-forest: #0f2419;
-  --cactus-forest-light: #162e20;
-  --cactus-mint: #e8f5ee;
-  --cactus-mint-strong: #d1eddb;
-
-  /* Bucket colors — consistent everywhere */
-  --bucket-needs: #2563eb;
-  --bucket-needs-light: #dbeafe;
-  --bucket-wants: #8b5cf6;
-  --bucket-wants-light: #ede9fe;
-  --bucket-goals: #10b981;
-  --bucket-goals-light: #d1fae5;
-
-  /* Semantic */
-  --warning: #f59e0b;
-  --warning-light: #fef3c7;
-  --danger: #ef4444;
-  --danger-light: #fee2e2;
-  --success: #10b981;
-  --success-light: #d1fae5;
-
-  /* Surfaces */
-  --surface: #f8fafa;
-  --card: #ffffff;
-  --sidebar: var(--cactus-forest);
-  --sidebar-hover: var(--cactus-forest-light);
-
-  /* Text */
-  --text-primary: #111827;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --text-on-dark: #e5e7eb;
-  --text-on-dark-muted: #9ca3af;
-
-  /* Legacy compat */
-  --color-needs: var(--bucket-needs);
-  --color-wants: var(--bucket-wants);
-  --color-goals: var(--bucket-goals);
-  --color-primary: var(--cactus-green);
-  --color-primary-dark: #15803d;
 }
 
 /* ── Base ── */
 body {
-  font-family:
-    'Inter',
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    sans-serif;
-  background-color: var(--surface);
-  color: var(--text-primary);
+  font-family: var(--font-cactus);
+  background-color: var(--color-cactus-sandstone);
+  color: var(--color-cactus-charcoal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Currency / Financial Numbers ── */
-.font-mono-financial {
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-variant-numeric: tabular-nums;
-}
-
 .tabular-nums {
   font-variant-numeric: tabular-nums;
-}
-
-/* ── Sidebar ── */
-.sidebar {
-  background-color: var(--sidebar);
-  color: var(--text-on-dark);
-}
-
-.sidebar-nav-item {
-  color: var(--text-on-dark-muted);
-  transition: all 150ms ease;
-}
-
-.sidebar-nav-item:hover {
-  color: var(--text-on-dark);
-  background-color: var(--sidebar-hover);
-}
-
-.sidebar-nav-item-active {
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* ── Animations ── */
@@ -200,11 +127,11 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #d1d5db;
+  background: rgba(51, 51, 51, 0.15);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+  background: rgba(51, 51, 51, 0.3);
 }
 
 /* ── Phase 2 slider thumb (cross-browser) ── */
