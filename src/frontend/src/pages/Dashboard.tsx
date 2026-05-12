@@ -124,20 +124,20 @@ function OnboardingChecklist() {
                 to="/import"
                 className="flex items-center gap-3 p-4 rounded-xl border border-cactus-overlay hover:bg-cactus-sage-light transition-colors"
               >
-                <Circle className="w-5 h-5 text-cactus-charcoal/40 flex-shrink-0" />
+                <Circle className="w-5 h-5 text-cactus-charcoal/40 shrink-0" />
                 <span className="font-cactus font-semibold text-cactus-charcoal">
                   Import your first bank statement
                 </span>
                 <ArrowRight className="w-4 h-4 text-cactus-charcoal/40 ml-auto" />
               </Link>
               <div className="flex items-center gap-3 p-4 rounded-xl border border-cactus-overlay opacity-50">
-                <Circle className="w-5 h-5 text-cactus-charcoal/40 flex-shrink-0" />
+                <Circle className="w-5 h-5 text-cactus-charcoal/40 shrink-0" />
                 <span className="font-cactus font-semibold text-cactus-charcoal/40">
                   Classify your transactions
                 </span>
               </div>
               <div className="flex items-center gap-3 p-4 rounded-xl border border-cactus-overlay opacity-50">
-                <Circle className="w-5 h-5 text-cactus-charcoal/40 flex-shrink-0" />
+                <Circle className="w-5 h-5 text-cactus-charcoal/40 shrink-0" />
                 <span className="font-cactus font-semibold text-cactus-charcoal/40">
                   Review your budget
                 </span>
@@ -289,7 +289,7 @@ export function DashboardPage() {
         {/* Unclassified transactions banner */}
         {summary.unclassifiedCount > 0 && (
           <div className="mb-6 p-4 bg-cactus-goals-bg border border-cactus-overlay rounded-2xl flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 text-cactus-prickly flex-shrink-0" />
+            <AlertCircle className="w-5 h-5 text-cactus-prickly shrink-0" />
             <p className="text-cactus-charcoal font-cactus">
               <strong>{summary.unclassifiedCount}</strong> transactions need classifying (
               {estimateClassifyTime(summary.unclassifiedCount)})
@@ -359,7 +359,7 @@ export function DashboardPage() {
               {summary.buckets.map((bucket) => (
                 <div key={bucket.type} className="flex items-center gap-2 text-sm">
                   <span
-                    className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${BUCKET_DOT_CLASS[bucket.type]}`}
+                    className={`w-2.5 h-2.5 rounded-full shrink-0 ${BUCKET_DOT_CLASS[bucket.type]}`}
                   />
                   <span className="text-cactus-charcoal font-cactus">{bucket.name}</span>
                   <span className="text-cactus-charcoal font-cactus tabular-nums">
