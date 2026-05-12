@@ -240,4 +240,83 @@ public class CompleteOnboardingCommandHandlerTests : HandlerTestBase
         var allocation = Context.BudgetAllocations.Single();
         allocation.AllocatedAmount.Should().Be(0m);
     }
+
+    [Fact]
+    public async Task Complete_WithStep11SecondaryIncome_AggregatesIntoMonthlyIncome()
+    {
+        var user = TestDataFactory.User();
+        Context.Users.Add(user);
+        Context.OnboardingResponses.Add(new OnboardingResponse
+        {
+            UserId = user.Id, StepNumber = 5, StepName = "Monthly Income", Response = "35000",
+        });
+        Context.OnboardingResponses.Add(new OnboardingResponse
+        {
+            UserId = user.Id, StepNumber = 11, StepName = "Secondary income sources",
+            Response = "[{\"type\":\"freelance\",\"amount\":5000},{\"type\":\"rental\",\"amount\":2500}]",
+        });
+        await Context.SaveChangesAsync(default);
+        _currentUser.UserId.Returns(user.Id);
+
+        var handler = new CompleteOnboardingCommandHandler(Context, _currentUser);
+        await handler.Handle(new CompleteOnboardingCommand(), CancellationToken.None);
+
+        var plan = Context.SpendingPlans.Single(p => p.UserId == user.Id);
+        plan.MonthlyIncome.Should().Be(42500m); // 35000 + 5000 + 2500
+        plan.SecondaryIncomeSources.Should().Contain("freelance");
+    }
+
+    [Fact]
+    public async Task Complete_WithStep12And13_UpdatesGoalTargetAmountAndDate()
+    {
+        var user = TestDataFactory.User();
+        Context.Users.Add(user);
+        Context.OnboardingResponses.Add(new OnboardingResponse
+        {
+            UserId = user.Id, StepNumber = 6, StepName = "Goal type pick", Response = "[\"save\"]",
+        });
+        Context.OnboardingResponses.Add(new OnboardingResponse
+        {
+            UserId = user.Id, StepNumber = 12, StepName = "Goal target amount", Response = "\"50000\"",
+        });
+        Context.OnboardingResponses.Add(new OnboardingResponse
+        {
+            UserId = user.Id, StepNumber = 13, StepName = "Goal target months", Response = "\"12\"",
+        });
+        await Context.SaveChangesAsync(default);
+        _currentUser.UserId.Returns(user.Id);
+
+        var handler = new CompleteOnboardingCommandHandler(Context, _currentUser);
+        await handler.Handle(new CompleteOnboardingCommand(), CancellationToken.None);
+
+        var goal = Context.Goals.Single(g => g.UserId == user.Id);
+        goal.TargetAmount.Should().Be(50000m);
+        goal.TargetDate.Should().NotBeNull();
+        goal.TargetDate!.Value.Should().BeCloseTo(DateTime.UtcNow.AddMonths(12), TimeSpan.FromMinutes(1));
+    }
+
+    [Fact]
+    public async Task Complete_WithEmergencyGoalAndNoMonths_LeavesTargetDateNull()
+    {
+        var user = TestDataFactory.User();
+        Context.Users.Add(user);
+        Context.OnboardingResponses.Add(new OnboardingResponse
+        {
+            UserId = user.Id, StepNumber = 6, StepName = "Goal type pick", Response = "[\"emergency\"]",
+        });
+        Context.OnboardingResponses.Add(new OnboardingResponse
+        {
+            UserId = user.Id, StepNumber = 12, StepName = "Goal target amount", Response = "\"30000\"",
+        });
+        // No step 13 for emergency
+        await Context.SaveChangesAsync(default);
+        _currentUser.UserId.Returns(user.Id);
+
+        var handler = new CompleteOnboardingCommandHandler(Context, _currentUser);
+        await handler.Handle(new CompleteOnboardingCommand(), CancellationToken.None);
+
+        var goal = Context.Goals.Single(g => g.UserId == user.Id);
+        goal.TargetAmount.Should().Be(30000m);
+        goal.TargetDate.Should().BeNull();
+    }
 }

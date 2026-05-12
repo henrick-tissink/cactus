@@ -3,6 +3,7 @@ using System;
 using Cactus.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cactus.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(CactusDbContext))]
-    partial class CactusDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260512072348_AddSecondaryIncomeSourcesToSpendingPlan")]
+    partial class AddSecondaryIncomeSourcesToSpendingPlan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -10,7 +10,7 @@ const fmt = (n: number) => 'R' + Math.round(n).toLocaleString('en-ZA');
 interface EstimateScreenProps {
   selectedNeeds: string[];
   selectedWants: string[];
-  onContinue: () => void;
+  onContinue: (estimates: Record<string, number>) => void;
 }
 
 export function EstimateScreen({ selectedNeeds, selectedWants, onContinue }: EstimateScreenProps) {
@@ -39,19 +39,23 @@ export function EstimateScreen({ selectedNeeds, selectedWants, onContinue }: Est
     setAmounts((prev) => ({ ...prev, [name]: raw.replace(/[^0-9]/g, '') }));
   };
 
+  const buildPayload = (): Record<string, number> => {
+    const payload: Record<string, number> = {};
+    for (const row of [...needsRows, ...wantsRows]) {
+      payload[row.name] = parseInt(amounts[row.name]) || 0;
+    }
+    return payload;
+  };
+
   const saveMutation = useMutation({
     mutationFn: async () => {
-      const payload: Record<string, number> = {};
-      for (const row of [...needsRows, ...wantsRows]) {
-        payload[row.name] = parseInt(amounts[row.name]) || 0;
-      }
       await apiClient.post('/onboarding/response', {
         stepNumber: 4,
         stepName: 'Per-category estimates',
-        response: JSON.stringify(payload),
+        response: JSON.stringify(buildPayload()),
       });
     },
-    onSuccess: () => onContinue(),
+    onSuccess: () => onContinue(buildPayload()),
   });
 
   return (

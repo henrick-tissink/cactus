@@ -70,7 +70,7 @@ describe('GoalPickScreen', () => {
       stepName: 'Goal type pick',
       response: JSON.stringify(['debt']),
     });
-    expect(onContinue).toHaveBeenCalledOnce();
+    expect(onContinue).toHaveBeenCalledWith('debt');
   });
 
   it('disables the lock-in CTA until something is selected', async () => {

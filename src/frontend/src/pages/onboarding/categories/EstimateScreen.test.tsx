@@ -52,7 +52,9 @@ describe('EstimateScreen', () => {
 
     await waitFor(() => {
       expect(captured).not.toBeNull();
-      expect(onContinue).toHaveBeenCalledOnce();
+      expect(onContinue).toHaveBeenCalledWith(
+        expect.objectContaining({ 'Rent / Bond': 12000, 'Dining Out': 1500 })
+      );
     });
     expect(captured!.stepNumber).toBe(4);
     const payload = JSON.parse(captured!.response) as Record<string, number>;
@@ -74,7 +76,9 @@ describe('EstimateScreen', () => {
       <EstimateScreen selectedNeeds={['Rent / Bond']} selectedWants={[]} onContinue={onContinue} />
     );
     await user.click(screen.getByRole('button', { name: /^next$/i }));
-    await waitFor(() => expect(onContinue).toHaveBeenCalledOnce());
+    await waitFor(() =>
+      expect(onContinue).toHaveBeenCalledWith(expect.objectContaining({ 'Rent / Bond': 0 }))
+    );
     const payload = JSON.parse(captured!.response) as Record<string, number>;
     expect(payload['Rent / Bond'] ?? 0).toBe(0);
   });

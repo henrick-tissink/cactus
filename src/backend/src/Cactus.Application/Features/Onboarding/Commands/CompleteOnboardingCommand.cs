@@ -122,6 +122,45 @@ public class CompleteOnboardingCommandHandler : IRequestHandler<CompleteOnboardi
             _context.Goals.Add(debtGoal);
         }
 
+        // PR O-6: Aggregate primary + secondary income onto SpendingPlan
+        var primaryIncomeResponse = responses.FirstOrDefault(r => r.StepNumber == 5);
+        decimal primaryIncome = 0m;
+        if (primaryIncomeResponse != null)
+            decimal.TryParse(primaryIncomeResponse.Response, out primaryIncome);
+
+        var secondaryResponse = responses.FirstOrDefault(r => r.StepNumber == 11);
+        var (secondaryTotal, secondaryJson) = ParseSecondaryIncome(secondaryResponse?.Response);
+
+        if (newSpendingPlan != null)
+        {
+            newSpendingPlan.MonthlyIncome = primaryIncome + secondaryTotal;
+            newSpendingPlan.SecondaryIncomeSources = secondaryJson;
+        }
+
+        // PR O-6: Update primary Goal with target amount + date from steps 12 + 13
+        var primaryGoal = _context.Goals.Local.FirstOrDefault(g => g.UserId == userId && g.IsPrimary);
+        if (primaryGoal != null)
+        {
+            var targetAmountResponse = responses.FirstOrDefault(r => r.StepNumber == 12);
+            decimal targetAmount = 0m;
+            if (targetAmountResponse != null)
+            {
+                var trimmed = targetAmountResponse.Response.Trim('"');
+                decimal.TryParse(trimmed, out targetAmount);
+            }
+            if (targetAmount > 0) primaryGoal.TargetAmount = targetAmount;
+
+            var targetMonthsResponse = responses.FirstOrDefault(r => r.StepNumber == 13);
+            if (targetMonthsResponse != null)
+            {
+                var trimmed = targetMonthsResponse.Response.Trim('"');
+                if (int.TryParse(trimmed, out var months) && months > 0)
+                {
+                    primaryGoal.TargetDate = DateTime.UtcNow.AddMonths(months);
+                }
+            }
+        }
+
         // PR O-5: Create UserCategory + BudgetAllocation rows from step 3 + step 4
         if (newSpendingPlan != null)
         {
@@ -223,6 +262,27 @@ public class CompleteOnboardingCommandHandler : IRequestHandler<CompleteOnboardi
                 CategoryId = category.Id,
                 AllocatedAmount = amount,
             });
+        }
+    }
+
+    private static (decimal Total, string? Json) ParseSecondaryIncome(string? response)
+    {
+        if (string.IsNullOrWhiteSpace(response)) return (0m, null);
+        try
+        {
+            using var doc = System.Text.Json.JsonDocument.Parse(response);
+            if (doc.RootElement.ValueKind != System.Text.Json.JsonValueKind.Array) return (0m, null);
+            decimal total = 0m;
+            foreach (var element in doc.RootElement.EnumerateArray())
+            {
+                if (element.TryGetProperty("amount", out var amt) && amt.TryGetDecimal(out var amount))
+                    total += amount;
+            }
+            return (total, response);
+        }
+        catch
+        {
+            return (0m, null);
         }
     }
 
