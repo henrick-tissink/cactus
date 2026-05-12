@@ -50,7 +50,7 @@ export function ResetPasswordPage() {
           <div className="flex-1 flex items-center justify-center">
             <div className="w-full max-w-sm animate-fade-in text-center">
               <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-cactus-prickly flex-shrink-0" />
+                <AlertCircle className="w-4 h-4 text-cactus-prickly shrink-0" />
                 <span>Invalid reset link.</span>
               </div>
               <Link
@@ -88,7 +88,7 @@ export function ResetPasswordPage() {
             {success ? (
               <>
                 <div className="bg-cactus-sage-light border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
-                  <Check className="w-4 h-4 text-cactus-sage flex-shrink-0" />
+                  <Check className="w-4 h-4 text-cactus-sage shrink-0" />
                   <span>Password reset successfully!</span>
                 </div>
                 <p className="text-center">
@@ -104,7 +104,7 @@ export function ResetPasswordPage() {
               <form onSubmit={handleSubmit} className="space-y-5">
                 {error && (
                   <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-cactus-prickly flex-shrink-0" />
+                    <AlertCircle className="w-4 h-4 text-cactus-prickly shrink-0" />
                     <span>{error}</span>
                   </div>
                 )}

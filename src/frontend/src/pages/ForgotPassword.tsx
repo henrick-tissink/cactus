@@ -45,7 +45,7 @@ export function ForgotPasswordPage() {
             {submitted ? (
               <>
                 <div className="bg-cactus-sage-light border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
-                  <Check className="w-4 h-4 text-cactus-sage flex-shrink-0" />
+                  <Check className="w-4 h-4 text-cactus-sage shrink-0" />
                   <span>
                     If an account with that email exists, we've sent a password reset link.
                   </span>
