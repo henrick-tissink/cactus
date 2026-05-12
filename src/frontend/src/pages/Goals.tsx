@@ -18,31 +18,49 @@ import {
   Star,
 } from 'lucide-react';
 
-const GOAL_TYPE_INFO: Record<number, { label: string; icon: typeof Target; color: string }> = {
+type GoalTypeStyle = {
+  label: string;
+  icon: typeof Target;
+  iconBg: string;
+  iconText: string;
+  borderActive: string;
+};
+
+const GOAL_TYPE_INFO: Record<number, GoalTypeStyle> = {
   [GoalType.MiniBuffer]: {
     label: 'Mini Buffer',
     icon: Wallet,
-    color: 'bg-amber-100 text-amber-600',
+    iconBg: 'bg-cactus-wants-bg',
+    iconText: 'text-cactus-charcoal',
+    borderActive: 'border-cactus-desert',
   },
   [GoalType.DebtPayoff]: {
     label: 'Debt Payoff',
     icon: CreditCard,
-    color: 'bg-red-100 text-red-600',
+    iconBg: 'bg-cactus-goals-bg',
+    iconText: 'text-cactus-prickly',
+    borderActive: 'border-cactus-prickly',
   },
   [GoalType.EmergencyFund]: {
     label: 'Emergency Fund',
     icon: PiggyBank,
-    color: 'bg-blue-100 text-blue-600',
+    iconBg: 'bg-cactus-wants-bg',
+    iconText: 'text-cactus-charcoal',
+    borderActive: 'border-cactus-desert',
   },
   [GoalType.Savings]: {
     label: 'Savings',
     icon: Target,
-    color: 'bg-green-100 text-green-600',
+    iconBg: 'bg-cactus-sage-light',
+    iconText: 'text-cactus-sage',
+    borderActive: 'border-cactus-sage',
   },
   [GoalType.Investment]: {
     label: 'Investment',
     icon: LineChart,
-    color: 'bg-purple-100 text-purple-600',
+    iconBg: 'bg-cactus-overlay',
+    iconText: 'text-cactus-charcoal/60',
+    borderActive: 'border-cactus-overlay',
   },
 };
 
@@ -106,12 +124,12 @@ export function GoalsPage() {
 
   if (isLoading) {
     return (
-      <div className="p-8">
+      <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
         <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+          <div className="h-8 bg-cactus-overlay rounded w-1/4"></div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="h-48 bg-gray-200 rounded-xl"></div>
-            <div className="h-48 bg-gray-200 rounded-xl"></div>
+            <div className="h-48 bg-cactus-overlay rounded-2xl"></div>
+            <div className="h-48 bg-cactus-overlay rounded-2xl"></div>
           </div>
         </div>
       </div>
@@ -119,17 +137,18 @@ export function GoalsPage() {
   }
 
   return (
-    <div className="p-8 animate-fade-in">
+    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Goals</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-cactus-charcoal font-cactus font-bold text-2xl">Goals</h1>
+          <p className="text-cactus-charcoal/60 font-cactus mt-1">
             {activeGoals.length} active goal{activeGoals.length !== 1 ? 's' : ''}
           </p>
         </div>
         <button
+          type="button"
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          className="flex items-center gap-2 px-6 py-3 rounded-2xl font-cactus font-bold text-white bg-cactus-sage shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 transition-all"
         >
           <Plus className="w-4 h-4" />
           New Goal
@@ -138,14 +157,16 @@ export function GoalsPage() {
 
       {/* Recommended Sequence (if no goals yet) */}
       {activeGoals.length === 0 && recommendations && (
-        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100 mb-8">
+        <div className="bg-cactus-sage-light border border-cactus-overlay rounded-2xl p-5 mb-6">
           <div className="flex items-start gap-4 mb-6">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <Sparkles className="w-5 h-5 text-green-600" />
+            <div className="p-2 bg-cactus-sage/15 rounded-xl">
+              <Sparkles className="w-5 h-5 text-cactus-sage" />
             </div>
             <div>
-              <h2 className="font-semibold text-gray-900">Recommended Goal Sequence</h2>
-              <p className="text-sm text-gray-600 mt-1">
+              <h2 className="text-cactus-charcoal font-cactus font-bold">
+                Recommended Goal Sequence
+              </h2>
+              <p className="text-cactus-charcoal/70 font-cactus text-sm mt-1">
                 Following the Cactus methodology, here's the recommended order for your goals:
               </p>
             </div>
@@ -158,40 +179,42 @@ export function GoalsPage() {
               return (
                 <div
                   key={rec.order}
-                  className="flex items-center gap-4 bg-white rounded-lg p-4 border border-green-100"
+                  className="flex items-center gap-4 bg-white border border-cactus-overlay rounded-2xl p-4"
                 >
-                  <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-semibold">
+                  <div className="bg-cactus-sage text-white font-cactus font-bold rounded-full w-8 h-8 flex items-center justify-center shrink-0">
                     {index + 1}
                   </div>
-                  <div className={`p-2 rounded-lg ${typeInfo?.color || 'bg-gray-100'}`}>
+                  <div
+                    className={`p-2 rounded-xl ${typeInfo?.iconBg || 'bg-cactus-overlay'} ${typeInfo?.iconText || 'text-cactus-charcoal/60'} shrink-0`}
+                  >
                     <Icon className="w-5 h-5" />
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <p className="font-medium text-gray-900">{rec.title}</p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="text-cactus-charcoal font-cactus font-semibold">{rec.title}</p>
                       {rec.alreadyExists && (
-                        <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full">
+                        <span className="px-2 py-0.5 bg-cactus-sage text-white text-[10px] uppercase font-cactus font-bold tracking-wide rounded-full">
                           Active
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-500">{rec.description}</p>
+                    <p className="text-sm text-cactus-charcoal/60 font-cactus">{rec.description}</p>
                     {rec.alreadyExists && rec.currentProgress > 0 && rec.suggestedAmount > 0 && (
                       <div className="mt-2">
-                        <div className="h-1.5 bg-green-100 rounded-full overflow-hidden">
+                        <div className="h-1.5 bg-cactus-overlay rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-green-500"
+                            className="h-full bg-cactus-sage"
                             style={{
                               width: `${Math.min((rec.currentProgress / rec.suggestedAmount) * 100, 100)}%`,
                             }}
                           />
                         </div>
-                        <p className="text-xs text-gray-400 mt-1">
-                          <span className="font-mono-financial">
+                        <p className="text-xs text-cactus-charcoal/40 font-cactus mt-1">
+                          <span className="font-cactus font-bold tabular-nums">
                             {formatCurrency(rec.currentProgress)}
                           </span>{' '}
                           of{' '}
-                          <span className="font-mono-financial">
+                          <span className="font-cactus font-bold tabular-nums">
                             {formatCurrency(rec.suggestedAmount)}
                           </span>
                         </p>
@@ -199,9 +222,9 @@ export function GoalsPage() {
                     )}
                   </div>
                   {rec.suggestedAmount > 0 && (
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">Suggested</p>
-                      <p className="font-semibold text-gray-900 font-mono-financial">
+                    <div className="text-right shrink-0">
+                      <p className="text-xs text-cactus-charcoal/60 font-cactus">Suggested</p>
+                      <p className="text-cactus-charcoal font-cactus font-bold tabular-nums">
                         {formatCurrency(rec.suggestedAmount)}
                       </p>
                     </div>
@@ -216,9 +239,7 @@ export function GoalsPage() {
       {/* Primary Goal (Highlighted) */}
       {primaryGoal && (
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            <span className="border-b-2 border-amber-400 pb-1">Primary Focus</span>
-          </h2>
+          <h2 className="text-cactus-charcoal font-cactus font-bold text-lg mb-4">Primary Focus</h2>
           <GoalCard
             goal={primaryGoal}
             isPrimary={true}
@@ -230,7 +251,9 @@ export function GoalsPage() {
       {/* Other Active Goals */}
       {nonPrimaryActiveGoals.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Other Active Goals</h2>
+          <h2 className="text-cactus-charcoal font-cactus font-bold text-lg mb-4">
+            Other Active Goals
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {nonPrimaryActiveGoals.map((goal) => (
               <GoalCard
@@ -247,8 +270,8 @@ export function GoalsPage() {
       {/* Completed Goals */}
       {completedGoals.length > 0 && (
         <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Trophy className="w-5 h-5 text-amber-500" />
+          <h2 className="text-cactus-charcoal font-cactus font-bold text-lg mb-4 flex items-center gap-2">
+            <Trophy className="w-5 h-5 text-cactus-sage" />
             Completed Goals
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -306,6 +329,8 @@ function GoalCard({
 }) {
   const typeInfo = GOAL_TYPE_INFO[goal.goalType];
   const Icon = typeInfo?.icon || Target;
+  const iconBg = typeInfo?.iconBg || 'bg-cactus-overlay';
+  const iconText = typeInfo?.iconText || 'text-cactus-charcoal/60';
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-ZA', {
@@ -319,39 +344,43 @@ function GoalCard({
   // Find the next milestone
   const nextMilestone = goal.milestones.find((m) => !m.isReached);
 
+  const remaining = Math.max(goal.targetAmount - goal.currentAmount, 0);
+
+  const containerClass = isPrimary
+    ? 'bg-cactus-sage-light border border-cactus-overlay rounded-2xl p-6 transition-all'
+    : completed
+      ? 'bg-white border border-cactus-overlay rounded-2xl p-5 transition-all opacity-70'
+      : 'bg-white border border-cactus-overlay rounded-2xl p-5 transition-all hover:bg-cactus-sage-light/30';
+
   return (
-    <div
-      className={`rounded-xl shadow-sm border transition-all ${
-        isPrimary
-          ? 'bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200 ring-2 ring-amber-200 p-8'
-          : completed
-            ? 'bg-green-50/30 border-green-200 p-6'
-            : 'bg-white border-gray-100 p-6'
-      }`}
-    >
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-lg ${typeInfo?.color || 'bg-gray-100'}`}>
+    <div className={containerClass}>
+      <div className="flex items-start justify-between mb-4 gap-2">
+        <div className="flex items-center gap-3 min-w-0">
+          <div
+            className={`${iconBg} ${iconText} rounded-xl w-10 h-10 flex items-center justify-center shrink-0`}
+          >
             <Icon className={isPrimary ? 'w-6 h-6' : 'w-5 h-5'} />
           </div>
-          <div>
-            <h3 className={`font-semibold text-gray-900 ${isPrimary ? 'text-lg' : ''}`}>
+          <div className="min-w-0">
+            <h3
+              className={`text-cactus-charcoal font-cactus font-bold ${isPrimary ? 'text-lg' : 'text-base'} truncate`}
+            >
               {goal.name}
             </h3>
-            <p className="text-sm text-gray-500">{typeInfo?.label}</p>
+            <p className="text-cactus-charcoal/60 font-cactus text-sm">{typeInfo?.label}</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           {isPrimary && (
-            <div className="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full flex items-center gap-1">
-              <Star className="w-3 h-3 fill-current" />
-              Primary Goal
+            <div className="bg-cactus-sage text-white text-[10px] uppercase font-cactus font-bold tracking-wide px-2 py-0.5 rounded-full flex items-center gap-1">
+              <Star className="w-3 h-3 fill-current text-cactus-sage bg-white rounded-full" />
+              Primary
             </div>
           )}
           {completed && (
-            <div className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full flex items-center gap-1">
+            <div className="bg-cactus-sage text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
               <Check className="w-3 h-3" />
-              Complete
+              Done
             </div>
           )}
         </div>
@@ -360,24 +389,31 @@ function GoalCard({
       {/* Progress Bar */}
       <div className="mb-4">
         <div className="flex justify-between text-sm mb-1">
-          <span className="text-gray-600 font-mono-financial">
+          <span className="text-cactus-charcoal font-cactus font-bold tabular-nums">
             {formatCurrency(goal.currentAmount)}
           </span>
-          <span className="text-gray-500 font-mono-financial">
+          <span className="text-cactus-charcoal/60 font-cactus font-bold tabular-nums">
             {formatCurrency(goal.targetAmount)}
           </span>
         </div>
-        <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+        <div className="h-3 bg-cactus-overlay rounded-full overflow-hidden">
           <div
-            className="h-full bg-green-500 transition-all duration-500"
+            className="h-full bg-cactus-sage transition-all duration-500"
             style={{ width: `${Math.min(goal.progressPercentage, 100)}%` }}
           />
         </div>
-        <p className="text-sm text-gray-500 mt-1">
-          {goal.currentAmount === 0
-            ? 'Every rand counts. Start your journey today.'
-            : `${goal.progressPercentage.toFixed(0)}% complete`}
-        </p>
+        <div className="flex justify-between items-center mt-1">
+          <p className="text-sm text-cactus-charcoal/60 font-cactus">
+            {goal.currentAmount === 0
+              ? 'Every rand counts. Start your journey today.'
+              : `${goal.progressPercentage.toFixed(0)}% complete`}
+          </p>
+          {!completed && remaining > 0 && (
+            <p className="text-sm text-cactus-sage font-cactus font-bold tabular-nums">
+              {formatCurrency(remaining)} to go
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Milestones */}
@@ -388,23 +424,23 @@ function GoalCard({
               <div
                 key={milestone.id}
                 className={`flex-1 h-1 rounded-full ${
-                  milestone.isReached ? 'bg-green-500' : 'bg-gray-200'
+                  milestone.isReached ? 'bg-cactus-sage' : 'bg-cactus-overlay'
                 }`}
                 title={milestone.name}
               />
             ))}
           </div>
           {nextMilestone && !completed && (
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-cactus-charcoal/60 font-cactus">
               Next: {nextMilestone.name} (
-              <span className="font-mono-financial">
+              <span className="font-cactus font-bold tabular-nums">
                 {formatCurrency(nextMilestone.targetAmount)}
               </span>
               )
             </p>
           )}
           {completed && (
-            <p className="text-xs text-green-600">
+            <p className="text-xs text-cactus-sage font-cactus font-semibold">
               All {goal.milestones.length} milestones reached!
             </p>
           )}
@@ -413,7 +449,7 @@ function GoalCard({
 
       {/* Linked Account/Debt */}
       {(goal.linkedAccountName || goal.linkedDebtName) && (
-        <p className="text-xs text-gray-500 mb-4">
+        <p className="text-xs text-cactus-charcoal/40 font-cactus mb-4">
           Linked to: {goal.linkedAccountName || goal.linkedDebtName}
         </p>
       )}
@@ -423,11 +459,12 @@ function GoalCard({
         <div className={`flex gap-2 ${isPrimary ? 'flex-col' : ''}`}>
           {onUpdateProgress && (
             <button
+              type="button"
               onClick={onUpdateProgress}
-              className={`flex-1 py-2 px-4 rounded-lg font-medium flex items-center justify-center gap-2 ${
+              className={`flex-1 py-2 px-4 rounded-xl font-cactus font-semibold flex items-center justify-center gap-2 transition-colors ${
                 isPrimary
-                  ? 'bg-amber-500 text-white hover:bg-amber-600'
-                  : 'bg-green-50 text-green-600 hover:bg-green-100'
+                  ? 'bg-cactus-sage text-white hover:brightness-95'
+                  : 'text-cactus-charcoal/60 hover:text-cactus-sage hover:bg-cactus-sage-light/40 text-sm'
               }`}
             >
               <TrendingUp className="w-4 h-4" />
@@ -436,8 +473,9 @@ function GoalCard({
           )}
           {onSetPrimary && !isPrimary && (
             <button
+              type="button"
               onClick={onSetPrimary}
-              className="py-2 px-4 border border-amber-300 text-amber-600 rounded-lg hover:bg-amber-50 font-medium flex items-center justify-center gap-2"
+              className="py-2 px-4 rounded-xl text-cactus-charcoal/60 hover:text-cactus-sage hover:bg-cactus-sage-light/40 font-cactus font-semibold text-sm flex items-center justify-center gap-2 transition-colors"
             >
               <Star className="w-4 h-4" />
               Set as Primary
@@ -479,57 +517,66 @@ function CreateGoalModal({ onClose, onSuccess }: { onClose: () => void; onSucces
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-hidden flex flex-col">
-        <div className="p-6 border-b border-gray-100">
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold text-gray-900">Create New Goal</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+    <div className="fixed inset-0 bg-cactus-charcoal/40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white border border-cactus-overlay rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-cactus-charcoal font-cactus font-bold text-xl">Create New Goal</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-cactus-charcoal/40 hover:text-cactus-charcoal p-1"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex-1 overflow-auto p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
-              <span className="text-sm">{error}</span>
+            <div className="p-3 bg-cactus-goals-bg border border-cactus-overlay rounded-xl flex items-center gap-2 text-cactus-prickly">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span className="text-sm font-cactus">{error}</span>
             </div>
           )}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Goal Name</label>
+            <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5">
+              Goal Name
+            </label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
               placeholder="e.g., Emergency Fund"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Goal Type</label>
+            <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5">
+              Goal Type
+            </label>
             <div className="grid grid-cols-2 gap-2">
               {Object.entries(GOAL_TYPE_INFO).map(([type, info]) => {
                 const Icon = info.icon;
                 const typeNum = parseInt(type);
+                const active = formData.goalType === typeNum;
                 return (
                   <button
                     key={type}
                     type="button"
                     onClick={() => setFormData({ ...formData, goalType: typeNum })}
-                    className={`p-3 rounded-lg border-2 text-left transition-all ${
-                      formData.goalType === typeNum
-                        ? 'border-green-500 bg-green-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                    className={`rounded-xl p-3 font-cactus font-semibold flex flex-col items-center gap-2 transition-all border-2 ${
+                      active
+                        ? `${info.iconBg} ${info.borderActive} text-cactus-charcoal`
+                        : 'bg-white border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40'
                     }`}
                   >
-                    <div className={`inline-flex p-1.5 rounded-lg ${info.color} mb-2`}>
+                    <div className={`inline-flex p-1.5 rounded-xl ${info.iconBg} ${info.iconText}`}>
                       <Icon className="w-4 h-4" />
                     </div>
-                    <p className="text-sm font-medium text-gray-900">{info.label}</p>
+                    <p className="text-sm font-cactus font-semibold text-cactus-charcoal">
+                      {info.label}
+                    </p>
                   </button>
                 );
               })}
@@ -537,9 +584,13 @@ function CreateGoalModal({ onClose, onSuccess }: { onClose: () => void; onSucces
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Target Amount</label>
+            <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5">
+              Target Amount
+            </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">R</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-cactus-charcoal/60 font-cactus">
+                R
+              </span>
               <input
                 type="number"
                 step="0.01"
@@ -547,14 +598,14 @@ function CreateGoalModal({ onClose, onSuccess }: { onClose: () => void; onSucces
                 value={formData.targetAmount}
                 onChange={(e) => setFormData({ ...formData, targetAmount: e.target.value })}
                 required
-                className="w-full pl-8 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl pl-8 pr-4 py-3 font-cactus text-cactus-charcoal outline-none tabular-nums"
                 placeholder="0.00"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5">
               Target Date (optional)
             </label>
             <input
@@ -562,24 +613,28 @@ function CreateGoalModal({ onClose, onSuccess }: { onClose: () => void; onSucces
               value={formData.targetDate}
               onChange={(e) => setFormData({ ...formData, targetDate: e.target.value })}
               min={new Date().toISOString().split('T')[0]}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
             />
           </div>
-        </form>
 
-        <div className="p-6 border-t border-gray-100 flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 text-gray-600 hover:text-gray-800">
-            Cancel
-          </button>
-          <button
-            onClick={() => createMutation.mutate()}
-            disabled={!formData.name || !formData.targetAmount || createMutation.isPending}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Plus className="w-4 h-4" />
-            {createMutation.isPending ? 'Creating...' : 'Create Goal'}
-          </button>
-        </div>
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-6 py-3 rounded-2xl font-cactus font-bold"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={!formData.name || !formData.targetAmount || createMutation.isPending}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-cactus font-bold text-white bg-cactus-sage shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed transition-all"
+            >
+              <Plus className="w-4 h-4" />
+              {createMutation.isPending ? 'Creating...' : 'Create Goal'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
@@ -620,63 +675,77 @@ function UpdateProgressModal({
     },
   });
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateMutation.mutate();
+  };
+
   const remaining = goal.targetAmount - goal.currentAmount;
   const newAmount = goal.currentAmount + (parseFloat(amount) || 0);
   const newPercentage = (newAmount / goal.targetAmount) * 100;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl w-full max-w-md mx-4">
-        <div className="p-6 border-b border-gray-100">
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold text-gray-900">Update Progress</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-          <p className="text-sm text-gray-500 mt-1">{goal.name}</p>
+    <div className="fixed inset-0 bg-cactus-charcoal/40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white border border-cactus-overlay rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-auto">
+        <div className="flex justify-between items-center mb-1">
+          <h2 className="text-cactus-charcoal font-cactus font-bold text-xl">Update Progress</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-cactus-charcoal/40 hover:text-cactus-charcoal p-1"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
+        <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">{goal.name}</p>
 
-        <div className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
-              <span className="text-sm">{error}</span>
+            <div className="p-3 bg-cactus-goals-bg border border-cactus-overlay rounded-xl flex items-center gap-2 text-cactus-prickly">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span className="text-sm font-cactus">{error}</span>
             </div>
           )}
           {/* Current Progress */}
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="bg-cactus-sage-light/40 border border-cactus-overlay rounded-xl p-4">
             <div className="flex justify-between text-sm mb-2">
-              <span className="text-gray-600">Current</span>
-              <span className="font-medium font-mono-financial">
+              <span className="text-cactus-charcoal/60 font-cactus">Current</span>
+              <span className="text-cactus-charcoal font-cactus font-bold tabular-nums">
                 {formatCurrency(goal.currentAmount)}
               </span>
             </div>
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-2 bg-cactus-overlay rounded-full overflow-hidden">
               <div
-                className="h-full bg-green-500 transition-all"
+                className="h-full bg-cactus-sage transition-all"
                 style={{ width: `${goal.progressPercentage}%` }}
               />
             </div>
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
-              <span>{goal.progressPercentage.toFixed(0)}%</span>
+            <div className="flex justify-between text-xs text-cactus-charcoal/60 font-cactus mt-1">
+              <span className="tabular-nums">{goal.progressPercentage.toFixed(0)}%</span>
               <span>
-                <span className="font-mono-financial">{formatCurrency(remaining)}</span> remaining
+                <span className="font-cactus font-bold tabular-nums">
+                  {formatCurrency(remaining)}
+                </span>{' '}
+                remaining
               </span>
             </div>
           </div>
 
           {/* Amount Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Amount to Add</label>
+            <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5">
+              Amount to Add
+            </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">R</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-cactus-charcoal/60 font-cactus">
+                R
+              </span>
               <input
                 type="number"
                 step="0.01"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full pl-8 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl pl-8 pr-4 py-3 font-cactus text-cactus-charcoal outline-none tabular-nums"
                 placeholder="0.00"
                 autoFocus
               />
@@ -684,19 +753,21 @@ function UpdateProgressModal({
           </div>
 
           {/* Quick Amounts */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {[100, 500, 1000].map((quickAmount) => (
               <button
                 key={quickAmount}
+                type="button"
                 onClick={() => setAmount(quickAmount.toString())}
-                className="flex-1 py-1.5 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+                className="flex-1 bg-cactus-sage-light text-cactus-sage font-cactus font-semibold border border-cactus-overlay rounded-xl px-4 py-2 hover:bg-cactus-sage hover:text-white transition-colors text-sm tabular-nums"
               >
                 +R{quickAmount}
               </button>
             ))}
             <button
+              type="button"
               onClick={() => setAmount(remaining.toString())}
-              className="flex-1 py-1.5 text-sm font-medium text-green-600 bg-green-50 rounded-lg hover:bg-green-100"
+              className="flex-1 bg-cactus-sage-light text-cactus-sage font-cactus font-semibold border border-cactus-overlay rounded-xl px-4 py-2 hover:bg-cactus-sage hover:text-white transition-colors text-sm"
             >
               Fill
             </button>
@@ -704,16 +775,16 @@ function UpdateProgressModal({
 
           {/* Preview */}
           {parseFloat(amount) > 0 && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-              <p className="text-sm text-green-800">
+            <div className="bg-cactus-sage-light border border-cactus-overlay rounded-xl p-3">
+              <p className="text-sm text-cactus-charcoal font-cactus">
                 New balance:{' '}
-                <span className="font-semibold font-mono-financial">
+                <span className="font-cactus font-bold tabular-nums">
                   {formatCurrency(newAmount)}
                 </span>{' '}
-                ({newPercentage.toFixed(0)}%)
+                <span className="tabular-nums">({newPercentage.toFixed(0)}%)</span>
               </p>
               {newAmount >= goal.targetAmount && (
-                <p className="text-sm text-green-600 font-medium mt-1 flex items-center gap-1">
+                <p className="text-sm text-cactus-sage font-cactus font-bold mt-1 flex items-center gap-1">
                   <Trophy className="w-4 h-4" />
                   Goal will be complete!
                 </p>
@@ -723,30 +794,36 @@ function UpdateProgressModal({
 
           {/* Note */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Note (optional)</label>
+            <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5">
+              Note (optional)
+            </label>
             <input
               type="text"
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
               placeholder="e.g., Monthly contribution"
             />
           </div>
-        </div>
 
-        <div className="p-6 border-t border-gray-100 flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 text-gray-600 hover:text-gray-800">
-            Cancel
-          </button>
-          <button
-            onClick={() => updateMutation.mutate()}
-            disabled={!amount || parseFloat(amount) === 0 || updateMutation.isPending}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <TrendingUp className="w-4 h-4" />
-            {updateMutation.isPending ? 'Saving...' : 'Update Progress'}
-          </button>
-        </div>
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-6 py-3 rounded-2xl font-cactus font-bold"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={!amount || parseFloat(amount) === 0 || updateMutation.isPending}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-cactus font-bold text-white bg-cactus-sage shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed transition-all"
+            >
+              <TrendingUp className="w-4 h-4" />
+              {updateMutation.isPending ? 'Saving...' : 'Update Progress'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
