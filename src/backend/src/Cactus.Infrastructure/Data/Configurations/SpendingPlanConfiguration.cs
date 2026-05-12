@@ -20,6 +20,9 @@ public class SpendingPlanConfiguration : IEntityTypeConfiguration<SpendingPlan>
         builder.Property(s => s.WantsPercentage).HasColumnName("wants_percentage").HasPrecision(5, 2);
         builder.Property(s => s.GoalsPercentage).HasColumnName("goals_percentage").HasPrecision(5, 2);
         builder.Property(s => s.IsActive).HasColumnName("is_active");
+        builder.Property(s => s.SecondaryIncomeSources)
+            .HasColumnName("secondary_income_sources")
+            .HasColumnType("text");
         builder.Property(s => s.CreatedAt).HasColumnName("created_at");
         builder.Property(s => s.UpdatedAt).HasColumnName("updated_at");
 

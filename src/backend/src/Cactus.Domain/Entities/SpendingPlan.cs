@@ -12,6 +12,7 @@ public class SpendingPlan : BaseEntity
     public decimal WantsPercentage { get; set; }
     public decimal GoalsPercentage { get; set; }
     public bool IsActive { get; set; } = true;
+    public string? SecondaryIncomeSources { get; set; }
 
     // Navigation properties
     public User User { get; set; } = null!;
