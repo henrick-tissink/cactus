@@ -1,236 +1,177 @@
 import { useState } from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
-import {
-  LayoutDashboard,
-  ArrowRightLeft,
-  PiggyBank,
-  Target,
-  TrendingUp,
-  Settings,
-  LogOut,
-  ChevronDown,
-  Menu,
-  X,
-} from 'lucide-react';
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { LayoutDashboard, Receipt, PieChart, Target, TrendingUp, Menu, X } from 'lucide-react';
+import { CactusLogo } from '../brand/CactusLogo';
 import { useAuthStore } from '../../store/authStore';
+import type { User } from '../../types';
 
-const navItems = [
+interface NavItemDef {
+  path: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+}
+
+const navItems: NavItemDef[] = [
   { path: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { path: '/transactions', label: 'Transactions', icon: ArrowRightLeft },
-  { path: '/budget', label: 'Budget', icon: PiggyBank },
+  { path: '/transactions', label: 'Transactions', icon: Receipt },
+  { path: '/budget', label: 'Budget', icon: PieChart },
   { path: '/goals', label: 'Goals', icon: Target },
   { path: '/insights', label: 'Insights', icon: TrendingUp },
 ];
 
-function CactusLogo({ className = 'w-8 h-8' }: { className?: string }) {
+function NavItem({
+  item,
+  active,
+  onClick,
+  variant = 'sidebar',
+}: {
+  item: NavItemDef;
+  active: boolean;
+  onClick?: () => void;
+  variant?: 'sidebar' | 'tab';
+}) {
+  const Icon = item.icon;
+  if (variant === 'tab') {
+    return (
+      <Link
+        to={item.path}
+        aria-current={active ? 'page' : undefined}
+        onClick={onClick}
+        className={`flex flex-col items-center gap-0.5 px-3 py-2 ${
+          active ? 'text-cactus-sage' : 'text-cactus-charcoal/50'
+        }`}
+      >
+        <Icon className="w-5 h-5" />
+        <span className="text-[10px] font-cactus font-semibold">{item.label}</span>
+      </Link>
+    );
+  }
   return (
-    <svg viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
-      <rect width="64" height="64" rx="16" fill="#1B7A4A" />
-      <path
-        d="M32 12C32 12 28 20 28 32C28 44 32 52 32 52C32 52 36 44 36 32C36 20 32 12 32 12Z"
-        fill="#E8F5EE"
-      />
-      <path d="M22 24C22 24 26 26 28 32" stroke="#E8F5EE" strokeWidth="3" strokeLinecap="round" />
-      <path d="M42 24C42 24 38 26 36 32" stroke="#E8F5EE" strokeWidth="3" strokeLinecap="round" />
-      <path d="M20 36C20 36 25 34 28 36" stroke="#E8F5EE" strokeWidth="2.5" strokeLinecap="round" />
-      <path d="M44 36C44 36 39 34 36 36" stroke="#E8F5EE" strokeWidth="2.5" strokeLinecap="round" />
-    </svg>
+    <Link
+      to={item.path}
+      aria-current={active ? 'page' : undefined}
+      onClick={onClick}
+      className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-cactus font-semibold text-sm transition-colors ${
+        active
+          ? 'bg-cactus-sage-light text-cactus-charcoal border-l-[3px] border-cactus-sage'
+          : 'text-cactus-charcoal/60 hover:bg-cactus-sage-light/40 hover:text-cactus-charcoal'
+      }`}
+    >
+      <Icon className="w-5 h-5 shrink-0" />
+      <span>{item.label}</span>
+    </Link>
+  );
+}
+
+function UserSection({ user, onLogout }: { user: User | null; onLogout: () => Promise<void> }) {
+  const [open, setOpen] = useState(false);
+  if (!user) return null;
+  const initial = user.firstName?.[0] ?? user.email[0];
+  return (
+    <div className="p-3 border-t border-cactus-overlay relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex items-center gap-2.5 w-full p-2 rounded-xl hover:bg-cactus-sage-light/40 transition-colors"
+      >
+        <div className="w-9 h-9 rounded-full bg-cactus-sage text-white font-cactus font-bold flex items-center justify-center text-sm">
+          {initial.toUpperCase()}
+        </div>
+        <div className="flex-1 text-left min-w-0">
+          <p className="font-cactus font-semibold text-sm text-cactus-charcoal truncate">
+            {user.firstName ?? user.email}
+          </p>
+          <p className="font-cactus text-xs text-cactus-charcoal/50 truncate">{user.email}</p>
+        </div>
+      </button>
+      {open && (
+        <div className="absolute bottom-full left-3 right-3 mb-2 bg-white border border-cactus-overlay rounded-xl shadow-lg overflow-hidden">
+          <button
+            type="button"
+            onClick={onLogout}
+            className="w-full px-4 py-3 text-left font-cactus font-semibold text-sm text-cactus-charcoal hover:bg-cactus-sage-light/40"
+          >
+            Log out
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 
 export function Layout() {
   const location = useLocation();
   const { user, logout } = useAuthStore();
-  const [showUserMenu, setShowUserMenu] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
-  const handleLogout = async () => {
-    await logout();
+  const isActive = (path: string) => {
+    if (path === '/') return location.pathname === '/';
+    if (path === '/budget')
+      return location.pathname === '/budget' || location.pathname === '/spending-plan';
+    return location.pathname.startsWith(path);
   };
 
-  const initials = user?.firstName?.[0]?.toUpperCase() || user?.email[0]?.toUpperCase() || '?';
-
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: 'var(--surface)' }}>
-      {/* Mobile header */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 z-40 h-14 flex items-center justify-between px-4 border-b border-gray-200 bg-white">
-        <button onClick={() => setMobileNavOpen(true)} className="p-2 -ml-2 text-gray-600">
-          <Menu className="w-5 h-5" />
-        </button>
-        <div className="flex items-center gap-2">
-          <CactusLogo className="w-7 h-7" />
-          <span className="font-bold text-[var(--cactus-green)]">Cactus</span>
-        </div>
-        <div className="w-9" /> {/* Spacer for centering */}
-      </header>
-
-      {/* Mobile overlay */}
-      {mobileNavOpen && (
-        <div className="lg:hidden fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setMobileNavOpen(false)} />
-          <aside className="sidebar absolute left-0 top-0 bottom-0 w-64 flex flex-col animate-slide-in">
-            <div className="h-16 flex items-center justify-between px-5">
-              <div className="flex items-center gap-3">
-                <CactusLogo className="w-8 h-8" />
-                <span className="text-lg font-bold text-white">Cactus</span>
-              </div>
-              <button
-                onClick={() => setMobileNavOpen(false)}
-                className="p-1 text-white/60 hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <NavList location={location} onNavigate={() => setMobileNavOpen(false)} />
-            <UserSection
-              user={user}
-              initials={initials}
-              showUserMenu={showUserMenu}
-              setShowUserMenu={setShowUserMenu}
-              onLogout={handleLogout}
-            />
-          </aside>
-        </div>
-      )}
-
+    <div className="min-h-screen bg-cactus-sandstone font-cactus">
       {/* Desktop sidebar */}
-      <aside className="sidebar hidden lg:flex w-64 flex-col fixed inset-y-0 left-0 z-30">
-        {/* Logo */}
-        <div className="h-16 flex items-center gap-3 px-5 border-b border-white/10">
-          <CactusLogo className="w-8 h-8" />
-          <span className="text-lg font-bold text-white tracking-tight">Cactus</span>
+      <aside className="hidden md:flex md:flex-col md:fixed md:inset-y-0 md:left-0 md:w-64 bg-cactus-sandstone border-r border-cactus-overlay">
+        <div className="h-16 flex items-center px-5 border-b border-cactus-overlay">
+          <CactusLogo />
         </div>
-
-        <NavList location={location} />
-
-        <UserSection
-          user={user}
-          initials={initials}
-          showUserMenu={showUserMenu}
-          setShowUserMenu={setShowUserMenu}
-          onLogout={handleLogout}
-        />
+        <nav className="flex-1 px-3 py-4 space-y-1">
+          {navItems.map((item) => (
+            <NavItem key={item.path} item={item} active={isActive(item.path)} />
+          ))}
+        </nav>
+        <UserSection user={user} onLogout={logout} />
       </aside>
 
-      {/* Main content */}
-      <main className="flex-1 lg:ml-64 overflow-auto">
-        <div className="pt-14 lg:pt-0">
-          <div className="animate-fade-in">
-            <Outlet />
-          </div>
+      {/* Mobile header */}
+      <header className="md:hidden fixed top-0 inset-x-0 h-14 bg-cactus-sandstone border-b border-cactus-overlay flex items-center justify-between px-4 z-40">
+        <CactusLogo />
+        <button
+          type="button"
+          aria-label={mobileNavOpen ? 'close menu' : 'open menu'}
+          onClick={() => setMobileNavOpen((v) => !v)}
+          className="p-2 text-cactus-charcoal"
+        >
+          {mobileNavOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </header>
+
+      {/* Mobile drawer */}
+      {mobileNavOpen && (
+        <div
+          role="dialog"
+          aria-label="menu"
+          aria-modal="true"
+          className="md:hidden fixed inset-0 top-14 z-30 bg-cactus-sandstone animate-slide-in flex flex-col"
+        >
+          <nav className="flex-1 px-4 py-4 space-y-1">
+            {navItems.map((item) => (
+              <NavItem
+                key={item.path}
+                item={item}
+                active={isActive(item.path)}
+                onClick={() => setMobileNavOpen(false)}
+              />
+            ))}
+          </nav>
+          <UserSection user={user} onLogout={logout} />
         </div>
-      </main>
-
-      {/* Mobile bottom nav */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 flex">
-        {navItems.map(({ path, label, icon: Icon }) => {
-          const isActive = location.pathname === path;
-          return (
-            <Link
-              key={path}
-              to={path}
-              className={`flex-1 flex flex-col items-center gap-0.5 py-2 text-[10px] font-medium transition-colors ${
-                isActive ? 'text-[var(--cactus-green)]' : 'text-gray-400'
-              }`}
-            >
-              <Icon className="w-5 h-5" />
-              {label}
-            </Link>
-          );
-        })}
-      </nav>
-    </div>
-  );
-}
-
-function NavList({
-  location,
-  onNavigate,
-}: {
-  location: { pathname: string };
-  onNavigate?: () => void;
-}) {
-  return (
-    <nav className="flex-1 px-3 py-4 space-y-1">
-      {navItems.map(({ path, label, icon: Icon }) => {
-        const isActive =
-          location.pathname === path ||
-          (path === '/budget' && location.pathname === '/spending-plan');
-        return (
-          <Link
-            key={path}
-            to={path}
-            onClick={onNavigate}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-              isActive ? 'sidebar-nav-item-active' : 'sidebar-nav-item'
-            }`}
-          >
-            <Icon className="w-[18px] h-[18px]" />
-            {label}
-          </Link>
-        );
-      })}
-    </nav>
-  );
-}
-
-function UserSection({
-  user,
-  initials,
-  showUserMenu,
-  setShowUserMenu,
-  onLogout,
-}: {
-  user: { firstName?: string; email: string } | null;
-  initials: string;
-  showUserMenu: boolean;
-  setShowUserMenu: (v: boolean) => void;
-  onLogout: () => void;
-}) {
-  return (
-    <div className="p-3 border-t border-white/10 relative">
-      <button
-        onClick={() => setShowUserMenu(!showUserMenu)}
-        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg sidebar-nav-item"
-      >
-        <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center text-sm font-semibold text-white">
-          {initials}
-        </div>
-        <div className="flex-1 min-w-0 text-left">
-          <p className="text-sm font-medium text-white/90 truncate">{user?.firstName || 'User'}</p>
-          <p className="text-xs text-white/50 truncate">{user?.email}</p>
-        </div>
-        <ChevronDown
-          className={`w-4 h-4 text-white/40 transition-transform ${showUserMenu ? 'rotate-180' : ''}`}
-        />
-      </button>
-
-      {/* Dropdown */}
-      {showUserMenu && (
-        <>
-          <div className="fixed inset-0 z-40" onClick={() => setShowUserMenu(false)} />
-          <div className="absolute bottom-full left-3 right-3 mb-2 z-50 bg-white rounded-lg shadow-lg border border-gray-200 py-1 animate-fade-in">
-            <Link
-              to="/settings"
-              onClick={() => setShowUserMenu(false)}
-              className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
-            >
-              <Settings className="w-4 h-4" />
-              Settings
-            </Link>
-            <button
-              onClick={() => {
-                setShowUserMenu(false);
-                onLogout();
-              }}
-              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
-            >
-              <LogOut className="w-4 h-4" />
-              Log out
-            </button>
-          </div>
-        </>
       )}
+
+      {/* Mobile bottom tab bar */}
+      <nav className="md:hidden fixed bottom-0 inset-x-0 h-16 bg-cactus-sandstone border-t border-cactus-overlay flex items-center justify-around z-40">
+        {navItems.map((item) => (
+          <NavItem key={item.path} item={item} active={isActive(item.path)} variant="tab" />
+        ))}
+      </nav>
+
+      {/* Main content */}
+      <main className="md:pl-64 pt-14 md:pt-0 pb-16 md:pb-0 min-h-screen">
+        <Outlet />
+      </main>
     </div>
   );
 }
