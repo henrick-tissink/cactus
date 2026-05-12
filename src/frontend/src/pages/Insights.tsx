@@ -31,6 +31,18 @@ import {
   TrendDirection,
 } from '../types';
 
+const BRAND_CHART_COLORS = {
+  needs: '#77DD77', // cactus-sage
+  wants: '#FFCC00', // cactus-desert
+  goals: '#FF6F61', // cactus-prickly
+  surplus: '#77DD77', // cactus-sage
+  deficit: '#FF6F61', // cactus-prickly
+  gridline: 'rgba(51, 51, 51, 0.06)', // cactus-overlay
+  axisText: '#333333', // cactus-charcoal
+};
+// Hex strings used directly because Recharts props don't read CSS vars at runtime.
+// If brand tokens shift, update this map alongside index.css.
+
 const MONTH_NAMES = [
   'Jan',
   'Feb',
@@ -46,27 +58,36 @@ const MONTH_NAMES = [
   'Dec',
 ];
 
-const colorMap: Record<
+const macroColorMap: Record<
   MacroCategoryType,
-  { bg: string; light: string; text: string; hex: string }
+  {
+    chartHex: string;
+    bucketBg: string;
+    bucketSoftBg: string;
+    dotBg: string;
+    accentText: string;
+  }
 > = {
   [MacroCategoryType.Needs]: {
-    bg: 'bg-green-500',
-    light: 'bg-green-100',
-    text: 'text-green-700',
-    hex: '#22c55e',
+    chartHex: BRAND_CHART_COLORS.needs,
+    bucketBg: 'bg-cactus-sage',
+    bucketSoftBg: 'bg-cactus-needs-bg/40',
+    dotBg: 'bg-cactus-sage',
+    accentText: 'text-cactus-sage',
   },
   [MacroCategoryType.Wants]: {
-    bg: 'bg-amber-500',
-    light: 'bg-amber-100',
-    text: 'text-amber-700',
-    hex: '#f59e0b',
+    chartHex: BRAND_CHART_COLORS.wants,
+    bucketBg: 'bg-cactus-desert',
+    bucketSoftBg: 'bg-cactus-wants-bg/40',
+    dotBg: 'bg-cactus-desert',
+    accentText: 'text-cactus-desert',
   },
   [MacroCategoryType.Goals]: {
-    bg: 'bg-blue-500',
-    light: 'bg-blue-100',
-    text: 'text-blue-700',
-    hex: '#3b82f6',
+    chartHex: BRAND_CHART_COLORS.goals,
+    bucketBg: 'bg-cactus-prickly',
+    bucketSoftBg: 'bg-cactus-goals-bg/40',
+    dotBg: 'bg-cactus-prickly',
+    accentText: 'text-cactus-prickly',
   },
 };
 
@@ -78,10 +99,10 @@ const GUIDELINE = {
 
 function LoadingState() {
   return (
-    <div className="p-8">
+    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-green-600" />
-        <span className="ml-3 text-gray-600">Loading insights...</span>
+        <Loader2 className="w-8 h-8 animate-spin text-cactus-sage" />
+        <span className="ml-3 text-cactus-charcoal/60 font-cactus">Loading insights...</span>
       </div>
     </div>
   );
@@ -89,11 +110,13 @@ function LoadingState() {
 
 function ErrorState({ error }: { error: Error }) {
   return (
-    <div className="p-8">
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-        <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <h2 className="text-lg font-semibold text-red-800 mb-2">Failed to load insights</h2>
-        <p className="text-red-600">{error.message}</p>
+    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
+      <div className="bg-cactus-goals-bg border border-cactus-overlay rounded-2xl p-6 text-center">
+        <AlertCircle className="w-12 h-12 text-cactus-prickly mx-auto mb-4" />
+        <h2 className="text-lg font-cactus font-bold text-cactus-charcoal mb-2">
+          Failed to load insights
+        </h2>
+        <p className="text-cactus-charcoal font-cactus">{error.message}</p>
       </div>
     </div>
   );
@@ -101,15 +124,17 @@ function ErrorState({ error }: { error: Error }) {
 
 function EmptyState() {
   return (
-    <div className="p-8">
+    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Insights</h1>
-        <p className="text-gray-600">Analyze your spending trends and patterns.</p>
+        <h1 className="text-cactus-charcoal font-cactus font-bold text-2xl">Insights</h1>
+        <p className="text-cactus-charcoal/60 font-cactus">
+          Analyze your spending trends and patterns.
+        </p>
       </div>
-      <div className="bg-white rounded-xl p-12 shadow-sm border border-gray-100 text-center">
-        <TrendingUp className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">No insights yet</h2>
-        <p className="text-gray-500 max-w-md mx-auto">
+      <div className="bg-white border border-cactus-overlay rounded-2xl p-12 text-center">
+        <TrendingUp className="w-16 h-16 text-cactus-charcoal/40 mx-auto mb-4" />
+        <h2 className="text-xl font-cactus font-bold text-cactus-charcoal mb-2">No insights yet</h2>
+        <p className="text-cactus-charcoal/60 font-cactus max-w-md mx-auto">
           Start tracking your transactions and spending to see insights about your financial trends.
           Insights will appear after you have transaction data for at least one month.
         </p>
@@ -122,25 +147,25 @@ function TrendSummaryCard({ trendDirection }: { trendDirection: TrendDirection }
   const trendConfig = {
     [TrendDirection.Improving]: {
       icon: TrendingUp,
-      color: 'text-green-600',
-      bg: 'bg-green-50',
-      border: 'border-green-200',
+      iconColor: 'text-cactus-sage',
+      cardBg: 'bg-cactus-sage-light',
+      iconBg: 'bg-cactus-sage-light',
       title: 'Improving',
       message: "You're improving! Your savings rate has increased in recent months.",
     },
     [TrendDirection.Stable]: {
       icon: Minus,
-      color: 'text-blue-600',
-      bg: 'bg-blue-50',
-      border: 'border-blue-200',
+      iconColor: 'text-cactus-charcoal/60',
+      cardBg: 'bg-white',
+      iconBg: 'bg-cactus-sandstone',
       title: 'Stable',
       message: "You're maintaining a consistent spending pattern. Keep it up!",
     },
     [TrendDirection.Declining]: {
       icon: TrendingDown,
-      color: 'text-amber-600',
-      bg: 'bg-amber-50',
-      border: 'border-amber-200',
+      iconColor: 'text-cactus-prickly',
+      cardBg: 'bg-cactus-goals-bg',
+      iconBg: 'bg-cactus-goals-bg',
       title: 'Declining',
       message: 'Consider adjusting your spending. Your savings rate has decreased recently.',
     },
@@ -150,14 +175,16 @@ function TrendSummaryCard({ trendDirection }: { trendDirection: TrendDirection }
   const Icon = config.icon;
 
   return (
-    <div className={`${config.bg} rounded-xl p-6 shadow-sm border ${config.border}`}>
+    <div className={`${config.cardBg} border border-cactus-overlay rounded-2xl p-6`}>
       <div className="flex items-center gap-4">
-        <div className={`p-3 rounded-full ${config.bg}`}>
-          <Icon className={`w-8 h-8 ${config.color}`} />
+        <div className={`p-3 rounded-full ${config.iconBg}`}>
+          <Icon className={`w-8 h-8 ${config.iconColor}`} />
         </div>
         <div>
-          <h3 className={`text-lg font-semibold ${config.color}`}>Trend: {config.title}</h3>
-          <p className="text-gray-600 mt-1">{config.message}</p>
+          <h3 className="text-lg font-cactus font-bold text-cactus-charcoal">
+            Trend: {config.title}
+          </h3>
+          <p className="text-cactus-charcoal/70 font-cactus mt-1">{config.message}</p>
         </div>
       </div>
     </div>
@@ -168,12 +195,12 @@ function CircularProgress({
   percentage,
   guideline,
   label,
-  color,
+  macroType,
 }: {
   percentage: number;
   guideline: number;
   label: string;
-  color: { bg: string; light: string; text: string; hex: string };
+  macroType: MacroCategoryType;
 }) {
   const size = 120;
   const strokeWidth = 10;
@@ -184,6 +211,7 @@ function CircularProgress({
 
   const isAboveGuideline = percentage > guideline;
   const diff = Math.abs(percentage - guideline).toFixed(1);
+  const color = macroColorMap[macroType];
 
   return (
     <div className="flex flex-col items-center">
@@ -195,7 +223,7 @@ function CircularProgress({
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="#e5e7eb"
+            stroke={BRAND_CHART_COLORS.gridline}
             strokeWidth={strokeWidth}
           />
           {/* Guideline marker */}
@@ -204,12 +232,12 @@ function CircularProgress({
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="#d1d5db"
+            stroke={BRAND_CHART_COLORS.axisText}
             strokeWidth={strokeWidth}
             strokeDasharray={circumference}
             strokeDashoffset={guidelineOffset}
             strokeLinecap="round"
-            opacity={0.5}
+            opacity={0.4}
           />
           {/* Progress circle */}
           <circle
@@ -217,7 +245,7 @@ function CircularProgress({
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke={color.hex}
+            stroke={color.chartHex}
             strokeWidth={strokeWidth}
             strokeDasharray={circumference}
             strokeDashoffset={offset}
@@ -226,19 +254,21 @@ function CircularProgress({
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className={`text-2xl font-bold ${color.text}`}>{percentage.toFixed(0)}%</span>
+          <span className="text-2xl text-cactus-charcoal font-cactus font-bold tabular-nums">
+            {percentage.toFixed(0)}%
+          </span>
         </div>
       </div>
-      <p className="mt-3 font-medium text-gray-900">{label}</p>
-      <p className="text-sm text-gray-500">
+      <p className="mt-3 font-cactus font-semibold text-cactus-charcoal">{label}</p>
+      <p className="text-sm font-cactus text-cactus-charcoal/60">
         {isAboveGuideline ? (
-          <span className="text-amber-600">
+          <span className="text-cactus-prickly">
             +{diff}% above {guideline}% guideline
           </span>
         ) : percentage === guideline ? (
-          <span className="text-green-600">On target ({guideline}%)</span>
+          <span className="text-cactus-sage">On target ({guideline}%)</span>
         ) : (
-          <span className="text-green-600">
+          <span className="text-cactus-sage">
             {diff}% below {guideline}% guideline
           </span>
         )}
@@ -249,30 +279,32 @@ function CircularProgress({
 
 function AverageSplitCard({ data }: { data: InsightsData }) {
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-      <h3 className="text-lg font-semibold text-gray-900 mb-6">Average N/W/G Split</h3>
+    <div className="bg-white border border-cactus-overlay rounded-2xl p-6">
+      <h3 className="text-lg text-cactus-charcoal font-cactus font-bold mb-6">
+        Average N/W/G Split
+      </h3>
       <div className="grid grid-cols-3 gap-8">
         <CircularProgress
           percentage={data.averageNeedsPercent}
           guideline={GUIDELINE.needs}
           label="Needs"
-          color={colorMap[MacroCategoryType.Needs]}
+          macroType={MacroCategoryType.Needs}
         />
         <CircularProgress
           percentage={data.averageWantsPercent}
           guideline={GUIDELINE.wants}
           label="Wants"
-          color={colorMap[MacroCategoryType.Wants]}
+          macroType={MacroCategoryType.Wants}
         />
         <CircularProgress
           percentage={data.averageGoalsPercent}
           guideline={GUIDELINE.goals}
           label="Goals"
-          color={colorMap[MacroCategoryType.Goals]}
+          macroType={MacroCategoryType.Goals}
         />
       </div>
-      <div className="mt-6 pt-4 border-t border-gray-100">
-        <p className="text-sm text-gray-500 text-center">
+      <div className="mt-6 pt-4 border-t border-cactus-overlay">
+        <p className="text-sm font-cactus text-cactus-charcoal/60 text-center">
           Compared to the 50/30/20 guideline (Needs/Wants/Goals)
         </p>
       </div>
@@ -289,29 +321,30 @@ function MonthlyTrendChart({ monthlyBreakdowns }: { monthlyBreakdowns: MonthlyBr
   }));
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-      <h3 className="text-lg font-semibold text-gray-900 mb-6">Monthly Spending Trend</h3>
+    <div className="bg-white border border-cactus-overlay rounded-2xl p-5">
+      <h3 className="text-lg text-cactus-charcoal font-cactus font-bold mb-6">
+        Monthly Spending Trend
+      </h3>
       <div className="h-72">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <CartesianGrid strokeDasharray="3 3" stroke={BRAND_CHART_COLORS.gridline} />
             <XAxis
               dataKey="name"
-              tick={{ fill: '#6b7280', fontSize: 12 }}
-              axisLine={{ stroke: '#e5e7eb' }}
+              tick={{ fill: BRAND_CHART_COLORS.axisText, fontSize: 12 }}
+              axisLine={{ stroke: BRAND_CHART_COLORS.gridline }}
             />
             <YAxis
-              tick={{ fill: '#6b7280', fontSize: 12 }}
-              axisLine={{ stroke: '#e5e7eb' }}
+              tick={{ fill: BRAND_CHART_COLORS.axisText, fontSize: 12 }}
+              axisLine={{ stroke: BRAND_CHART_COLORS.gridline }}
               domain={[0, 100]}
               tickFormatter={(value) => `${value}%`}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'white',
-                border: '1px solid #e5e7eb',
-                borderRadius: '8px',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid rgba(51,51,51,0.06)',
+                borderRadius: 12,
               }}
               formatter={(value) => [`${Number(value).toFixed(1)}%`]}
             />
@@ -319,25 +352,25 @@ function MonthlyTrendChart({ monthlyBreakdowns }: { monthlyBreakdowns: MonthlyBr
             <Line
               type="monotone"
               dataKey="Needs"
-              stroke={colorMap[MacroCategoryType.Needs].hex}
+              stroke={BRAND_CHART_COLORS.needs}
               strokeWidth={2}
-              dot={{ fill: colorMap[MacroCategoryType.Needs].hex, strokeWidth: 2 }}
+              dot={{ fill: BRAND_CHART_COLORS.needs, strokeWidth: 2 }}
               activeDot={{ r: 6 }}
             />
             <Line
               type="monotone"
               dataKey="Wants"
-              stroke={colorMap[MacroCategoryType.Wants].hex}
+              stroke={BRAND_CHART_COLORS.wants}
               strokeWidth={2}
-              dot={{ fill: colorMap[MacroCategoryType.Wants].hex, strokeWidth: 2 }}
+              dot={{ fill: BRAND_CHART_COLORS.wants, strokeWidth: 2 }}
               activeDot={{ r: 6 }}
             />
             <Line
               type="monotone"
               dataKey="Goals"
-              stroke={colorMap[MacroCategoryType.Goals].hex}
+              stroke={BRAND_CHART_COLORS.goals}
               strokeWidth={2}
-              dot={{ fill: colorMap[MacroCategoryType.Goals].hex, strokeWidth: 2 }}
+              dot={{ fill: BRAND_CHART_COLORS.goals, strokeWidth: 2 }}
               activeDot={{ r: 6 }}
             />
           </LineChart>
@@ -357,17 +390,19 @@ function SurplusDeficitChart({
   const chartData = monthlyBreakdowns.map((m) => ({
     name: `${MONTH_NAMES[m.month - 1]} ${m.year.toString().slice(-2)}`,
     surplus: m.surplus,
-    fill: m.surplus >= 0 ? '#22c55e' : '#ef4444',
+    fill: m.surplus >= 0 ? BRAND_CHART_COLORS.surplus : BRAND_CHART_COLORS.deficit,
   }));
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+    <div className="bg-white border border-cactus-overlay rounded-2xl p-5">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Monthly Surplus/Deficit</h3>
+        <h3 className="text-lg text-cactus-charcoal font-cactus font-bold">
+          Monthly Surplus/Deficit
+        </h3>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">Average:</span>
+          <span className="text-sm font-cactus text-cactus-charcoal/60">Average:</span>
           <span
-            className={`text-lg font-semibold font-mono-financial ${averageSurplus >= 0 ? 'text-green-600' : 'text-red-600'}`}
+            className={`text-lg font-cactus font-bold tabular-nums ${averageSurplus >= 0 ? 'text-cactus-sage' : 'text-cactus-prickly'}`}
           >
             R{Math.abs(averageSurplus).toLocaleString()}
             {averageSurplus >= 0 ? ' surplus' : ' deficit'}
@@ -377,23 +412,22 @@ function SurplusDeficitChart({
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <CartesianGrid strokeDasharray="3 3" stroke={BRAND_CHART_COLORS.gridline} />
             <XAxis
               dataKey="name"
-              tick={{ fill: '#6b7280', fontSize: 12 }}
-              axisLine={{ stroke: '#e5e7eb' }}
+              tick={{ fill: BRAND_CHART_COLORS.axisText, fontSize: 12 }}
+              axisLine={{ stroke: BRAND_CHART_COLORS.gridline }}
             />
             <YAxis
-              tick={{ fill: '#6b7280', fontSize: 12 }}
-              axisLine={{ stroke: '#e5e7eb' }}
+              tick={{ fill: BRAND_CHART_COLORS.axisText, fontSize: 12 }}
+              axisLine={{ stroke: BRAND_CHART_COLORS.gridline }}
               tickFormatter={(value) => `R${Math.abs(value / 1000)}k`}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'white',
-                border: '1px solid #e5e7eb',
-                borderRadius: '8px',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid rgba(51,51,51,0.06)',
+                borderRadius: 12,
               }}
               formatter={(value) => {
                 const numValue = Number(value);
@@ -403,7 +437,7 @@ function SurplusDeficitChart({
                 ];
               }}
             />
-            <ReferenceLine y={0} stroke="#6b7280" strokeDasharray="3 3" />
+            <ReferenceLine y={0} stroke={BRAND_CHART_COLORS.axisText} strokeDasharray="3 3" />
             <Bar dataKey="surplus" radius={[4, 4, 0, 0]}>
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
@@ -412,14 +446,14 @@ function SurplusDeficitChart({
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="mt-4 flex items-center justify-center gap-6 text-sm">
+      <div className="mt-4 flex items-center justify-center gap-6 text-sm font-cactus">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-green-500" />
-          <span className="text-gray-600">Surplus</span>
+          <div className="w-3 h-3 rounded bg-cactus-sage" />
+          <span className="text-cactus-charcoal/60">Surplus</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-red-500" />
-          <span className="text-gray-600">Deficit</span>
+          <div className="w-3 h-3 rounded bg-cactus-prickly" />
+          <span className="text-cactus-charcoal/60">Deficit</span>
         </div>
       </div>
     </div>
@@ -449,9 +483,11 @@ function CategoryAveragesCard({ categoryAverages }: { categoryAverages: Category
 
   if (categoryAverages.length === 0) {
     return (
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Category Averages</h3>
-        <p className="text-gray-500 text-center py-8">
+      <div className="bg-white border border-cactus-overlay rounded-2xl p-6">
+        <h3 className="text-lg text-cactus-charcoal font-cactus font-bold mb-4">
+          Category Averages
+        </h3>
+        <p className="text-cactus-charcoal/60 font-cactus text-center py-8">
           Classify your transactions to unlock spending insights by category.
         </p>
       </div>
@@ -459,36 +495,43 @@ function CategoryAveragesCard({ categoryAverages }: { categoryAverages: Category
   }
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-      <h3 className="text-lg font-semibold text-gray-900 mb-6">Category Averages</h3>
+    <div className="bg-white border border-cactus-overlay rounded-2xl p-6">
+      <h3 className="text-lg text-cactus-charcoal font-cactus font-bold mb-6">Category Averages</h3>
       <div className="space-y-6">
         {macroOrder.map((macroType) => {
           const categories = groupedCategories[macroType];
           if (!categories || categories.length === 0) return null;
 
-          const color = colorMap[macroType];
+          const color = macroColorMap[macroType];
 
           return (
-            <div key={macroType}>
+            <div
+              key={macroType}
+              className={`${color.bucketSoftBg} border border-cactus-overlay rounded-2xl p-4`}
+            >
               <div className="flex items-center gap-2 mb-3">
-                <div className={`w-3 h-3 rounded-full ${color.bg}`} />
-                <h4 className={`font-medium ${color.text}`}>{macroNames[macroType]}</h4>
+                <div className={`w-3 h-3 rounded-full ${color.dotBg}`} />
+                <h4 className="font-cactus font-bold text-cactus-charcoal">
+                  {macroNames[macroType]}
+                </h4>
               </div>
               <div className="space-y-2">
                 {categories.slice(0, 5).map((cat) => (
                   <div
                     key={cat.categoryId}
-                    className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50"
+                    className="flex items-center justify-between py-2 px-3 rounded-xl bg-white border border-cactus-overlay"
                   >
-                    <span className="text-gray-700">{cat.categoryName}</span>
-                    <span className="font-medium text-gray-900 font-mono-financial">
+                    <span className="text-cactus-charcoal font-cactus font-semibold">
+                      {cat.categoryName}
+                    </span>
+                    <span className="font-cactus font-bold tabular-nums text-cactus-charcoal">
                       R{cat.averageAmount.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                      <span className="text-gray-500 text-sm font-normal">/mo</span>
+                      <span className="text-cactus-charcoal/60 text-sm font-normal">/mo</span>
                     </span>
                   </div>
                 ))}
                 {categories.length > 5 && (
-                  <p className="text-sm text-gray-500 text-center py-1">
+                  <p className="text-sm font-cactus text-cactus-charcoal/60 text-center py-1">
                     +{categories.length - 5} more categories
                   </p>
                 )}
@@ -507,61 +550,77 @@ function GuidelineComparisonCard({ data }: { data: InsightsData }) {
       label: 'Needs',
       actual: data.averageNeedsPercent,
       guideline: GUIDELINE.needs,
-      color: colorMap[MacroCategoryType.Needs],
+      macroType: MacroCategoryType.Needs,
     },
     {
       label: 'Wants',
       actual: data.averageWantsPercent,
       guideline: GUIDELINE.wants,
-      color: colorMap[MacroCategoryType.Wants],
+      macroType: MacroCategoryType.Wants,
     },
     {
       label: 'Goals',
       actual: data.averageGoalsPercent,
       guideline: GUIDELINE.goals,
-      color: colorMap[MacroCategoryType.Goals],
+      macroType: MacroCategoryType.Goals,
     },
   ];
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">vs. 50/30/20 Guideline</h3>
+    <div className="bg-white border border-cactus-overlay rounded-2xl p-6">
+      <h3 className="text-lg text-cactus-charcoal font-cactus font-bold mb-4">
+        vs. 50/30/20 Guideline
+      </h3>
       <div className="space-y-4">
-        {comparisons.map(({ label, actual, guideline, color }) => {
+        {comparisons.map(({ label, actual, guideline, macroType }) => {
           const diff = actual - guideline;
           const isGood =
             (label === 'Needs' && diff <= 0) ||
             (label === 'Wants' && diff <= 0) ||
             (label === 'Goals' && diff >= 0);
+          const color = macroColorMap[macroType];
+          const guidelineLeftPct = Math.min(guideline, 100);
 
           return (
             <div key={label} className="flex items-center gap-4">
               <div className="w-16">
-                <span className={`font-medium ${color.text}`}>{label}</span>
+                <span className={`font-cactus font-semibold ${color.accentText}`}>{label}</span>
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm text-gray-600">{actual.toFixed(1)}%</span>
-                  <span className="text-sm text-gray-400">vs</span>
-                  <span className="text-sm text-gray-600">{guideline}%</span>
+                  <span className="text-sm font-cactus font-bold tabular-nums text-cactus-charcoal">
+                    {actual.toFixed(1)}%
+                  </span>
+                  <span className="text-sm font-cactus text-cactus-charcoal/40">vs</span>
+                  <span className="text-sm font-cactus font-bold tabular-nums text-cactus-charcoal/60">
+                    {guideline}%
+                  </span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="relative h-2 bg-cactus-overlay rounded-xl overflow-hidden">
                   <div
-                    className={`h-full ${color.bg} transition-all duration-500`}
+                    className={`h-full ${color.bucketBg} transition-all duration-500`}
                     style={{ width: `${Math.min(actual, 100)}%` }}
+                  />
+                  {/* Guideline marker */}
+                  <div
+                    className="absolute top-0 bottom-0 w-px bg-cactus-charcoal/40"
+                    style={{ left: `${guidelineLeftPct}%` }}
                   />
                 </div>
               </div>
               <div className="w-24 text-right">
                 {isGood ? (
-                  <span className="inline-flex items-center gap-1 text-sm text-green-600">
+                  <span className="inline-flex items-center gap-1 text-sm font-cactus text-cactus-sage">
                     <CheckCircle className="w-4 h-4" />
                     On track
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 text-sm text-amber-600">
+                  <span className="inline-flex items-center gap-1 text-sm font-cactus text-cactus-prickly">
                     <AlertTriangle className="w-4 h-4" />
-                    {Math.abs(diff).toFixed(1)}% {diff > 0 ? 'over' : 'under'}
+                    <span className="font-bold tabular-nums">
+                      {Math.abs(diff).toFixed(1)}%
+                    </span>{' '}
+                    {diff > 0 ? 'over' : 'under'}
                   </span>
                 )}
               </div>
@@ -604,11 +663,11 @@ export function InsightsPage() {
   const startMonth = sixMonthsAgo.toLocaleDateString('en-ZA', { month: 'long', year: 'numeric' });
 
   return (
-    <div className="p-8 animate-fade-in">
+    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Insights</h1>
-        <p className="text-gray-600">
+        <h1 className="text-cactus-charcoal font-cactus font-bold text-2xl">Insights</h1>
+        <p className="text-cactus-charcoal/60 font-cactus">
           {startMonth} - {endMonth}
         </p>
       </div>

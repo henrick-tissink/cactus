@@ -11,7 +11,6 @@ import {
   AlertCircle,
   CheckSquare,
   Square,
-  ArrowRight,
   ArrowLeft,
 } from 'lucide-react';
 
@@ -43,6 +42,14 @@ interface CommitResult {
 }
 
 type Step = 'upload' | 'preview' | 'done';
+
+const STEPS: Step[] = ['upload', 'preview', 'done'];
+
+const primaryButtonClass =
+  'inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-cactus font-bold text-base text-white transition-all bg-cactus-sage shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed';
+
+const secondaryButtonClass =
+  'inline-flex items-center justify-center gap-2 bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-6 py-4 rounded-2xl font-cactus font-bold transition-colors';
 
 export function ImportTransactionsPage() {
   const queryClient = useQueryClient();
@@ -159,287 +166,347 @@ export function ImportTransactionsPage() {
       day: 'numeric',
     });
 
+  const currentStepIndex = STEPS.indexOf(step);
+
   return (
-    <div className="p-8 max-w-5xl mx-auto animate-fade-in">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Import Transactions</h1>
-      <p className="text-gray-500 mb-6">Import your bank statement to get started</p>
+    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-cactus-charcoal font-cactus font-bold text-2xl mb-2">
+          Import Transactions
+        </h1>
+        <p className="font-cactus text-cactus-charcoal/60 mb-6">
+          Import your bank statement to get started
+        </p>
 
-      {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
-          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
-          <span className="text-sm text-red-700">{error}</span>
-          <button
-            onClick={() => setError(null)}
-            className="ml-auto text-red-400 hover:text-red-600"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-      )}
-
-      {/* Step Indicator */}
-      <div className="flex items-center gap-2 mb-8">
-        {(['upload', 'preview', 'done'] as Step[]).map((s, i) => (
-          <div key={s} className="flex items-center gap-2">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                step === s
-                  ? 'bg-green-600 text-white'
-                  : ['upload', 'preview', 'done'].indexOf(step) > i
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-gray-100 text-gray-400'
-              }`}
+        {error && (
+          <div className="bg-cactus-goals-bg border border-cactus-overlay rounded-xl p-4 flex items-center gap-3 mb-6">
+            <AlertCircle className="w-5 h-5 text-cactus-prickly shrink-0" />
+            <span className="font-cactus text-sm text-cactus-charcoal">{error}</span>
+            <button
+              type="button"
+              onClick={() => setError(null)}
+              className="ml-auto text-cactus-charcoal/40 hover:text-cactus-charcoal"
             >
-              {['upload', 'preview', 'done'].indexOf(step) > i ? (
-                <Check className="w-4 h-4" />
-              ) : (
-                i + 1
-              )}
-            </div>
-            <span
-              className={`text-sm ${step === s ? 'text-gray-900 font-medium' : 'text-gray-400'}`}
-            >
-              {s === 'upload' ? 'Upload' : s === 'preview' ? 'Review' : 'Complete'}
-            </span>
-            {i < 2 && <ArrowRight className="w-4 h-4 text-gray-300 mx-2" />}
+              <X className="w-4 h-4" />
+            </button>
           </div>
-        ))}
-      </div>
+        )}
 
-      {/* Step 1: Upload */}
-      {step === 'upload' && (
-        <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Select Account</label>
-            <select
-              value={selectedAccountId}
-              onChange={(e) => setSelectedAccountId(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            >
-              <option value="">Choose an account...</option>
-              {accounts?.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.name} ({formatCurrency(a.balance)})
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="border-2 border-dashed border-gray-200 rounded-xl p-12 text-center">
-            <Upload className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-600 mb-2">Drop your bank statement here, or click to browse</p>
-            <p className="text-sm text-gray-400 mb-4">Supported formats: CSV, OFX, QFX</p>
-            <label className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 cursor-pointer">
-              <FileText className="w-4 h-4" />
-              Choose File
-              <input
-                type="file"
-                accept=".csv,.ofx,.qfx"
-                onChange={handleFileUpload}
-                className="hidden"
-                disabled={!selectedAccountId || parseMutation.isPending}
-              />
-            </label>
-            {parseMutation.isPending && (
-              <p className="text-sm text-gray-500 mt-4">Parsing file...</p>
-            )}
-          </div>
-
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Supported Banks</h3>
-            <div className="flex gap-3 text-xs text-gray-500">
-              <span className="px-2 py-1 bg-white rounded border">FNB</span>
-              <span className="px-2 py-1 bg-white rounded border">Nedbank</span>
-              <span className="px-2 py-1 bg-white rounded border">Capitec</span>
-              <span className="px-2 py-1 bg-white rounded border">Standard Bank</span>
-              <span className="px-2 py-1 bg-white rounded border">Absa</span>
-              <span className="px-2 py-1 bg-white rounded border">Any OFX</span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Step 2: Preview */}
-      {step === 'preview' && parseResult && (
-        <div className="space-y-4">
-          {/* Summary */}
-          <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
-            <div className="flex gap-6 text-sm">
-              <span className="text-gray-600">
-                <span className="font-medium text-gray-900">{parseResult.transactions.length}</span>{' '}
-                transactions found
-              </span>
-              {parseResult.duplicateCount > 0 && (
-                <span className="text-amber-600">
-                  <span className="font-medium">{parseResult.duplicateCount}</span> possible
-                  duplicates
+        {/* Step Indicator */}
+        <div className="flex items-center gap-2 mb-8">
+          {STEPS.map((s, i) => {
+            const isCompleted = currentStepIndex > i;
+            const isActive = step === s;
+            const stepLabel = s === 'upload' ? 'Upload' : s === 'preview' ? 'Review' : 'Complete';
+            return (
+              <div key={s} className="flex items-center gap-2">
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-cactus font-bold ${
+                    isCompleted
+                      ? 'bg-cactus-sage text-white'
+                      : isActive
+                        ? 'bg-cactus-sage-light text-cactus-sage border-2 border-cactus-sage'
+                        : 'bg-cactus-overlay text-cactus-charcoal/40'
+                  }`}
+                >
+                  {isCompleted ? <Check className="w-4 h-4" /> : i + 1}
+                </div>
+                <span
+                  className={`text-sm font-cactus font-semibold ${
+                    isActive || isCompleted ? 'text-cactus-charcoal' : 'text-cactus-charcoal/40'
+                  }`}
+                >
+                  {stepLabel}
                 </span>
-              )}
-              <span className="text-green-600">
-                <span className="font-medium">{selectedIds.size}</span> selected
-              </span>
+                {i < STEPS.length - 1 && (
+                  <div
+                    className={`w-8 h-px mx-2 ${
+                      isCompleted ? 'bg-cactus-sage' : 'bg-cactus-overlay'
+                    }`}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Step 1: Upload */}
+        {step === 'upload' && (
+          <div className="bg-white border border-cactus-overlay rounded-2xl p-8">
+            <div className="mb-6">
+              <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5">
+                Select Account
+              </label>
+              <select
+                value={selectedAccountId}
+                onChange={(e) => setSelectedAccountId(e.target.value)}
+                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none transition-colors bg-white"
+              >
+                <option value="">Choose an account...</option>
+                {accounts?.map((a) => (
+                  <option key={a.id} value={a.id}>
+                    {a.name} ({formatCurrency(a.balance)})
+                  </option>
+                ))}
+              </select>
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setStep('upload')}
-                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-800"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back
-              </button>
-              <button
-                onClick={() => commitMutation.mutate()}
-                disabled={selectedIds.size === 0 || commitMutation.isPending}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 disabled:opacity-50"
-              >
-                <Check className="w-4 h-4" />
-                {commitMutation.isPending
-                  ? 'Importing...'
-                  : `Import ${selectedIds.size} Transactions`}
-              </button>
+
+            <div className="border-2 border-dashed border-cactus-overlay rounded-2xl p-8 text-center hover:border-cactus-sage hover:bg-cactus-sage-light/30 transition-colors cursor-pointer">
+              <Upload className="w-12 h-12 text-cactus-charcoal/40 mx-auto mb-4" />
+              <p className="font-cactus text-cactus-charcoal mb-2">
+                Drag and drop your bank statement here, or click to select a file
+              </p>
+              <p className="font-cactus text-sm text-cactus-charcoal/60 mb-4">
+                Supported formats: CSV, OFX, QFX
+              </p>
+              <label className={`${primaryButtonClass} cursor-pointer`}>
+                <FileText className="w-4 h-4" />
+                Choose File
+                <input
+                  type="file"
+                  accept=".csv,.ofx,.qfx"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  disabled={!selectedAccountId || parseMutation.isPending}
+                />
+              </label>
+              {parseMutation.isPending && (
+                <p className="font-cactus text-sm text-cactus-charcoal/60 mt-4">Parsing file...</p>
+              )}
+            </div>
+
+            <div className="mt-6">
+              <h3 className="font-cactus font-semibold text-sm text-cactus-charcoal mb-2">
+                Supported Banks
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {['FNB', 'Nedbank', 'Capitec', 'Standard Bank', 'Absa', 'Any OFX'].map((bank) => (
+                  <span
+                    key={bank}
+                    className="bg-white border border-cactus-overlay rounded-xl px-3 py-1.5 font-cactus text-cactus-charcoal text-sm"
+                  >
+                    {bank}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
+        )}
 
-          {/* Table */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-100">
-                <tr>
-                  <th className="px-4 py-3 text-left">
-                    <button onClick={toggleAll} className="text-gray-400 hover:text-gray-600">
-                      {selectedIds.size === parseResult.transactions.length ? (
-                        <CheckSquare className="w-4 h-4" />
-                      ) : (
-                        <Square className="w-4 h-4" />
-                      )}
-                    </button>
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Date
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Description
-                  </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-                    Amount
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Category
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {parseResult.transactions.map((tx) => (
-                  <tr
-                    key={tx.tempId}
-                    className={`${tx.isDuplicate ? 'bg-amber-50/50' : ''} ${
-                      !selectedIds.has(tx.tempId) ? 'opacity-50' : ''
-                    }`}
-                  >
-                    <td className="px-4 py-3">
+        {/* Step 2: Preview */}
+        {step === 'preview' && parseResult && (
+          <div className="space-y-4">
+            {/* Summary */}
+            <div className="bg-white border border-cactus-overlay rounded-2xl p-4 flex items-center justify-between flex-wrap gap-4">
+              <div className="flex flex-wrap gap-6 text-sm font-cactus">
+                <span className="text-cactus-charcoal/60">
+                  <span className="font-bold text-cactus-charcoal tabular-nums">
+                    {parseResult.transactions.length}
+                  </span>{' '}
+                  transactions found
+                </span>
+                {parseResult.duplicateCount > 0 && (
+                  <span className="text-cactus-prickly">
+                    <span className="font-bold tabular-nums">{parseResult.duplicateCount}</span>{' '}
+                    possible duplicates
+                  </span>
+                )}
+                <span className="text-cactus-sage">
+                  <span className="font-bold tabular-nums">{selectedIds.size}</span> selected
+                </span>
+                <button
+                  type="button"
+                  onClick={toggleAll}
+                  className="text-cactus-sage font-cactus font-semibold hover:brightness-95"
+                >
+                  {selectedIds.size === parseResult.transactions.length
+                    ? 'Deselect all'
+                    : 'Select all'}
+                </button>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setStep('upload')}
+                  className={secondaryButtonClass}
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Back
+                </button>
+                <button
+                  type="button"
+                  onClick={() => commitMutation.mutate()}
+                  disabled={selectedIds.size === 0 || commitMutation.isPending}
+                  className={primaryButtonClass}
+                >
+                  <Check className="w-4 h-4" />
+                  {commitMutation.isPending
+                    ? 'Importing...'
+                    : `Import ${selectedIds.size} Transactions`}
+                </button>
+              </div>
+            </div>
+
+            {/* Table */}
+            <div className="bg-white border border-cactus-overlay rounded-2xl overflow-hidden">
+              <table className="w-full">
+                <thead className="border-b border-cactus-overlay">
+                  <tr className="bg-cactus-sage-light/30">
+                    <th className="px-4 py-3 text-left">
                       <button
-                        onClick={() => toggleSelect(tx.tempId)}
-                        className="text-gray-400 hover:text-gray-600"
+                        type="button"
+                        onClick={toggleAll}
+                        className="text-cactus-sage hover:brightness-95"
                       >
-                        {selectedIds.has(tx.tempId) ? (
-                          <CheckSquare className="w-4 h-4 text-green-600" />
+                        {selectedIds.size === parseResult.transactions.length ? (
+                          <CheckSquare className="w-4 h-4" />
                         ) : (
                           <Square className="w-4 h-4" />
                         )}
                       </button>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">
-                      {formatDate(tx.transactionDate)}
-                    </td>
-                    <td className="px-4 py-3">
-                      <p className="text-sm text-gray-900 truncate max-w-xs">{tx.description}</p>
-                      {tx.merchantName && (
-                        <p className="text-xs text-gray-400">{tx.merchantName}</p>
-                      )}
-                    </td>
-                    <td
-                      className={`px-4 py-3 text-sm font-medium font-mono-financial text-right whitespace-nowrap ${
-                        tx.isDebit ? 'text-red-600' : 'text-green-600'
-                      }`}
-                    >
-                      {tx.isDebit ? '-' : '+'}
-                      {formatCurrency(tx.amount)}
-                    </td>
-                    <td className="px-4 py-3 text-sm">
-                      {tx.suggestedCategoryName ? (
-                        <span className="px-2 py-1 bg-green-50 text-green-700 rounded text-xs">
-                          {tx.suggestedCategoryName}
-                        </span>
-                      ) : (
-                        <span className="text-gray-400 text-xs">Unclassified</span>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 text-sm">
-                      {tx.isDuplicate && (
-                        <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded text-xs">
-                          Duplicate?
-                        </span>
-                      )}
-                    </td>
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-cactus font-semibold text-cactus-charcoal/60 uppercase">
+                      Date
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-cactus font-semibold text-cactus-charcoal/60 uppercase">
+                      Description
+                    </th>
+                    <th className="px-4 py-3 text-right text-xs font-cactus font-semibold text-cactus-charcoal/60 uppercase">
+                      Amount
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-cactus font-semibold text-cactus-charcoal/60 uppercase">
+                      Category
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-cactus font-semibold text-cactus-charcoal/60 uppercase">
+                      Status
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-cactus-overlay">
+                  {parseResult.transactions.map((tx) => {
+                    const isUnclassified = !tx.suggestedCategoryName;
+                    return (
+                      <tr
+                        key={tx.tempId}
+                        className={`${
+                          isUnclassified ? 'border-l-2 border-l-cactus-prickly' : ''
+                        } ${!selectedIds.has(tx.tempId) ? 'opacity-50' : ''}`}
+                      >
+                        <td className="px-4 py-3">
+                          <input
+                            type="checkbox"
+                            checked={selectedIds.has(tx.tempId)}
+                            onChange={() => toggleSelect(tx.tempId)}
+                            className="accent-cactus-sage w-4 h-4 cursor-pointer"
+                            aria-label={`Select ${tx.description}`}
+                          />
+                        </td>
+                        <td className="px-4 py-3 text-sm font-cactus text-cactus-charcoal/60 whitespace-nowrap tabular-nums">
+                          {formatDate(tx.transactionDate)}
+                        </td>
+                        <td className="px-4 py-3">
+                          <p className="text-sm font-cactus text-cactus-charcoal truncate max-w-xs">
+                            {tx.description}
+                          </p>
+                          {tx.merchantName && (
+                            <p className="text-xs font-cactus text-cactus-charcoal/40">
+                              {tx.merchantName}
+                            </p>
+                          )}
+                        </td>
+                        <td
+                          className={`px-4 py-3 text-sm font-cactus font-bold tabular-nums text-right whitespace-nowrap ${
+                            tx.isDebit ? 'text-cactus-prickly' : 'text-cactus-sage'
+                          }`}
+                        >
+                          {tx.isDebit ? '-' : '+'}
+                          {formatCurrency(tx.amount)}
+                        </td>
+                        <td className="px-4 py-3 text-sm">
+                          {tx.suggestedCategoryName ? (
+                            <span className="px-2 py-1 bg-cactus-sage-light text-cactus-charcoal rounded-xl text-xs font-cactus font-semibold">
+                              {tx.suggestedCategoryName}
+                            </span>
+                          ) : (
+                            <span className="text-cactus-charcoal/40 text-xs font-cactus">
+                              Unclassified
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 text-sm">
+                          {tx.isDuplicate && (
+                            <span className="px-2 py-1 bg-cactus-goals-bg text-cactus-charcoal rounded-xl text-xs font-cactus font-semibold">
+                              Duplicate?
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Step 3: Done */}
-      {step === 'done' && commitResult && (
-        <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Check className="w-8 h-8 text-green-600" />
-          </div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Import Complete!</h2>
-          <div className="text-gray-600 space-y-1 mb-6">
-            <p>{commitResult.importedCount} transactions imported</p>
-            <p>{commitResult.classifiedCount} auto-classified</p>
-            {commitResult.totalDebits > 0 && (
-              <p className="text-red-600">
-                Total debits:{' '}
-                <span className="font-mono-financial">
-                  {formatCurrency(commitResult.totalDebits)}
-                </span>
+        {/* Step 3: Done */}
+        {step === 'done' && commitResult && (
+          <div className="bg-cactus-sage-light border border-cactus-overlay rounded-2xl p-8 text-center">
+            <div className="w-16 h-16 bg-white border border-cactus-overlay rounded-full flex items-center justify-center mx-auto mb-4">
+              <Check className="w-8 h-8 text-cactus-sage" />
+            </div>
+            <h2 className="text-cactus-charcoal font-cactus font-bold text-xl mb-2">
+              Import Complete!
+            </h2>
+            <div className="font-cactus text-cactus-charcoal space-y-1 mb-6">
+              <p>
+                <span className="font-bold tabular-nums">{commitResult.importedCount}</span>{' '}
+                transactions imported
               </p>
-            )}
-            {commitResult.totalCredits > 0 && (
-              <p className="text-green-600">
-                Total credits:{' '}
-                <span className="font-mono-financial">
-                  {formatCurrency(commitResult.totalCredits)}
-                </span>
+              <p>
+                <span className="font-bold tabular-nums">{commitResult.classifiedCount}</span>{' '}
+                auto-classified
               </p>
-            )}
+              {commitResult.totalDebits > 0 && (
+                <p className="text-cactus-prickly">
+                  Total debits:{' '}
+                  <span className="font-cactus font-bold tabular-nums">
+                    {formatCurrency(commitResult.totalDebits)}
+                  </span>
+                </p>
+              )}
+              {commitResult.totalCredits > 0 && (
+                <p className="text-cactus-sage">
+                  Total credits:{' '}
+                  <span className="font-cactus font-bold tabular-nums">
+                    {formatCurrency(commitResult.totalCredits)}
+                  </span>
+                </p>
+              )}
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setStep('upload');
+                  setParseResult(null);
+                  setCommitResult(null);
+                  setSelectedIds(new Set());
+                }}
+                className="text-cactus-sage font-cactus font-semibold hover:brightness-95"
+              >
+                Import Another
+              </button>
+              <Link
+                to="/transactions"
+                className="text-cactus-sage font-cactus font-semibold hover:brightness-95"
+              >
+                View Transactions
+              </Link>
+            </div>
           </div>
-          <div className="flex justify-center gap-4">
-            <button
-              onClick={() => {
-                setStep('upload');
-                setParseResult(null);
-                setCommitResult(null);
-                setSelectedIds(new Set());
-              }}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800"
-            >
-              Import Another
-            </button>
-            <Link
-              to="/transactions"
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-            >
-              View Transactions
-            </Link>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

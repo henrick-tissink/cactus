@@ -163,13 +163,13 @@ export function TransactionsPage() {
   const getMacroCategoryColor = (type?: number) => {
     switch (type) {
       case MacroCategoryType.Needs:
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-cactus-needs-bg text-cactus-charcoal';
       case MacroCategoryType.Wants:
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-cactus-wants-bg text-cactus-charcoal';
       case MacroCategoryType.Goals:
-        return 'bg-green-100 text-green-800';
+        return 'bg-cactus-goals-bg text-cactus-charcoal';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-cactus-overlay text-cactus-charcoal/60';
     }
   };
 
@@ -189,16 +189,16 @@ export function TransactionsPage() {
   };
 
   return (
-    <div className="p-8">
+    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
+        <h1 className="text-cactus-charcoal font-cactus font-bold text-2xl">Transactions</h1>
         <div className="flex gap-3">
           <button
             onClick={() => setShowRecurring(!showRecurring)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl border font-cactus font-semibold ${
               showRecurring
-                ? 'border-purple-500 text-purple-600 bg-purple-50'
-                : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                ? 'bg-cactus-sage-light text-cactus-charcoal border-cactus-sage'
+                : 'bg-white text-cactus-charcoal border-cactus-overlay hover:bg-cactus-sage-light/40'
             }`}
           >
             <Repeat className="w-4 h-4" />
@@ -206,10 +206,10 @@ export function TransactionsPage() {
           </button>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl border font-cactus font-semibold ${
               showFilters
-                ? 'border-green-500 text-green-600 bg-green-50'
-                : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                ? 'bg-cactus-sage-light text-cactus-charcoal border-cactus-sage'
+                : 'bg-white text-cactus-charcoal border-cactus-overlay hover:bg-cactus-sage-light/40'
             }`}
           >
             <Filter className="w-4 h-4" />
@@ -222,10 +222,10 @@ export function TransactionsPage() {
                 clearSelection();
               }
             }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl border font-cactus font-semibold ${
               bulkClassifyMode
-                ? 'border-green-500 text-green-600 bg-green-50'
-                : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                ? 'bg-cactus-sage-light text-cactus-charcoal border-cactus-sage'
+                : 'bg-white text-cactus-charcoal border-cactus-overlay hover:bg-cactus-sage-light/40'
             }`}
           >
             <Tag className="w-4 h-4" />
@@ -233,14 +233,14 @@ export function TransactionsPage() {
           </button>
           <Link
             to="/import"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 font-cactus font-semibold"
           >
             <Upload className="w-4 h-4" />
             Import Statement
           </Link>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cactus-sage text-white font-cactus font-bold shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90"
           >
             <Plus className="w-4 h-4" />
             Add Transaction
@@ -253,14 +253,16 @@ export function TransactionsPage() {
 
       {/* Filters Panel */}
       {showFilters && (
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6">
+        <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Account</label>
+              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
+                Account
+              </label>
               <select
                 value={filters.accountId}
                 onChange={(e) => setFilters({ ...filters, accountId: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none bg-white"
               >
                 <option value="">All accounts</option>
                 {accounts?.map((account) => (
@@ -271,11 +273,13 @@ export function TransactionsPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
+                Status
+              </label>
               <select
                 value={filters.isClassified}
                 onChange={(e) => setFilters({ ...filters, isClassified: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none bg-white"
               >
                 <option value="">All</option>
                 <option value="true">Classified</option>
@@ -283,31 +287,38 @@ export function TransactionsPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">From</label>
+              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
+                From
+              </label>
               <input
                 type="date"
                 value={filters.startDate}
                 onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
+              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
+                To
+              </label>
               <input
                 type="date"
                 value={filters.endDate}
                 onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
               />
             </div>
           </div>
           <div className="flex justify-end gap-3 mt-4">
-            <button onClick={clearFilters} className="px-4 py-2 text-gray-600 hover:text-gray-800">
+            <button
+              onClick={clearFilters}
+              className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-4 py-2 rounded-xl font-cactus font-semibold"
+            >
               Clear
             </button>
             <button
               onClick={applyFilters}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              className="px-4 py-2 rounded-xl bg-cactus-sage text-white font-cactus font-bold shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90"
             >
               Apply Filters
             </button>
@@ -317,21 +328,21 @@ export function TransactionsPage() {
 
       {/* Bulk Action Bar */}
       {selectedTransactionIds.size > 0 && (
-        <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 flex items-center justify-between">
-          <span className="text-green-800 font-medium">
+        <div className="bg-cactus-sage-light border border-cactus-sage rounded-2xl p-4 mb-6 flex items-center justify-between">
+          <span className="text-cactus-charcoal font-cactus font-semibold">
             {selectedTransactionIds.size} transaction{selectedTransactionIds.size !== 1 ? 's' : ''}{' '}
             selected
           </span>
           <div className="flex gap-3">
             <button
               onClick={clearSelection}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800 border border-gray-200 rounded-lg hover:bg-gray-50"
+              className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-4 py-2 rounded-xl font-cactus font-semibold"
             >
               Clear Selection
             </button>
             <button
               onClick={() => setShowBulkClassifyModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cactus-sage text-white font-cactus font-bold shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90"
             >
               <Tag className="w-4 h-4" />
               Classify Selected
@@ -341,41 +352,43 @@ export function TransactionsPage() {
       )}
 
       {/* Transactions List */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+      <div className="bg-white border border-cactus-overlay rounded-2xl">
         {isLoading ? (
-          <div className="p-8 text-center text-gray-500">Loading transactions...</div>
+          <div className="p-8 text-center text-cactus-charcoal/60 font-cactus">
+            Loading transactions...
+          </div>
         ) : transactionsData?.items.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">
-            <AlertCircle className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-            <p>No transactions found</p>
+          <div className="p-8 text-center font-cactus">
+            <AlertCircle className="w-12 h-12 mx-auto mb-4 text-cactus-charcoal/40" />
+            <p className="text-cactus-charcoal/60">No transactions found</p>
           </div>
         ) : (
           <>
             {/* Select All Header - only in bulk classify mode */}
             {bulkClassifyMode && unclassifiedTransactions.length > 0 && (
-              <div className="px-4 py-3 border-b border-gray-100 bg-gray-50">
+              <div className="px-4 py-3 border-b border-cactus-overlay bg-cactus-sandstone">
                 <button
                   onClick={toggleSelectAllUnclassified}
-                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
+                  className="flex items-center gap-2 text-sm font-cactus font-semibold text-cactus-charcoal hover:text-cactus-charcoal"
                 >
                   {allUnclassifiedSelected ? (
-                    <CheckSquare className="w-5 h-5 text-green-600" />
+                    <CheckSquare className="w-5 h-5 text-cactus-sage" />
                   ) : someUnclassifiedSelected ? (
-                    <Minus className="w-5 h-5 text-green-600" />
+                    <Minus className="w-5 h-5 text-cactus-sage" />
                   ) : (
-                    <Square className="w-5 h-5" />
+                    <Square className="w-5 h-5 text-cactus-charcoal/40" />
                   )}
                   Select all unclassified ({unclassifiedTransactions.length})
                 </button>
               </div>
             )}
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-cactus-overlay">
               {transactionsData?.items.map((transaction) => (
                 <div
                   key={transaction.id}
-                  className={`py-2.5 px-4 hover:bg-gray-50 transition-colors ${
-                    selectedTransactionIds.has(transaction.id) ? 'bg-green-50' : ''
-                  } ${!transaction.isClassified ? 'border-l-3 border-amber-400' : ''}`}
+                  className={`py-2.5 px-4 hover:bg-cactus-sage-light/30 transition-colors ${
+                    selectedTransactionIds.has(transaction.id) ? 'bg-cactus-sage-light' : ''
+                  } ${!transaction.isClassified ? 'border-l-2 border-cactus-prickly' : ''}`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 flex-1">
@@ -383,32 +396,34 @@ export function TransactionsPage() {
                       {bulkClassifyMode && (
                         <button
                           onClick={() => toggleTransactionSelection(transaction.id)}
-                          className="flex-shrink-0"
+                          className="shrink-0"
                         >
                           {selectedTransactionIds.has(transaction.id) ? (
-                            <CheckSquare className="w-5 h-5 text-green-600" />
+                            <CheckSquare className="w-5 h-5 text-cactus-sage" />
                           ) : (
-                            <Square className="w-5 h-5 text-gray-400 hover:text-gray-600" />
+                            <Square className="w-5 h-5 text-cactus-charcoal/40 hover:text-cactus-charcoal/60" />
                           )}
                         </button>
                       )}
                       <div className="flex-1">
                         <div className="flex items-center gap-3">
-                          <p className="font-medium text-gray-900">
+                          <p className="text-cactus-charcoal font-cactus font-semibold">
                             {transaction.merchantName || transaction.description}
                           </p>
                         </div>
                         <div className="flex items-center gap-3 mt-1">
-                          <span className="text-sm text-gray-500">
+                          <span className="text-sm text-cactus-charcoal/60 font-cactus">
                             {formatDate(transaction.transactionDate)}
                           </span>
-                          <span className="text-sm text-gray-400">-</span>
-                          <span className="text-sm text-gray-500">{transaction.accountName}</span>
+                          <span className="text-sm text-cactus-charcoal/40">-</span>
+                          <span className="text-sm text-cactus-charcoal/60 font-cactus">
+                            {transaction.accountName}
+                          </span>
                           {transaction.isClassified && transaction.macroCategoryName && (
                             <>
-                              <span className="text-sm text-gray-400">-</span>
+                              <span className="text-sm text-cactus-charcoal/40">-</span>
                               <span
-                                className={`px-2 py-0.5 text-xs font-medium rounded-full ${getMacroCategoryColor(
+                                className={`font-cactus font-semibold text-xs px-2 py-0.5 rounded-full ${getMacroCategoryColor(
                                   categories?.find((c) => c.id === transaction.macroCategoryId)
                                     ?.type
                                 )}`}
@@ -416,7 +431,7 @@ export function TransactionsPage() {
                                 {transaction.macroCategoryName}
                               </span>
                               {transaction.categoryName && (
-                                <span className="text-sm text-gray-600">
+                                <span className="text-sm text-cactus-charcoal/60 font-cactus">
                                   {transaction.categoryName}
                                 </span>
                               )}
@@ -427,10 +442,10 @@ export function TransactionsPage() {
                     </div>
                     <div className="flex items-center gap-4">
                       <span
-                        className={`font-semibold font-mono-financial ${
+                        className={`font-cactus font-bold tabular-nums ${
                           transaction.type === TransactionType.Credit
-                            ? 'text-green-600'
-                            : 'text-gray-900'
+                            ? 'text-cactus-sage'
+                            : 'text-cactus-prickly'
                         }`}
                       >
                         {transaction.type === TransactionType.Credit ? '+' : '-'}
@@ -438,10 +453,10 @@ export function TransactionsPage() {
                       </span>
                       <button
                         onClick={() => openClassifyModal(transaction)}
-                        className={`p-2 rounded-lg ${
+                        className={`p-2 rounded-xl ${
                           transaction.isClassified
-                            ? 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
-                            : 'text-green-600 hover:bg-green-50'
+                            ? 'text-cactus-charcoal/40 hover:text-cactus-charcoal hover:bg-cactus-sage-light/40'
+                            : 'text-cactus-sage hover:bg-cactus-sage-light'
                         }`}
                         title={transaction.isClassified ? 'Reclassify' : 'Classify'}
                       >
@@ -455,22 +470,22 @@ export function TransactionsPage() {
 
             {/* Pagination */}
             {transactionsData && transactionsData.totalPages > 1 && (
-              <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
-                <p className="text-sm text-gray-500">
+              <div className="flex items-center justify-between px-4 py-3 border-t border-cactus-overlay">
+                <p className="text-sm text-cactus-charcoal/60 font-cactus">
                   Page {transactionsData.page} of {transactionsData.totalPages}
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setPage(page - 1)}
                     disabled={page === 1}
-                    className="p-2 rounded-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="p-2 rounded-xl bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 disabled:opacity-40 disabled:cursor-not-allowed font-cactus font-semibold"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => setPage(page + 1)}
                     disabled={page === transactionsData.totalPages}
-                    className="p-2 rounded-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="p-2 rounded-xl bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 disabled:opacity-40 disabled:cursor-not-allowed font-cactus font-semibold"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>
@@ -651,13 +666,13 @@ function ClassifyModal({
   const getMacroColor = (type: number) => {
     switch (type) {
       case MacroCategoryType.Needs:
-        return 'border-blue-500 bg-blue-50 hover:bg-blue-100';
+        return 'border-cactus-sage bg-cactus-needs-bg hover:bg-cactus-needs-bg/80';
       case MacroCategoryType.Wants:
-        return 'border-purple-500 bg-purple-50 hover:bg-purple-100';
+        return 'border-cactus-desert bg-cactus-wants-bg hover:bg-cactus-wants-bg/80';
       case MacroCategoryType.Goals:
-        return 'border-green-500 bg-green-50 hover:bg-green-100';
+        return 'border-cactus-prickly bg-cactus-goals-bg hover:bg-cactus-goals-bg/80';
       default:
-        return 'border-gray-300 bg-gray-50 hover:bg-gray-100';
+        return 'border-cactus-overlay bg-cactus-sandstone hover:bg-cactus-sage-light/40';
     }
   };
 
@@ -669,28 +684,33 @@ function ClassifyModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-cactus-charcoal/40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white border border-cactus-overlay rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="p-6 border-b border-gray-100">
+        <div className="p-6 border-b border-cactus-overlay">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Classify Transaction</h2>
-              <p className="text-sm text-gray-500 mt-1">
+              <h2 className="text-lg text-cactus-charcoal font-cactus font-bold">
+                Classify Transaction
+              </h2>
+              <p className="text-sm text-cactus-charcoal/60 font-cactus mt-1">
                 {transaction.merchantName || transaction.description}
               </p>
-              <p className="text-lg font-semibold font-mono-financial text-gray-900 mt-2">
+              <p className="text-lg text-cactus-charcoal font-cactus font-bold tabular-nums mt-2">
                 {formatCurrency(transaction.amount)}
               </p>
             </div>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <button
+              onClick={onClose}
+              className="text-cactus-charcoal/40 hover:text-cactus-charcoal"
+            >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Breadcrumb */}
           {selectedMacro && (
-            <div className="flex items-center gap-2 mt-4 text-sm">
+            <div className="flex items-center gap-2 mt-4 text-sm font-cactus">
               <button
                 onClick={() => {
                   setStep('macro');
@@ -698,20 +718,20 @@ function ClassifyModal({
                   setSelectedCategory(null);
                   setSelectedSubCategory(null);
                 }}
-                className="text-green-600 hover:underline"
+                className="text-cactus-sage font-semibold hover:underline"
               >
                 {selectedMacro.name}
               </button>
               {selectedCategory && (
                 <>
-                  <span className="text-gray-400">/</span>
+                  <span className="text-cactus-charcoal/40">/</span>
                   <button
                     onClick={() => {
                       setStep('category');
                       setSelectedCategory(null);
                       setSelectedSubCategory(null);
                     }}
-                    className="text-green-600 hover:underline"
+                    className="text-cactus-sage font-semibold hover:underline"
                   >
                     {selectedCategory.name}
                   </button>
@@ -719,8 +739,8 @@ function ClassifyModal({
               )}
               {selectedSubCategory && (
                 <>
-                  <span className="text-gray-400">/</span>
-                  <span className="text-gray-600">
+                  <span className="text-cactus-charcoal/40">/</span>
+                  <span className="text-cactus-charcoal/60">
                     {
                       selectedMacro.categories
                         .find((c) => c.id === selectedCategory?.id)
@@ -736,8 +756,8 @@ function ClassifyModal({
         {/* Content */}
         <div className="flex-1 overflow-auto p-6">
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <div className="mb-4 p-3 bg-cactus-goals-bg border border-cactus-prickly rounded-xl flex items-center gap-2 text-cactus-charcoal font-cactus">
+              <AlertCircle className="w-4 h-4 shrink-0 text-cactus-prickly" />
               <span className="text-sm">{error}</span>
             </div>
           )}
@@ -746,19 +766,21 @@ function ClassifyModal({
           {step === 'macro' && !suggestionsLoading && bestSuggestion && (
             <button
               onClick={() => applySuggestion(bestSuggestion)}
-              className="w-full mb-4 p-4 rounded-xl border-2 border-amber-400 bg-amber-50 hover:bg-amber-100 text-left transition-all group"
+              className="w-full mb-4 p-4 rounded-xl border-2 border-cactus-desert bg-cactus-wants-bg hover:bg-cactus-wants-bg/70 text-left transition-all group"
             >
               <div className="flex items-center gap-2 mb-1">
-                <Sparkles className="w-4 h-4 text-amber-600" />
-                <span className="text-sm font-medium text-amber-800">
+                <Sparkles className="w-4 h-4 text-cactus-desert" />
+                <span className="text-sm font-cactus font-semibold text-cactus-charcoal">
                   Suggested: {bestSuggestion.categoryName}
                 </span>
-                <span className="text-xs px-2 py-0.5 bg-amber-200 text-amber-800 rounded-full">
+                <span className="text-xs px-2 py-0.5 bg-cactus-sage-light text-cactus-sage border border-cactus-overlay font-cactus font-semibold rounded-full">
                   {Math.round(bestSuggestion.confidence * 100)}% confident
                 </span>
               </div>
-              <p className="text-sm text-amber-700">Based on: "{bestSuggestion.matchedPattern}"</p>
-              <p className="text-xs text-amber-600 mt-1 group-hover:underline">
+              <p className="text-sm text-cactus-charcoal/60 font-cactus">
+                Based on: "{bestSuggestion.matchedPattern}"
+              </p>
+              <p className="text-xs text-cactus-charcoal/60 font-cactus mt-1 group-hover:underline">
                 Click to apply this suggestion
               </p>
             </button>
@@ -766,15 +788,19 @@ function ClassifyModal({
 
           {step === 'macro' && (
             <div className="space-y-3">
-              <p className="text-sm text-gray-500 mb-4">Is this a Need, Want, or Goal?</p>
+              <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">
+                Is this a Need, Want, or Goal?
+              </p>
               {categories.map((macro) => (
                 <button
                   key={macro.id}
                   onClick={() => handleMacroSelect(macro)}
                   className={`w-full p-4 rounded-xl border-2 text-left transition-all ${getMacroColor(macro.type)}`}
                 >
-                  <p className="font-medium text-gray-900">{macro.name}</p>
-                  <p className="text-sm text-gray-500 mt-1">{macro.description}</p>
+                  <p className="text-cactus-charcoal font-cactus font-semibold">{macro.name}</p>
+                  <p className="text-sm text-cactus-charcoal/60 font-cactus mt-1">
+                    {macro.description}
+                  </p>
                 </button>
               ))}
             </div>
@@ -782,20 +808,20 @@ function ClassifyModal({
 
           {step === 'category' && selectedMacro && (
             <div className="space-y-2">
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">
                 What type of {selectedMacro.name.toLowerCase()}?
               </p>
               {selectedMacro.categories.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => handleCategorySelect(category)}
-                  className={`w-full p-3 rounded-lg border text-left transition-all ${
+                  className={`w-full p-3 rounded-xl border-2 text-left transition-all ${
                     selectedCategory?.id === category.id
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      ? 'border-cactus-sage bg-cactus-sage-light'
+                      : 'border-cactus-overlay bg-white hover:bg-cactus-sage-light/30'
                   }`}
                 >
-                  <p className="font-medium text-gray-900">{category.name}</p>
+                  <p className="text-cactus-charcoal font-cactus font-semibold">{category.name}</p>
                 </button>
               ))}
             </div>
@@ -803,16 +829,20 @@ function ClassifyModal({
 
           {step === 'sub' && selectedMacro && selectedCategory && (
             <div className="space-y-2">
-              <p className="text-sm text-gray-500 mb-4">Optional: More specific category</p>
+              <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">
+                Optional: More specific category
+              </p>
               <button
                 onClick={() => setSelectedSubCategory(null)}
-                className={`w-full p-3 rounded-lg border text-left transition-all ${
+                className={`w-full p-3 rounded-xl border-2 text-left transition-all ${
                   !selectedSubCategory
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    ? 'border-cactus-sage bg-cactus-sage-light'
+                    : 'border-cactus-overlay bg-white hover:bg-cactus-sage-light/30'
                 }`}
               >
-                <p className="font-medium text-gray-900">Skip (use "{selectedCategory.name}")</p>
+                <p className="text-cactus-charcoal font-cactus font-semibold">
+                  Skip (use "{selectedCategory.name}")
+                </p>
               </button>
               {selectedMacro.categories
                 .find((c) => c.id === selectedCategory.id)
@@ -820,13 +850,13 @@ function ClassifyModal({
                   <button
                     key={sub.id}
                     onClick={() => setSelectedSubCategory(sub.id)}
-                    className={`w-full p-3 rounded-lg border text-left transition-all ${
+                    className={`w-full p-3 rounded-xl border-2 text-left transition-all ${
                       selectedSubCategory === sub.id
-                        ? 'border-green-500 bg-green-50'
-                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                        ? 'border-cactus-sage bg-cactus-sage-light'
+                        : 'border-cactus-overlay bg-white hover:bg-cactus-sage-light/30'
                     }`}
                   >
-                    <p className="font-medium text-gray-900">{sub.name}</p>
+                    <p className="text-cactus-charcoal font-cactus font-semibold">{sub.name}</p>
                   </button>
                 ))}
             </div>
@@ -835,14 +865,14 @@ function ClassifyModal({
           {/* Notes */}
           {selectedCategory && (
             <div className="mt-6">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
                 Notes (optional)
               </label>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Add a note..."
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none resize-none"
                 rows={2}
               />
             </div>
@@ -850,19 +880,19 @@ function ClassifyModal({
 
           {/* Apply to Similar Checkbox */}
           {selectedCategory && similarCount && similarCount.count > 0 && (
-            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="mt-4 p-3 bg-cactus-sage-light border border-cactus-sage rounded-xl">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={applyToSimilar}
                   onChange={(e) => setUserOverrideApplyToSimilar(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
+                  className="mt-0.5 h-4 w-4 rounded border-cactus-overlay text-cactus-sage focus:ring-cactus-sage"
                 />
                 <div>
-                  <span className="text-sm font-medium text-blue-900">
+                  <span className="text-sm text-cactus-charcoal font-cactus font-semibold">
                     Apply to similar transactions
                   </span>
-                  <p className="text-xs text-blue-700 mt-0.5">
+                  <p className="text-xs text-cactus-charcoal/60 font-cactus mt-0.5">
                     {similarCount.count} other unclassified transaction
                     {similarCount.count !== 1 ? 's' : ''} matching "{similarCount.matchPattern}"
                     will also be classified
@@ -874,14 +904,17 @@ function ClassifyModal({
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-gray-100 flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 text-gray-600 hover:text-gray-800">
+        <div className="p-6 border-t border-cactus-overlay flex justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-4 py-2 rounded-xl font-cactus font-semibold"
+          >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={!selectedMacro || !selectedCategory || classifyMutation.isPending}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cactus-sage text-white font-cactus font-bold shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed"
           >
             <Check className="w-4 h-4" />
             {classifyMutation.isPending
@@ -946,12 +979,15 @@ function AddTransactionModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-hidden flex flex-col">
-        <div className="p-6 border-b border-gray-100">
+    <div className="fixed inset-0 bg-cactus-charcoal/40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white border border-cactus-overlay rounded-2xl w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="p-6 border-b border-cactus-overlay">
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold text-gray-900">Add Transaction</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <h2 className="text-lg text-cactus-charcoal font-cactus font-bold">Add Transaction</h2>
+            <button
+              onClick={onClose}
+              className="text-cactus-charcoal/40 hover:text-cactus-charcoal"
+            >
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -959,19 +995,21 @@ function AddTransactionModal({
 
         <form onSubmit={handleSubmit} className="flex-1 overflow-auto p-6 space-y-4">
           {error && (
-            <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <div className="p-3 bg-cactus-goals-bg border border-cactus-prickly rounded-xl flex items-center gap-2 text-cactus-charcoal font-cactus">
+              <AlertCircle className="w-4 h-4 shrink-0 text-cactus-prickly" />
               <span className="text-sm">{error}</span>
             </div>
           )}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Account</label>
+              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
+                Account
+              </label>
               <select
                 value={formData.accountId}
                 onChange={(e) => setFormData({ ...formData, accountId: e.target.value })}
                 required
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none bg-white"
               >
                 {accounts.map((account) => (
                   <option key={account.id} value={account.id}>
@@ -981,11 +1019,13 @@ function AddTransactionModal({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
+                Type
+              </label>
               <select
                 value={formData.type}
                 onChange={(e) => setFormData({ ...formData, type: parseInt(e.target.value) })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none bg-white"
               >
                 <option value={TransactionType.Debit}>Expense (Debit)</option>
                 <option value={TransactionType.Credit}>Income (Credit)</option>
@@ -994,7 +1034,9 @@ function AddTransactionModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Amount (R)</label>
+            <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
+              Amount (R)
+            </label>
             <input
               type="number"
               step="0.01"
@@ -1002,56 +1044,62 @@ function AddTransactionModal({
               value={formData.amount}
               onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               required
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
               placeholder="0.00"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
+              Description
+            </label>
             <input
               type="text"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
               placeholder="What was this for?"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
               Merchant (optional)
             </label>
             <input
               type="text"
               value={formData.merchantName}
               onChange={(e) => setFormData({ ...formData, merchantName: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
               placeholder="e.g., Woolworths"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+            <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
+              Date
+            </label>
             <input
               type="date"
               value={formData.transactionDate}
               onChange={(e) => setFormData({ ...formData, transactionDate: e.target.value })}
               required
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
+                Category
+              </label>
               <select
                 value={formData.macroCategoryId}
                 onChange={(e) =>
                   setFormData({ ...formData, macroCategoryId: e.target.value, categoryId: '' })
                 }
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none bg-white"
               >
                 <option value="">Select category...</option>
                 {categories.map((macro) => (
@@ -1062,12 +1110,14 @@ function AddTransactionModal({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Sub-category</label>
+              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
+                Sub-category
+              </label>
               <select
                 value={formData.categoryId}
                 onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                 disabled={!selectedMacro}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:bg-gray-100"
+                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none bg-white disabled:bg-cactus-sandstone disabled:cursor-not-allowed"
               >
                 <option value="">Select...</option>
                 {selectedMacro?.categories.map((cat) => (
@@ -1080,22 +1130,28 @@ function AddTransactionModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Notes (optional)</label>
+            <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
+              Notes (optional)
+            </label>
             <textarea
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none resize-none"
               rows={2}
               placeholder="Additional notes..."
             />
           </div>
         </form>
 
-        <div className="p-6 border-t border-gray-100 flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 text-gray-600 hover:text-gray-800">
+        <div className="p-6 border-t border-cactus-overlay flex justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-4 py-2 rounded-xl font-cactus font-semibold"
+          >
             Cancel
           </button>
           <button
+            type="submit"
             onClick={() => createMutation.mutate()}
             disabled={
               !formData.accountId ||
@@ -1103,7 +1159,7 @@ function AddTransactionModal({
               !formData.description ||
               createMutation.isPending
             }
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cactus-sage text-white font-cactus font-bold shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed"
           >
             <Plus className="w-4 h-4" />
             {createMutation.isPending ? 'Adding...' : 'Add Transaction'}
@@ -1187,37 +1243,45 @@ function BulkClassifyModal({
   const getMacroColor = (type: number) => {
     switch (type) {
       case MacroCategoryType.Needs:
-        return 'border-blue-500 bg-blue-50 hover:bg-blue-100';
+        return 'border-cactus-sage bg-cactus-needs-bg hover:bg-cactus-needs-bg/80';
       case MacroCategoryType.Wants:
-        return 'border-purple-500 bg-purple-50 hover:bg-purple-100';
+        return 'border-cactus-desert bg-cactus-wants-bg hover:bg-cactus-wants-bg/80';
       case MacroCategoryType.Goals:
-        return 'border-green-500 bg-green-50 hover:bg-green-100';
+        return 'border-cactus-prickly bg-cactus-goals-bg hover:bg-cactus-goals-bg/80';
       default:
-        return 'border-gray-300 bg-gray-50 hover:bg-gray-100';
+        return 'border-cactus-overlay bg-cactus-sandstone hover:bg-cactus-sage-light/40';
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-cactus-charcoal/40 flex items-center justify-center z-50 p-4">
+      <div className="bg-white border border-cactus-overlay rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="p-6 border-b border-gray-100">
+        <div className="p-6 border-b border-cactus-overlay">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Bulk Classification</h2>
-              <p className="text-sm text-gray-500 mt-1">
-                Classifying {transactionIds.length} transaction
-                {transactionIds.length !== 1 ? 's' : ''}
+              <h2 className="text-lg text-cactus-charcoal font-cactus font-bold">
+                Bulk Classification
+              </h2>
+              <p className="text-sm text-cactus-charcoal/60 font-cactus mt-1">
+                Classifying{' '}
+                <span className="inline-block bg-cactus-sage-light text-cactus-sage border border-cactus-overlay text-xs font-cactus font-semibold px-2 py-0.5 rounded-full align-middle">
+                  {transactionIds.length}
+                </span>{' '}
+                transaction{transactionIds.length !== 1 ? 's' : ''}
               </p>
             </div>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <button
+              onClick={onClose}
+              className="text-cactus-charcoal/40 hover:text-cactus-charcoal"
+            >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Breadcrumb */}
           {selectedMacro && (
-            <div className="flex items-center gap-2 mt-4 text-sm">
+            <div className="flex items-center gap-2 mt-4 text-sm font-cactus">
               <button
                 onClick={() => {
                   setStep('macro');
@@ -1225,20 +1289,20 @@ function BulkClassifyModal({
                   setSelectedCategory(null);
                   setSelectedSubCategory(null);
                 }}
-                className="text-green-600 hover:underline"
+                className="text-cactus-sage font-semibold hover:underline"
               >
                 {selectedMacro.name}
               </button>
               {selectedCategory && (
                 <>
-                  <span className="text-gray-400">/</span>
+                  <span className="text-cactus-charcoal/40">/</span>
                   <button
                     onClick={() => {
                       setStep('category');
                       setSelectedCategory(null);
                       setSelectedSubCategory(null);
                     }}
-                    className="text-green-600 hover:underline"
+                    className="text-cactus-sage font-semibold hover:underline"
                   >
                     {selectedCategory.name}
                   </button>
@@ -1246,8 +1310,8 @@ function BulkClassifyModal({
               )}
               {selectedSubCategory && (
                 <>
-                  <span className="text-gray-400">/</span>
-                  <span className="text-gray-600">
+                  <span className="text-cactus-charcoal/40">/</span>
+                  <span className="text-cactus-charcoal/60">
                     {
                       selectedMacro.categories
                         .find((c) => c.id === selectedCategory?.id)
@@ -1263,22 +1327,26 @@ function BulkClassifyModal({
         {/* Content */}
         <div className="flex-1 overflow-auto p-6">
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <div className="mb-4 p-3 bg-cactus-goals-bg border border-cactus-prickly rounded-xl flex items-center gap-2 text-cactus-charcoal font-cactus">
+              <AlertCircle className="w-4 h-4 shrink-0 text-cactus-prickly" />
               <span className="text-sm">{error}</span>
             </div>
           )}
           {step === 'macro' && (
             <div className="space-y-3">
-              <p className="text-sm text-gray-500 mb-4">Is this a Need, Want, or Goal?</p>
+              <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">
+                Is this a Need, Want, or Goal?
+              </p>
               {categories.map((macro) => (
                 <button
                   key={macro.id}
                   onClick={() => handleMacroSelect(macro)}
                   className={`w-full p-4 rounded-xl border-2 text-left transition-all ${getMacroColor(macro.type)}`}
                 >
-                  <p className="font-medium text-gray-900">{macro.name}</p>
-                  <p className="text-sm text-gray-500 mt-1">{macro.description}</p>
+                  <p className="text-cactus-charcoal font-cactus font-semibold">{macro.name}</p>
+                  <p className="text-sm text-cactus-charcoal/60 font-cactus mt-1">
+                    {macro.description}
+                  </p>
                 </button>
               ))}
             </div>
@@ -1286,20 +1354,20 @@ function BulkClassifyModal({
 
           {step === 'category' && selectedMacro && (
             <div className="space-y-2">
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">
                 What type of {selectedMacro.name.toLowerCase()}?
               </p>
               {selectedMacro.categories.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => handleCategorySelect(category)}
-                  className={`w-full p-3 rounded-lg border text-left transition-all ${
+                  className={`w-full p-3 rounded-xl border-2 text-left transition-all ${
                     selectedCategory?.id === category.id
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      ? 'border-cactus-sage bg-cactus-sage-light'
+                      : 'border-cactus-overlay bg-white hover:bg-cactus-sage-light/30'
                   }`}
                 >
-                  <p className="font-medium text-gray-900">{category.name}</p>
+                  <p className="text-cactus-charcoal font-cactus font-semibold">{category.name}</p>
                 </button>
               ))}
             </div>
@@ -1307,16 +1375,20 @@ function BulkClassifyModal({
 
           {step === 'sub' && selectedMacro && selectedCategory && (
             <div className="space-y-2">
-              <p className="text-sm text-gray-500 mb-4">Optional: More specific category</p>
+              <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">
+                Optional: More specific category
+              </p>
               <button
                 onClick={() => setSelectedSubCategory(null)}
-                className={`w-full p-3 rounded-lg border text-left transition-all ${
+                className={`w-full p-3 rounded-xl border-2 text-left transition-all ${
                   !selectedSubCategory
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    ? 'border-cactus-sage bg-cactus-sage-light'
+                    : 'border-cactus-overlay bg-white hover:bg-cactus-sage-light/30'
                 }`}
               >
-                <p className="font-medium text-gray-900">Skip (use "{selectedCategory.name}")</p>
+                <p className="text-cactus-charcoal font-cactus font-semibold">
+                  Skip (use "{selectedCategory.name}")
+                </p>
               </button>
               {selectedMacro.categories
                 .find((c) => c.id === selectedCategory.id)
@@ -1324,13 +1396,13 @@ function BulkClassifyModal({
                   <button
                     key={sub.id}
                     onClick={() => setSelectedSubCategory(sub.id)}
-                    className={`w-full p-3 rounded-lg border text-left transition-all ${
+                    className={`w-full p-3 rounded-xl border-2 text-left transition-all ${
                       selectedSubCategory === sub.id
-                        ? 'border-green-500 bg-green-50'
-                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                        ? 'border-cactus-sage bg-cactus-sage-light'
+                        : 'border-cactus-overlay bg-white hover:bg-cactus-sage-light/30'
                     }`}
                   >
-                    <p className="font-medium text-gray-900">{sub.name}</p>
+                    <p className="text-cactus-charcoal font-cactus font-semibold">{sub.name}</p>
                   </button>
                 ))}
             </div>
@@ -1338,14 +1410,17 @@ function BulkClassifyModal({
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-gray-100 flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 text-gray-600 hover:text-gray-800">
+        <div className="p-6 border-t border-cactus-overlay flex justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-4 py-2 rounded-xl font-cactus font-semibold"
+          >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={!selectedMacro || !selectedCategory || bulkClassifyMutation.isPending}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cactus-sage text-white font-cactus font-bold shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed"
           >
             <Check className="w-4 h-4" />
             {bulkClassifyMutation.isPending
@@ -1386,45 +1461,52 @@ function RecurringPatternsPanel() {
     }).format(amount);
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6">
+    <div className="bg-white border border-cactus-overlay rounded-2xl p-5 mb-6">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-2">
-          <Repeat className="w-5 h-5 text-purple-600" />
-          <h2 className="font-semibold text-gray-900">Recurring Patterns</h2>
+          <Repeat className="w-5 h-5 text-cactus-sage" />
+          <h2 className="text-cactus-charcoal font-cactus font-bold">Recurring Patterns</h2>
         </div>
         <button
           onClick={() => detectMutation.mutate()}
           disabled={detectMutation.isPending}
-          className="flex items-center gap-2 px-3 py-1.5 text-sm text-purple-600 bg-purple-50 rounded-lg hover:bg-purple-100 disabled:opacity-50"
+          className="flex items-center gap-2 px-3 py-1.5 text-sm bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 rounded-xl font-cactus font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <RefreshCw className={`w-3 h-3 ${detectMutation.isPending ? 'animate-spin' : ''}`} />
           {detectMutation.isPending ? 'Detecting...' : 'Detect Patterns'}
         </button>
       </div>
 
-      {isLoading && <p className="text-sm text-gray-500">Loading patterns...</p>}
+      {isLoading && (
+        <p className="text-sm text-cactus-charcoal/60 font-cactus">Loading patterns...</p>
+      )}
 
       {patterns && patterns.length === 0 && (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-cactus-charcoal/60 font-cactus">
           No recurring patterns detected yet. Click "Detect Patterns" to analyze your transactions.
         </p>
       )}
 
       {patterns && patterns.length > 0 && (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {patterns.map((p) => (
-            <div key={p.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div
+              key={p.id}
+              className="flex items-center justify-between bg-white border border-cactus-overlay rounded-xl hover:bg-cactus-sage-light/30 p-4"
+            >
               <div>
-                <p className="text-sm font-medium text-gray-900">{p.description}</p>
-                <div className="flex gap-3 mt-1">
-                  <span className="text-xs text-purple-600 bg-purple-50 px-2 py-0.5 rounded">
+                <p className="text-cactus-charcoal font-cactus font-semibold">{p.description}</p>
+                <div className="flex gap-3 mt-1 items-center">
+                  <span className="bg-cactus-sage text-white text-[10px] uppercase font-cactus font-bold tracking-wide px-2 py-0.5 rounded-full">
                     {p.frequencyLabel}
                   </span>
                   {p.categoryName && (
-                    <span className="text-xs text-gray-500">{p.categoryName}</span>
+                    <span className="text-xs text-cactus-charcoal/60 font-cactus">
+                      {p.categoryName}
+                    </span>
                   )}
                   {p.nextExpectedDate && (
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-cactus-charcoal/40 font-cactus">
                       Next:{' '}
                       {new Date(p.nextExpectedDate).toLocaleDateString('en-ZA', {
                         month: 'short',
@@ -1434,7 +1516,7 @@ function RecurringPatternsPanel() {
                   )}
                 </div>
               </div>
-              <span className="text-sm font-medium font-mono-financial text-gray-900">
+              <span className="text-cactus-charcoal font-cactus font-bold tabular-nums">
                 {formatCurrency(p.averageAmount)}
               </span>
             </div>
