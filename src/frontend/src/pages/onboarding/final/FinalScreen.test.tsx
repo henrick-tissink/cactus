@@ -14,8 +14,8 @@ describe('FinalScreen', () => {
       user: {
         userId: 'u1',
         email: 'x@y.z',
-        firstName: null,
-        lastName: null,
+        firstName: undefined,
+        lastName: undefined,
         isOnboardingComplete: false,
         isEmailVerified: false,
       },

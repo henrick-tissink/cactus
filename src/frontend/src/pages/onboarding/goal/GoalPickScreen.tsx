@@ -10,7 +10,7 @@ interface GoalRecommendationResponse {
 }
 
 interface GoalPickScreenProps {
-  onContinue: () => void;
+  onContinue: (goalType: GoalPickValue) => void;
 }
 
 export function GoalPickScreen({ onContinue }: GoalPickScreenProps) {
@@ -34,7 +34,7 @@ export function GoalPickScreen({ onContinue }: GoalPickScreenProps) {
         response: JSON.stringify([value]),
       });
     },
-    onSuccess: () => onContinue(),
+    onSuccess: () => onContinue(selected!),
   });
 
   const handleLockIn = () => {
