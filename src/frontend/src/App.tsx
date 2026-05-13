@@ -16,6 +16,7 @@ import { ResetPasswordPage } from './pages/ResetPassword';
 import { VerifyEmailPage } from './pages/VerifyEmail';
 import { ImportTransactionsPage } from './pages/ImportTransactions';
 import { WelcomePage } from './pages/onboarding/welcome/WelcomePage';
+import { StyleGuidePage } from './pages/StyleGuide';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -114,6 +115,9 @@ function App() {
             <Route path="/insights" element={<InsightsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
+
+          {/* Style guide — dev only, removed from production via import.meta.env.DEV conditional */}
+          {import.meta.env.DEV && <Route path="/styleguide" element={<StyleGuidePage />} />}
 
           {/* Catch all */}
           <Route path="*" element={<Navigate to="/" replace />} />
