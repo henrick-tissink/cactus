@@ -50,8 +50,10 @@ describe('StyleGuidePage', () => {
     }
   });
 
-  it('renders the primitives placeholder noting future PRs', () => {
+  it('renders the primitives section with Btn and MoneyInput samples', () => {
     render(<StyleGuidePage />);
-    expect(screen.getByText(/Components arrive in Axis H PR-2/)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Continue' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Disabled' })).toBeInTheDocument();
+    expect(screen.getByText(/New primitives.*will land in later PRs/)).toBeInTheDocument();
   });
 });

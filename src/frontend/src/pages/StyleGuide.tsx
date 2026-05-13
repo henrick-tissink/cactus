@@ -4,6 +4,10 @@
  * Added in Axis H PR-1 (2026-05-13). Expanded in subsequent PRs as primitives land.
  */
 
+import { useState } from 'react';
+import { Btn } from '../components/brand/Btn';
+import { MoneyInput } from '../components/brand/MoneyInput';
+
 const swatches = [
   { name: 'brand-cream', hex: '#faf5ec', use: 'app background' },
   { name: 'brand-surface', hex: '#ffffff', use: 'card / elevated panel' },
@@ -336,27 +340,94 @@ export function StyleGuidePage() {
           </div>
         </section>
 
-        {/* ── Primitives placeholder ─────────────── */}
-        <section>
-          <h2
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 500,
-              fontSize: 28,
-              letterSpacing: '-0.02em',
-              margin: '0 0 16px',
-              fontVariationSettings: '"opsz" 60, "SOFT" 50',
-            }}
-          >
-            Primitives
-          </h2>
-          <p style={{ color: 'var(--color-brand-text-muted)', fontStyle: 'italic' }}>
-            Components arrive in Axis H PR-2 (Button, Card, Input, Badge, Alert, Tag, Stat,
-            TransactionRow). This section gets populated incrementally as each primitive lands.
-          </p>
-        </section>
+        {/* ── Primitives (Axis H PR-2 onwards) ─────────────── */}
+        <PrimitivesSection />
       </div>
     </div>
+  );
+}
+
+function PrimitivesSection() {
+  const [amount, setAmount] = useState('');
+  return (
+    <section>
+      <h2
+        style={{
+          fontFamily: 'var(--font-display)',
+          fontWeight: 500,
+          fontSize: 28,
+          letterSpacing: '-0.02em',
+          margin: '0 0 16px',
+          fontVariationSettings: '"opsz" 60, "SOFT" 50',
+        }}
+      >
+        Primitives
+      </h2>
+
+      <div
+        style={{
+          background: 'var(--color-brand-surface)',
+          border: '1px solid var(--color-brand-border)',
+          borderRadius: 'var(--radius-xl)',
+          padding: 28,
+          marginBottom: 16,
+        }}
+      >
+        <div
+          style={{
+            fontSize: 11,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'var(--color-brand-text-muted)',
+            fontWeight: 600,
+            marginBottom: 12,
+          }}
+        >
+          Btn — primary button
+        </div>
+        <Btn onClick={() => {}}>Continue</Btn>
+        <div style={{ marginTop: 12 }}>
+          <Btn onClick={() => {}} disabled>
+            Disabled
+          </Btn>
+        </div>
+      </div>
+
+      <div
+        style={{
+          background: 'var(--color-brand-surface)',
+          border: '1px solid var(--color-brand-border)',
+          borderRadius: 'var(--radius-xl)',
+          padding: 28,
+          marginBottom: 16,
+        }}
+      >
+        <div
+          style={{
+            fontSize: 11,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'var(--color-brand-text-muted)',
+            fontWeight: 600,
+            marginBottom: 12,
+          }}
+        >
+          MoneyInput
+        </div>
+        <MoneyInput value={amount} onChange={setAmount} placeholder="0" />
+      </div>
+
+      <p
+        style={{
+          color: 'var(--color-brand-text-muted)',
+          fontStyle: 'italic',
+          marginTop: 12,
+        }}
+      >
+        New primitives (Card, Stat, TransactionRow, Badge, Alert) extracted from page-level inline
+        styles will land in later PRs.
+      </p>
+    </section>
   );
 }
 
