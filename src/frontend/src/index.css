@@ -1,4 +1,9 @@
 @import 'tailwindcss';
+
+/* Self-hosted fonts (Axis H PR-1, 2026-05-13). Quicksand kept until CactusLogo is replaced in Axis H PR-3. */
+@import '@fontsource-variable/fraunces/wght.css';
+@import '@fontsource-variable/fraunces/wght-italic.css';
+@import '@fontsource-variable/inter/wght.css';
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
 
 /* ── Cactus brand tokens — registered with Tailwind v4 ── */
@@ -14,6 +19,31 @@
   --color-cactus-wants-bg: #fff5e0;
   --color-cactus-goals-bg: #ffe8e8;
   --color-cactus-overlay: rgba(51, 51, 51, 0.06);
+
+  /* ── Axis H brand tokens (2026-05-13) — coexist with cactus-* until PR-8 cleanup ── */
+  --color-brand-cream: #faf5ec;
+  --color-brand-surface: #ffffff;
+  --color-brand-border: #ebe5d5;
+  --color-brand-sage: #1f6f4a;
+  --color-brand-sage-soft: rgb(31 111 74 / 0.12);
+  --color-brand-terracotta: #c9743a;
+  --color-brand-terracotta-soft: #fdf0e6;
+  --color-brand-accent-ink: #8c4a1e;
+  --color-brand-text: #2d2418;
+  --color-brand-text-muted: #6b5e4a;
+  --color-brand-text-faint: #a59982;
+  --color-brand-danger: #b54838;
+  --color-brand-info: #4a6b8a;
+
+  --font-display: 'Fraunces Variable', 'Fraunces', 'Iowan Old Style', Cambria, Georgia, serif;
+  --font-sans-brand: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-pill: 9999px;
 
   --font-cactus: 'Quicksand', system-ui, -apple-system, sans-serif;
 
@@ -47,6 +77,13 @@ body {
 
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+.tabular-lining {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings:
+    'lnum' 1,
+    'tnum' 1;
 }
 
 /* ── Animations ── */
