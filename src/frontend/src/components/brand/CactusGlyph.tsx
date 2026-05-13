@@ -1,0 +1,30 @@
+interface CactusGlyphProps {
+  className?: string;
+  size?: number | 'sm' | 'md' | 'lg';
+}
+
+const sizeMap = { sm: 16, md: 24, lg: 32 } as const;
+
+/**
+ * The Cactus brand mark — a saguaro silhouette.
+ * Source: vector-traced from a Replicate (FLUX 1.1 Pro) generation, batch-04/04, picked 2026-05-13.
+ * Colour inherits from CSS `color` (fill="currentColor").
+ */
+export function CactusGlyph({ className = '', size = 24 }: CactusGlyphProps) {
+  const px = typeof size === 'number' ? size : sizeMap[size];
+  return (
+    <svg
+      viewBox="0 0 1024 1024"
+      xmlns="http://www.w3.org/2000/svg"
+      width={px}
+      height={px}
+      fill="currentColor"
+      aria-hidden="true"
+      className={className}
+    >
+      <g transform="translate(0,1024) scale(0.1,-0.1)">
+        <path d="M5034 7681 c-69 -40 -148 -129 -173 -195 -41 -111 -47 -212 -62 -1081 -12 -761 -37 -1577 -47 -1587 -22 -22 -166 53 -210 109 -77 98 -94 208 -112 753 -11 341 -27 504 -62 633 -35 132 -120 206 -225 194 -81 -9 -136 -71 -178 -201 -66 -206 -51 -1037 25 -1341 27 -106 64 -183 138 -281 64 -87 191 -198 273 -240 65 -33 180 -63 267 -71 l72 -6 0 -76 c0 -42 4 -258 10 -481 27 -1116 48 -1564 77 -1587 29 -22 183 -36 353 -30 91 3 179 10 195 14 28 9 31 14 42 79 16 97 32 347 43 699 26 779 32 943 39 980 l6 40 101 6 c177 11 294 62 422 183 254 241 332 560 332 1346 -1 408 -16 492 -110 594 -69 75 -139 84 -218 26 -22 -16 -52 -49 -66 -73 -66 -112 -80 -209 -96 -673 -22 -648 -44 -762 -165 -878 -55 -53 -187 -132 -204 -122 -4 3 -11 121 -15 263 -3 142 -10 364 -15 493 -6 129 -10 411 -11 625 -1 681 -30 1525 -56 1653 -38 186 -111 262 -251 262 -57 0 -76 -5 -119 -29z" />
+      </g>
+    </svg>
+  );
+}
