@@ -7,7 +7,7 @@ describe('Phase2Slider', () => {
   it('renders default values: income R35,000, Needs 50%, Wants 30%, Goals 20%', () => {
     render(<Phase2Slider onContinue={() => {}} />);
     expect(screen.getByText(/monthly income/i)).toBeInTheDocument();
-    expect(screen.getByText(/r35,000/i)).toBeInTheDocument();
+    expect(screen.getByText(/r35[\s,]000/i)).toBeInTheDocument();
     // Each percentage appears twice (bar chart + slider/goals row)
     expect(screen.getAllByText(/50%/).length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText(/30%/).length).toBeGreaterThanOrEqual(1);

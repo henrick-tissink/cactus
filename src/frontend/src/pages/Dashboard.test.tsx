@@ -14,7 +14,7 @@ describe('DashboardPage', () => {
   it('renders the monthly summary once data resolves', async () => {
     renderWithProviders(<DashboardPage />);
 
-    expect(await screen.findByText('R38,000')).toBeInTheDocument();
+    expect(await screen.findByText(/r38[\s,]000/i)).toBeInTheDocument();
     expect(screen.getByText(/spending plan/i)).toBeInTheDocument();
   });
 

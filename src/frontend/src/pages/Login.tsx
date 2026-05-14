@@ -49,12 +49,9 @@ export function LoginPage() {
 
   return (
     <div className="flex min-h-screen">
-      <AuthBrandPanel
-        heading="Build a Spending Plan that actually works"
-        tagline="Track where every Rand goes, hit your goals, and feel calm about money."
-      />
+      <AuthBrandPanel />
       <div className="flex-1 bg-cactus-sandstone p-6 md:p-12 flex flex-col font-cactus">
-        <div className="mb-8">
+        <div className="mb-8 md:hidden">
           <CactusLogo />
         </div>
         <div className="flex-1 flex items-center justify-center">
