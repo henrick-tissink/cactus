@@ -18,7 +18,6 @@ import { Link } from 'react-router-dom';
 import { apiClient } from '../api/client';
 import { MacroCategoryType, GoalType, type GoalDto } from '../types';
 
-// API response types matching backend DTOs
 interface BucketStatusDto {
   type: MacroCategoryType;
   name: string;
@@ -44,17 +43,16 @@ interface DashboardSummaryResponse {
   recentTransactions: RecentTransactionDto[];
 }
 
-// Tailwind class fragments per bucket (resolve to cactus tokens at build time)
 const BUCKET_FILL_CLASS: Record<MacroCategoryType, string> = {
-  [MacroCategoryType.Needs]: 'bg-cactus-sage',
-  [MacroCategoryType.Wants]: 'bg-cactus-desert',
-  [MacroCategoryType.Goals]: 'bg-cactus-prickly',
+  [MacroCategoryType.Needs]: 'bg-brand-sage',
+  [MacroCategoryType.Wants]: 'bg-brand-terracotta',
+  [MacroCategoryType.Goals]: 'bg-brand-accent-ink',
 };
 
 const BUCKET_DOT_CLASS: Record<MacroCategoryType, string> = {
-  [MacroCategoryType.Needs]: 'bg-cactus-sage',
-  [MacroCategoryType.Wants]: 'bg-cactus-desert',
-  [MacroCategoryType.Goals]: 'bg-cactus-prickly',
+  [MacroCategoryType.Needs]: 'bg-brand-sage',
+  [MacroCategoryType.Wants]: 'bg-brand-terracotta',
+  [MacroCategoryType.Goals]: 'bg-brand-accent-ink',
 };
 
 const GOAL_TYPE_INFO: Record<number, { label: string; icon: typeof Target }> = {
@@ -77,10 +75,10 @@ function estimateClassifyTime(count: number): string {
 
 function LoadingState() {
   return (
-    <div className="p-8 bg-cactus-sandstone font-cactus min-h-full">
+    <div className="p-8 bg-brand-cream font-sans-brand min-h-full">
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-cactus-sage" />
-        <span className="ml-3 text-cactus-charcoal/60 font-cactus">Loading dashboard...</span>
+        <Loader2 className="w-8 h-8 animate-spin text-brand-sage" />
+        <span className="ml-3 text-brand-text-muted font-sans-brand">Loading dashboard…</span>
       </div>
     </div>
   );
@@ -88,57 +86,60 @@ function LoadingState() {
 
 function ErrorState({ error }: { error: Error }) {
   return (
-    <div className="p-8 bg-cactus-sandstone font-cactus min-h-full">
-      <div className="bg-white border border-cactus-overlay rounded-2xl p-6 text-center">
-        <AlertCircle className="w-12 h-12 text-cactus-prickly mx-auto mb-4" />
-        <h2 className="text-lg font-cactus font-bold text-cactus-charcoal mb-2">
+    <div className="p-8 bg-brand-cream font-sans-brand min-h-full">
+      <div className="bg-brand-surface border border-brand-border rounded-3xl p-8 text-center max-w-md mx-auto">
+        <AlertCircle className="w-10 h-10 text-brand-terracotta mx-auto mb-4" />
+        <h2 className="font-display font-medium text-xl text-brand-text mb-2">
           Failed to load dashboard
         </h2>
-        <p className="text-cactus-charcoal/60 font-cactus">{error.message}</p>
+        <p className="text-brand-text-muted text-[14px] leading-relaxed">{error.message}</p>
       </div>
     </div>
   );
 }
 
+const SECTION_KICKER =
+  'font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted';
+
 function OnboardingChecklist() {
   return (
-    <div className="p-8 bg-cactus-sandstone font-cactus min-h-full">
+    <div className="p-8 bg-brand-cream font-sans-brand min-h-full">
       <div className="animate-fade-in">
-        <h1 className="text-2xl font-cactus font-bold text-cactus-charcoal mb-2">
+        <h1 className="font-display font-medium text-[2.5rem] leading-[1.05] tracking-[-0.018em] text-brand-text mb-2 capitalize">
           {getMonthTitle()}
         </h1>
         <div className="max-w-lg mx-auto mt-12">
-          <div className="bg-white border border-cactus-overlay rounded-2xl p-8 text-center">
-            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 bg-cactus-sage-light">
-              <Upload className="w-8 h-8 text-cactus-sage" />
+          <div className="bg-brand-surface border border-brand-border rounded-3xl p-10 text-center shadow-[0_24px_48px_-16px_rgba(31,111,74,0.08)]">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 bg-brand-sage-soft">
+              <Upload className="w-7 h-7 text-brand-sage" />
             </div>
-            <h2 className="text-xl font-cactus font-bold text-cactus-charcoal mb-2">
-              Let's get your finances in order
+            <h2 className="font-display font-medium text-2xl text-brand-text mb-2 tracking-tight">
+              Let's get your finances in order.
             </h2>
-            <p className="text-cactus-charcoal/60 font-cactus mb-8">
+            <p className="text-brand-text-muted font-sans-brand text-[15px] leading-relaxed mb-8">
               Start by importing a bank statement.
             </p>
 
-            <div className="space-y-4 text-left">
+            <div className="space-y-3 text-left">
               <Link
                 to="/import"
-                className="flex items-center gap-3 p-4 rounded-xl border border-cactus-overlay hover:bg-cactus-sage-light transition-colors"
+                className="flex items-center gap-3 p-4 rounded-xl border border-brand-border hover:bg-brand-sage-soft/60 hover:border-brand-sage/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface transition-colors"
               >
-                <Circle className="w-5 h-5 text-cactus-charcoal/40 shrink-0" />
-                <span className="font-cactus font-semibold text-cactus-charcoal">
+                <Circle className="w-5 h-5 text-brand-text-faint shrink-0" />
+                <span className="font-sans-brand font-semibold text-brand-text">
                   Import your first bank statement
                 </span>
-                <ArrowRight className="w-4 h-4 text-cactus-charcoal/40 ml-auto" />
+                <ArrowRight className="w-4 h-4 text-brand-text-faint ml-auto" />
               </Link>
-              <div className="flex items-center gap-3 p-4 rounded-xl border border-cactus-overlay opacity-50">
-                <Circle className="w-5 h-5 text-cactus-charcoal/40 shrink-0" />
-                <span className="font-cactus font-semibold text-cactus-charcoal/40">
+              <div className="flex items-center gap-3 p-4 rounded-xl border border-brand-border opacity-50">
+                <Circle className="w-5 h-5 text-brand-text-faint shrink-0" />
+                <span className="font-sans-brand font-semibold text-brand-text-faint">
                   Classify your transactions
                 </span>
               </div>
-              <div className="flex items-center gap-3 p-4 rounded-xl border border-cactus-overlay opacity-50">
-                <Circle className="w-5 h-5 text-cactus-charcoal/40 shrink-0" />
-                <span className="font-cactus font-semibold text-cactus-charcoal/40">
+              <div className="flex items-center gap-3 p-4 rounded-xl border border-brand-border opacity-50">
+                <Circle className="w-5 h-5 text-brand-text-faint shrink-0" />
+                <span className="font-sans-brand font-semibold text-brand-text-faint">
                   Review your budget
                 </span>
               </div>
@@ -154,68 +155,66 @@ function PrimaryGoalCard({ goal }: { goal: GoalDto }) {
   const typeInfo = GOAL_TYPE_INFO[goal.goalType];
   const Icon = typeInfo?.icon || Target;
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-ZA', {
+  const formatCurrency = (amount: number) =>
+    new Intl.NumberFormat('en-ZA', {
       style: 'currency',
       currency: 'ZAR',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
-  };
 
   const remaining = goal.targetAmount - goal.currentAmount;
 
   return (
-    <div className="bg-cactus-sage-light border border-cactus-overlay rounded-2xl p-5 max-w-sm">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-white">
-            <Icon className="w-4 h-4 text-cactus-sage" />
+    <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 max-w-md shadow-[0_16px_40px_-16px_rgba(31,111,74,0.10)]">
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-xl bg-brand-sage-soft">
+            <Icon className="w-4 h-4 text-brand-sage" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="font-cactus font-bold text-cactus-charcoal text-base">{goal.name}</h3>
-              <div className="bg-cactus-sage text-white font-cactus font-bold text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full flex items-center gap-0.5">
-                <Star className="w-2.5 h-2.5 fill-current" />
-                Primary
-              </div>
-            </div>
+          <div className="flex items-center gap-2">
+            <h3 className="font-display font-medium text-brand-text text-lg tracking-tight">
+              {goal.name}
+            </h3>
+            <span className="bg-brand-sage text-brand-cream font-sans-brand font-semibold text-[10px] uppercase tracking-[0.12em] px-2 py-0.5 rounded-full flex items-center gap-1">
+              <Star className="w-2.5 h-2.5 fill-current" />
+              Primary
+            </span>
           </div>
         </div>
         <Link
           to="/goals"
-          className="text-cactus-sage font-cactus font-semibold flex items-center gap-1 text-xs"
+          className="font-sans-brand text-[13px] font-semibold text-brand-sage hover:text-brand-accent-ink flex items-center gap-1 underline-offset-4 hover:underline transition-colors"
         >
           View <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
 
-      {/* Progress */}
       <div>
-        <div className="flex justify-between text-xs mb-1">
-          <span className="text-cactus-charcoal/60 font-cactus tabular-nums">
+        <div className="flex justify-between text-[12px] mb-1.5">
+          <span className="text-brand-text-muted font-sans-brand tabular-lining">
             {formatCurrency(goal.currentAmount)}
           </span>
-          <span className="text-cactus-charcoal/60 font-cactus tabular-nums">
+          <span className="text-brand-text-muted font-sans-brand tabular-lining">
             {formatCurrency(goal.targetAmount)}
           </span>
         </div>
-        <div className="h-2 bg-cactus-overlay rounded-full overflow-hidden">
+        <div className="h-1.5 bg-brand-border rounded-full overflow-hidden">
           <div
-            className="h-full bg-cactus-sage transition-all duration-500"
+            className="h-full bg-brand-sage transition-all duration-500"
             style={{ width: `${Math.min(goal.progressPercentage, 100)}%` }}
           />
         </div>
-        <div className="flex justify-between text-xs mt-1">
-          <span className="text-cactus-charcoal/60 font-cactus">
+        <div className="flex justify-between text-[12px] mt-2">
+          <span className="text-brand-text-faint font-sans-brand">
             {goal.progressPercentage.toFixed(0)}% complete
           </span>
-          <span className="text-cactus-sage font-cactus font-bold tabular-nums">
+          <span className="text-brand-sage font-sans-brand font-semibold tabular-lining">
             {formatCurrency(remaining)} to go
           </span>
         </div>
         {goal.currentAmount === 0 && (
-          <p className="text-xs text-cactus-charcoal/60 font-cactus mt-2 italic">
+          <p className="text-[12px] text-brand-text-muted font-display italic mt-3">
             Every rand counts. Start your journey today.
           </p>
         )}
@@ -237,7 +236,6 @@ export function DashboardPage() {
     },
   });
 
-  // Fetch goals to get the primary goal
   const { data: goals } = useQuery({
     queryKey: ['goals'],
     queryFn: async () => {
@@ -260,7 +258,6 @@ export function DashboardPage() {
     return <LoadingState />;
   }
 
-  // Empty state: no transactions at all — show onboarding
   if (
     summary.recentTransactions.length === 0 &&
     summary.totalSpent === 0 &&
@@ -275,73 +272,76 @@ export function DashboardPage() {
       ? Math.min((summary.totalSpent / summary.monthlyIncome) * 100, 100)
       : 0;
 
-  // Bucket bar calculations
   const totalAllocated = summary.buckets.reduce((sum, b) => sum + b.allocated, 0);
 
   return (
-    <div className="p-8 bg-cactus-sandstone font-cactus min-h-full">
-      <div className="animate-fade-in">
-        {/* Header — dynamic month title */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-cactus font-bold text-cactus-charcoal">{getMonthTitle()}</h1>
-        </div>
+    <div className="p-6 md:p-10 bg-brand-cream font-sans-brand min-h-full">
+      <div className="animate-fade-in max-w-5xl mx-auto">
+        {/* Header — month title as Fraunces hero */}
+        <header className="mb-10">
+          <p className={`${SECTION_KICKER} mb-2`}>This month</p>
+          <h1 className="font-display font-medium text-[2.75rem] leading-[1.05] tracking-[-0.018em] text-brand-text capitalize">
+            {getMonthTitle()}
+          </h1>
+        </header>
 
-        {/* Unclassified transactions banner */}
+        {/* Unclassified banner — left-accent terracotta strip */}
         {summary.unclassifiedCount > 0 && (
-          <div className="mb-6 p-4 bg-cactus-goals-bg border border-cactus-overlay rounded-2xl flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 text-cactus-prickly shrink-0" />
-            <p className="text-cactus-charcoal font-cactus">
-              <strong>{summary.unclassifiedCount}</strong> transactions need classifying (
-              {estimateClassifyTime(summary.unclassifiedCount)})
+          <div className="mb-8 bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-2xl pl-5 pr-4 py-4 flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-brand-terracotta shrink-0" />
+            <p className="text-brand-accent-ink font-sans-brand text-[14px]">
+              <span className="font-semibold tabular-lining">{summary.unclassifiedCount}</span>{' '}
+              transactions need classifying
+              <span className="text-brand-text-faint">
+                {' '}
+                ({estimateClassifyTime(summary.unclassifiedCount)})
+              </span>
             </p>
             <Link
               to="/transactions?filter=unclassified"
-              className="ml-auto text-cactus-charcoal font-cactus font-semibold underline flex items-center gap-1"
+              className="ml-auto font-sans-brand text-[13px] font-semibold text-brand-accent-ink hover:text-brand-text underline-offset-4 hover:underline flex items-center gap-1 transition-colors"
             >
-              Classify now <ArrowRight className="w-4 h-4" />
+              Classify now <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         )}
 
-        {/* Hero metric — single remaining amount */}
-        <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mb-8">
+        {/* Hero metric — remaining amount in Fraunces */}
+        <div className="bg-brand-surface border border-brand-border rounded-3xl p-8 mb-6 shadow-[0_24px_56px_-24px_rgba(31,111,74,0.12)]">
+          <p className={SECTION_KICKER}>Remaining</p>
           <p
-            className={`text-4xl font-cactus font-bold tabular-nums ${
-              remaining >= 0 ? 'text-cactus-charcoal' : 'text-cactus-prickly'
+            className={`mt-2 font-display font-medium tabular-lining text-[3.25rem] leading-[1.02] tracking-[-0.02em] ${
+              remaining >= 0 ? 'text-brand-text' : 'text-brand-terracotta'
             }`}
           >
             R{remaining.toLocaleString()}
           </p>
-          <p className="text-cactus-charcoal/40 font-cactus mt-1">
-            remaining of{' '}
-            <span className="tabular-nums">R{summary.monthlyIncome.toLocaleString()}</span> income
+          <p className="text-brand-text-muted font-sans-brand text-[14px] mt-1">
+            of <span className="tabular-lining">R{summary.monthlyIncome.toLocaleString()}</span>{' '}
+            income
           </p>
 
-          {/* Spent vs remaining bar */}
-          <div className="mt-4">
-            <div className="h-2 bg-cactus-overlay rounded-full overflow-hidden">
+          <div className="mt-6">
+            <div className="h-1.5 bg-brand-border rounded-full overflow-hidden">
               <div
-                className="h-full bg-cactus-sage rounded-full transition-all duration-500"
+                className="h-full bg-brand-sage rounded-full transition-all duration-500"
                 style={{ width: `${spentPercentage}%` }}
               />
             </div>
             {summary.totalSpent > 0 && (
-              <p className="text-xs text-cactus-charcoal/40 font-cactus mt-1.5">
-                <span className="tabular-nums">R{summary.totalSpent.toLocaleString()}</span> spent
+              <p className="text-[12px] text-brand-text-faint font-sans-brand mt-2">
+                <span className="tabular-lining">R{summary.totalSpent.toLocaleString()}</span> spent
               </p>
             )}
           </div>
         </div>
 
-        {/* Buckets — stacked horizontal bar */}
+        {/* Buckets — refined stacked bar */}
         {summary.buckets.length > 0 && (
-          <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mb-8">
-            <h2 className="text-sm font-cactus font-bold text-cactus-charcoal mb-3">
-              Spending Plan
-            </h2>
+          <div className="bg-brand-surface border border-brand-border rounded-3xl p-7 mb-8 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+            <h2 className={`${SECTION_KICKER} mb-4`}>Spending plan</h2>
 
-            {/* Stacked bar */}
-            <div className="h-3 rounded-full overflow-hidden flex bg-cactus-overlay">
+            <div className="h-2 rounded-full overflow-hidden flex bg-brand-border">
               {summary.buckets.map((bucket) => {
                 const widthPct = totalAllocated > 0 ? (bucket.spent / totalAllocated) * 100 : 0;
                 return (
@@ -354,19 +354,21 @@ export function DashboardPage() {
               })}
             </div>
 
-            {/* Labels */}
-            <div className="stagger-children flex items-center gap-6 mt-3">
+            <div className="stagger-children flex flex-wrap items-center gap-x-7 gap-y-3 mt-4">
               {summary.buckets.map((bucket) => (
-                <div key={bucket.type} className="flex items-center gap-2 text-sm">
+                <div
+                  key={bucket.type}
+                  className="flex items-center gap-2 font-sans-brand text-[13px]"
+                >
                   <span
-                    className={`w-2.5 h-2.5 rounded-full shrink-0 ${BUCKET_DOT_CLASS[bucket.type]}`}
+                    className={`w-2 h-2 rounded-full shrink-0 ${BUCKET_DOT_CLASS[bucket.type]}`}
                   />
-                  <span className="text-cactus-charcoal font-cactus">{bucket.name}</span>
-                  <span className="text-cactus-charcoal font-cactus tabular-nums">
+                  <span className="text-brand-text">{bucket.name}</span>
+                  <span className="text-brand-text tabular-lining font-semibold">
                     R{bucket.spent.toLocaleString()}
                   </span>
-                  <span className="text-cactus-charcoal/40 font-cactus">/</span>
-                  <span className="text-cactus-charcoal/60 font-cactus tabular-nums">
+                  <span className="text-brand-text-faint">/</span>
+                  <span className="text-brand-text-muted tabular-lining">
                     R{bucket.allocated.toLocaleString()}
                   </span>
                 </div>
@@ -378,71 +380,74 @@ export function DashboardPage() {
         {/* Primary Goal Focus */}
         {primaryGoal && (
           <div className="mb-8">
-            <h2 className="text-sm font-cactus font-bold text-cactus-charcoal mb-3 flex items-center gap-2">
-              <Star className="w-4 h-4 text-cactus-sage" />
-              Current Focus
+            <h2 className={`${SECTION_KICKER} mb-4 flex items-center gap-2`}>
+              <Star className="w-3.5 h-3.5 text-brand-sage" />
+              Current focus
             </h2>
             <PrimaryGoalCard goal={primaryGoal} />
           </div>
         )}
 
         {/* Recent transactions */}
-        <div className="bg-white border border-cactus-overlay rounded-2xl">
-          <div className="p-6 border-b border-cactus-overlay flex items-center justify-between">
-            <h2 className="text-sm font-cactus font-bold text-cactus-charcoal">
-              Recent Transactions
-            </h2>
-            <div className="flex items-center gap-4">
+        <div className="bg-brand-surface border border-brand-border rounded-3xl shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+          <div className="px-7 py-5 border-b border-brand-border flex items-center justify-between">
+            <h2 className={SECTION_KICKER}>Recent transactions</h2>
+            <div className="flex items-center gap-5">
               <Link
                 to="/import"
-                className="text-cactus-sage font-cactus font-semibold flex items-center gap-1 text-sm"
+                className="font-sans-brand text-[13px] font-semibold text-brand-sage hover:text-brand-accent-ink underline-offset-4 hover:underline flex items-center gap-1 transition-colors"
               >
-                <Upload className="w-4 h-4" />
+                <Upload className="w-3.5 h-3.5" />
                 Import
               </Link>
               <Link
                 to="/transactions"
-                className="text-cactus-sage font-cactus font-semibold text-sm"
+                className="font-sans-brand text-[13px] font-semibold text-brand-sage hover:text-brand-accent-ink underline-offset-4 hover:underline transition-colors"
               >
                 View all
               </Link>
             </div>
           </div>
-          <div className="divide-y divide-cactus-overlay">
+          <div className="divide-y divide-brand-border">
             {summary.recentTransactions.length === 0 ? (
-              <div className="p-8 text-center text-cactus-charcoal/60 font-cactus">
+              <div className="p-10 text-center text-brand-text-muted font-sans-brand">
                 No recent transactions
               </div>
             ) : (
               summary.recentTransactions.map((transaction) => (
                 <div
                   key={transaction.id}
-                  className={`p-4 flex items-center gap-4 ${
-                    !transaction.isClassified ? 'border-l-2 border-l-cactus-prickly' : ''
+                  className={`px-7 py-4 flex items-center gap-4 ${
+                    !transaction.isClassified
+                      ? 'border-l-[3px] border-l-brand-terracotta bg-brand-terracotta-soft/30'
+                      : ''
                   }`}
                 >
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      transaction.amount > 0 ? 'bg-cactus-sage-light' : 'bg-cactus-overlay'
+                    className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
+                      transaction.amount > 0 ? 'bg-brand-sage-soft' : 'bg-brand-border'
                     }`}
                   >
                     {transaction.amount > 0 ? (
-                      <TrendingUp className="w-5 h-5 text-cactus-sage" />
+                      <TrendingUp className="w-4 h-4 text-brand-sage" />
                     ) : (
-                      <TrendingDown className="w-5 h-5 text-cactus-prickly" />
+                      <TrendingDown className="w-4 h-4 text-brand-text-muted" />
                     )}
                   </div>
-                  <div className="flex-1">
-                    <p className="font-cactus font-semibold text-cactus-charcoal">
+                  <div className="flex-1 min-w-0">
+                    <p className="font-sans-brand font-semibold text-brand-text text-[14px] truncate">
                       {transaction.description}
                     </p>
-                    <p className="text-sm text-cactus-charcoal/50 font-cactus">
-                      {new Date(transaction.transactionDate).toLocaleDateString()}
+                    <p className="text-[12px] text-brand-text-faint font-sans-brand">
+                      {new Date(transaction.transactionDate).toLocaleDateString('en-ZA', {
+                        day: 'numeric',
+                        month: 'short',
+                      })}
                     </p>
                   </div>
                   <p
-                    className={`font-cactus font-bold tabular-nums ${
-                      transaction.amount > 0 ? 'text-cactus-sage' : 'text-cactus-prickly'
+                    className={`font-display font-medium tabular-lining text-[17px] ${
+                      transaction.amount > 0 ? 'text-brand-sage' : 'text-brand-text'
                     }`}
                   >
                     {transaction.amount > 0 ? '+' : ''}R
