@@ -76,6 +76,7 @@ jobs:
             else
               echo "IMAGE_TAG=sha-${{ github.sha }}" >> .env
             fi
+            docker image prune -af --filter "until=72h"
             docker compose -f docker-compose.yml -f docker-compose.prod.yml pull api frontend
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build api frontend
             docker image prune -f
