@@ -40,19 +40,19 @@ export function ResetPasswordPage() {
     return (
       <div className="flex min-h-screen">
         <AuthBrandPanel />
-        <div className="flex-1 bg-cactus-sandstone p-6 md:p-12 flex flex-col font-cactus">
+        <div className="flex-1 bg-brand-cream p-6 md:p-12 lg:p-16 flex flex-col font-sans-brand">
           <div className="mb-8 md:hidden">
             <CactusLogo />
           </div>
           <div className="flex-1 flex items-center justify-center">
-            <div className="w-full max-w-sm animate-fade-in text-center">
-              <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-cactus-prickly shrink-0" />
+            <div className="w-full max-w-[22rem] animate-fade-in text-center">
+              <div className="bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 font-sans-brand text-[14px] text-brand-accent-ink mb-6 flex items-center gap-2 text-left">
+                <AlertCircle className="w-4 h-4 text-brand-terracotta shrink-0" />
                 <span>Invalid reset link.</span>
               </div>
               <Link
                 to="/forgot-password"
-                className="text-cactus-sage font-cactus font-semibold hover:underline"
+                className="font-sans-brand text-[13px] font-semibold text-brand-sage hover:text-brand-accent-ink underline-offset-4 hover:underline transition-colors"
               >
                 Request a new reset link
               </Link>
@@ -66,29 +66,29 @@ export function ResetPasswordPage() {
   return (
     <div className="flex min-h-screen">
       <AuthBrandPanel />
-      <div className="flex-1 bg-cactus-sandstone p-6 md:p-12 flex flex-col font-cactus">
+      <div className="flex-1 bg-brand-cream p-6 md:p-12 lg:p-16 flex flex-col font-sans-brand">
         <div className="mb-8 md:hidden">
           <CactusLogo />
         </div>
         <div className="flex-1 flex items-center justify-center">
-          <div className="w-full max-w-sm animate-fade-in">
-            <h1 className="font-cactus font-bold text-2xl text-cactus-charcoal mb-2">
-              Set your new password
+          <div className="w-full max-w-[22rem] animate-fade-in">
+            <h1 className="font-display font-medium text-[2.25rem] leading-[1.1] tracking-[-0.015em] text-brand-text mb-3">
+              Choose a new password.
             </h1>
-            <p className="font-cactus text-sm text-cactus-charcoal/60 mb-6">
-              Choose a strong password to keep your account secure.
+            <p className="font-sans-brand text-[15px] leading-relaxed text-brand-text-muted mb-9">
+              Pick something strong to keep your account secure.
             </p>
 
             {success ? (
               <>
-                <div className="bg-cactus-sage-light border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
-                  <Check className="w-4 h-4 text-cactus-sage shrink-0" />
-                  <span>Password reset successfully!</span>
+                <div className="bg-brand-sage-soft border-l-[3px] border-brand-sage rounded-r-xl pl-4 pr-3 py-3 font-sans-brand text-[14px] text-brand-text mb-6 flex items-center gap-2">
+                  <Check className="w-4 h-4 text-brand-sage shrink-0" />
+                  <span>Password reset successfully.</span>
                 </div>
                 <p className="text-center">
                   <Link
                     to="/login"
-                    className="text-cactus-sage font-cactus font-semibold hover:underline"
+                    className="font-sans-brand text-[13px] font-semibold text-brand-sage hover:text-brand-accent-ink underline-offset-4 hover:underline transition-colors"
                   >
                     Sign in with your new password
                   </Link>
@@ -97,8 +97,8 @@ export function ResetPasswordPage() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 {error && (
-                  <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-cactus-prickly shrink-0" />
+                  <div className="bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 font-sans-brand text-[14px] text-brand-accent-ink mb-1 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-brand-terracotta shrink-0" />
                     <span>{error}</span>
                   </div>
                 )}
@@ -106,9 +106,9 @@ export function ResetPasswordPage() {
                 <div>
                   <label
                     htmlFor="password"
-                    className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5"
+                    className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted block mb-2"
                   >
-                    New Password
+                    New password
                   </label>
                   <div className="relative">
                     <input
@@ -116,7 +116,7 @@ export function ResetPasswordPage() {
                       id="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 pr-12 font-cactus text-cactus-charcoal outline-none"
+                      className="w-full bg-brand-surface border border-brand-border focus:border-brand-sage focus:ring-2 focus:ring-brand-sage/15 rounded-xl px-4 py-3.5 pr-12 font-sans-brand text-[15px] text-brand-text placeholder:text-brand-text-faint outline-none transition-all"
                       placeholder="••••••••"
                       required
                       minLength={8}
@@ -124,23 +124,23 @@ export function ResetPasswordPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-cactus-charcoal/40 hover:text-cactus-charcoal"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md text-brand-text-faint hover:text-brand-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream transition-colors"
                       aria-label={showPassword ? 'Hide password' : 'Show password'}
                     >
-                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                   </div>
-                  <p className="font-cactus text-xs text-cactus-charcoal/60 mt-1">
-                    At least 8 characters with uppercase, lowercase, and a digit
+                  <p className="font-sans-brand text-[12px] text-brand-text-faint mt-2">
+                    At least 8 characters with uppercase, lowercase, and a digit.
                   </p>
                 </div>
 
                 <div>
                   <label
                     htmlFor="confirmPassword"
-                    className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5"
+                    className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted block mb-2"
                   >
-                    Confirm Password
+                    Confirm password
                   </label>
                   <div className="relative">
                     <input
@@ -148,17 +148,17 @@ export function ResetPasswordPage() {
                       id="confirmPassword"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 pr-12 font-cactus text-cactus-charcoal outline-none"
+                      className="w-full bg-brand-surface border border-brand-border focus:border-brand-sage focus:ring-2 focus:ring-brand-sage/15 rounded-xl px-4 py-3.5 pr-12 font-sans-brand text-[15px] text-brand-text placeholder:text-brand-text-faint outline-none transition-all"
                       placeholder="••••••••"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-cactus-charcoal/40 hover:text-cactus-charcoal"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md text-brand-text-faint hover:text-brand-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream transition-colors"
                       aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                     >
-                      {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                   </div>
                 </div>
@@ -166,9 +166,9 @@ export function ResetPasswordPage() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full px-6 py-4 rounded-2xl font-cactus font-bold text-base text-white transition-all bg-cactus-sage shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed"
+                  className="w-full mt-2 px-6 py-3.5 rounded-2xl font-sans-brand font-semibold text-[15px] text-white bg-brand-sage shadow-[0_8px_24px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_12px_32px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream disabled:bg-brand-border disabled:text-brand-text-faint disabled:shadow-none disabled:cursor-not-allowed disabled:hover:translate-y-0 transition-all"
                 >
-                  {isLoading ? 'Resetting...' : 'Reset Password'}
+                  {isLoading ? 'Resetting…' : 'Reset password'}
                 </button>
               </form>
             )}
