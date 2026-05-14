@@ -54,7 +54,7 @@ export function Phase2Slider({ onContinue }: Phase2SliderProps) {
           className="inline-flex items-center gap-1.5 bg-cactus-sandstone border-[1.5px] border-cactus-overlay rounded-full py-2 px-4 cursor-pointer font-cactus font-semibold text-[13px] text-cactus-charcoal/50"
           aria-expanded={showIncome}
         >
-          Monthly income: {fmt(income)}{' '}
+          {`Monthly income: ${fmt(income)} `}
           <span
             className={`text-[10px] transition-transform inline-block ${
               showIncome ? 'rotate-180' : ''
