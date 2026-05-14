@@ -84,24 +84,31 @@ export function RegisterPage() {
   };
 
   const inputClasses =
-    'w-full px-4 py-3 border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl font-cactus text-cactus-charcoal outline-none placeholder:text-cactus-charcoal/30 transition-colors';
-  const labelClasses = 'block font-cactus font-semibold text-sm text-cactus-charcoal mb-1.5';
+    'w-full bg-brand-cream/40 border border-brand-border focus:border-brand-sage focus:bg-brand-surface focus:ring-2 focus:ring-brand-sage/15 rounded-xl px-4 py-3.5 font-sans-brand text-[15px] text-brand-text placeholder:text-brand-text-faint outline-none transition-all';
+  const labelClasses =
+    'block font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2';
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cactus-sandstone font-cactus py-12 px-6">
-      <div className="w-full max-w-md animate-fade-in">
-        <div className="bg-white rounded-2xl border border-cactus-overlay p-8">
-          <div className="flex flex-col items-center mb-8">
-            <CactusLogo />
-            <p className="font-cactus text-cactus-charcoal/60 mt-3 text-center">
-              Create your account to get started.
+    <div className="min-h-screen flex items-center justify-center bg-brand-cream font-sans-brand py-12 px-6">
+      <div className="w-full max-w-[28rem] animate-fade-in">
+        <div className="flex justify-center mb-8">
+          <CactusLogo />
+        </div>
+
+        <div className="bg-brand-surface rounded-3xl border border-brand-border shadow-[0_24px_56px_-16px_rgba(31,111,74,0.12)] p-8 sm:p-10">
+          <div className="mb-8">
+            <h1 className="font-display font-medium text-[2rem] leading-[1.1] tracking-[-0.015em] text-brand-text mb-2">
+              Create your account.
+            </h1>
+            <p className="font-sans-brand text-[14px] leading-relaxed text-brand-text-muted">
+              Start building a spending plan in five minutes.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-cactus-prickly shrink-0" />
+              <div className="bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 font-sans-brand text-[14px] text-brand-accent-ink flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-brand-terracotta shrink-0" />
                 <span>{error}</span>
               </div>
             )}
@@ -117,7 +124,7 @@ export function RegisterPage() {
                   value={formData.firstName}
                   onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                   className={inputClasses}
-                  placeholder="John"
+                  placeholder="Jane"
                 />
               </div>
               <div>
@@ -163,8 +170,8 @@ export function RegisterPage() {
                 placeholder="••••••••"
                 required
               />
-              <p className="mt-1.5 text-xs font-cactus text-cactus-charcoal/50">
-                At least 8 characters with uppercase, lowercase, and a number
+              <p className="mt-2 font-sans-brand text-[12px] text-brand-text-faint">
+                At least 8 characters with uppercase, lowercase, and a digit.
               </p>
             </div>
 
@@ -186,19 +193,22 @@ export function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full px-6 py-4 rounded-2xl font-cactus font-bold text-base text-white transition-all bg-cactus-sage shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed"
+              className="w-full mt-2 px-6 py-3.5 rounded-2xl font-sans-brand font-semibold text-[15px] text-white bg-brand-sage shadow-[0_8px_24px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_12px_32px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface disabled:bg-brand-border disabled:text-brand-text-faint disabled:shadow-none disabled:cursor-not-allowed disabled:hover:translate-y-0 transition-all"
             >
-              {isLoading ? 'Creating account...' : 'Create account'}
+              {isLoading ? 'Creating account…' : 'Create account'}
             </button>
           </form>
-
-          <p className="mt-6 text-center font-cactus text-cactus-charcoal/60">
-            Already have an account?{' '}
-            <Link to="/login" className="text-cactus-sage font-semibold hover:underline">
-              Sign in
-            </Link>
-          </p>
         </div>
+
+        <p className="mt-6 text-center font-sans-brand text-[13px] text-brand-text-muted">
+          Already have an account?{' '}
+          <Link
+            to="/login"
+            className="font-semibold text-brand-sage hover:text-brand-accent-ink underline-offset-4 hover:underline transition-colors"
+          >
+            Sign in
+          </Link>
+        </p>
       </div>
     </div>
   );
