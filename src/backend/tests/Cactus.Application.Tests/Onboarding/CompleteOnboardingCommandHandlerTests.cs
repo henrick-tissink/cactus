@@ -248,11 +248,16 @@ public class CompleteOnboardingCommandHandlerTests : HandlerTestBase
         Context.Users.Add(user);
         Context.OnboardingResponses.Add(new OnboardingResponse
         {
-            UserId = user.Id, StepNumber = 5, StepName = "Monthly Income", Response = "35000",
+            UserId = user.Id,
+            StepNumber = 5,
+            StepName = "Monthly Income",
+            Response = "35000",
         });
         Context.OnboardingResponses.Add(new OnboardingResponse
         {
-            UserId = user.Id, StepNumber = 11, StepName = "Secondary income sources",
+            UserId = user.Id,
+            StepNumber = 11,
+            StepName = "Secondary income sources",
             Response = "[{\"type\":\"freelance\",\"amount\":5000},{\"type\":\"rental\",\"amount\":2500}]",
         });
         await Context.SaveChangesAsync(default);
@@ -273,15 +278,24 @@ public class CompleteOnboardingCommandHandlerTests : HandlerTestBase
         Context.Users.Add(user);
         Context.OnboardingResponses.Add(new OnboardingResponse
         {
-            UserId = user.Id, StepNumber = 6, StepName = "Goal type pick", Response = "[\"save\"]",
+            UserId = user.Id,
+            StepNumber = 6,
+            StepName = "Goal type pick",
+            Response = "[\"save\"]",
         });
         Context.OnboardingResponses.Add(new OnboardingResponse
         {
-            UserId = user.Id, StepNumber = 12, StepName = "Goal target amount", Response = "\"50000\"",
+            UserId = user.Id,
+            StepNumber = 12,
+            StepName = "Goal target amount",
+            Response = "\"50000\"",
         });
         Context.OnboardingResponses.Add(new OnboardingResponse
         {
-            UserId = user.Id, StepNumber = 13, StepName = "Goal target months", Response = "\"12\"",
+            UserId = user.Id,
+            StepNumber = 13,
+            StepName = "Goal target months",
+            Response = "\"12\"",
         });
         await Context.SaveChangesAsync(default);
         _currentUser.UserId.Returns(user.Id);
@@ -302,11 +316,17 @@ public class CompleteOnboardingCommandHandlerTests : HandlerTestBase
         Context.Users.Add(user);
         Context.OnboardingResponses.Add(new OnboardingResponse
         {
-            UserId = user.Id, StepNumber = 6, StepName = "Goal type pick", Response = "[\"emergency\"]",
+            UserId = user.Id,
+            StepNumber = 6,
+            StepName = "Goal type pick",
+            Response = "[\"emergency\"]",
         });
         Context.OnboardingResponses.Add(new OnboardingResponse
         {
-            UserId = user.Id, StepNumber = 12, StepName = "Goal target amount", Response = "\"30000\"",
+            UserId = user.Id,
+            StepNumber = 12,
+            StepName = "Goal target amount",
+            Response = "\"30000\"",
         });
         // No step 13 for emergency
         await Context.SaveChangesAsync(default);
