@@ -163,13 +163,13 @@ export function TransactionsPage() {
   const getMacroCategoryColor = (type?: number) => {
     switch (type) {
       case MacroCategoryType.Needs:
-        return 'bg-cactus-needs-bg text-cactus-charcoal';
+        return 'bg-brand-sage-soft text-brand-sage';
       case MacroCategoryType.Wants:
-        return 'bg-cactus-wants-bg text-cactus-charcoal';
+        return 'bg-brand-terracotta-soft text-brand-accent-ink';
       case MacroCategoryType.Goals:
-        return 'bg-cactus-goals-bg text-cactus-charcoal';
+        return 'bg-brand-accent-ink/10 text-brand-accent-ink';
       default:
-        return 'bg-cactus-overlay text-cactus-charcoal/60';
+        return 'bg-brand-border text-brand-text-muted';
     }
   };
 
@@ -188,360 +188,353 @@ export function TransactionsPage() {
     setPage(1);
   };
 
+  const toolbarBase =
+    'flex items-center gap-2 px-4 py-2 rounded-full border font-sans-brand font-semibold text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream transition-colors';
+  const toolbarActive = 'bg-brand-sage-soft text-brand-text border-brand-sage/40';
+  const toolbarIdle =
+    'bg-brand-surface text-brand-text-muted border-brand-border hover:bg-brand-sage-soft/60 hover:text-brand-text';
+
   return (
-    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-cactus-charcoal font-cactus font-bold text-2xl">Transactions</h1>
-        <div className="flex gap-3">
-          <button
-            onClick={() => setShowRecurring(!showRecurring)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl border font-cactus font-semibold ${
-              showRecurring
-                ? 'bg-cactus-sage-light text-cactus-charcoal border-cactus-sage'
-                : 'bg-white text-cactus-charcoal border-cactus-overlay hover:bg-cactus-sage-light/40'
-            }`}
-          >
-            <Repeat className="w-4 h-4" />
-            Recurring
-          </button>
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl border font-cactus font-semibold ${
-              showFilters
-                ? 'bg-cactus-sage-light text-cactus-charcoal border-cactus-sage'
-                : 'bg-white text-cactus-charcoal border-cactus-overlay hover:bg-cactus-sage-light/40'
-            }`}
-          >
-            <Filter className="w-4 h-4" />
-            Filters
-          </button>
-          <button
-            onClick={() => {
-              setBulkClassifyMode(!bulkClassifyMode);
-              if (bulkClassifyMode) {
-                clearSelection();
-              }
-            }}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl border font-cactus font-semibold ${
-              bulkClassifyMode
-                ? 'bg-cactus-sage-light text-cactus-charcoal border-cactus-sage'
-                : 'bg-white text-cactus-charcoal border-cactus-overlay hover:bg-cactus-sage-light/40'
-            }`}
-          >
-            <Tag className="w-4 h-4" />
-            Bulk Classify
-          </button>
-          <Link
-            to="/import"
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 font-cactus font-semibold"
-          >
-            <Upload className="w-4 h-4" />
-            Import Statement
-          </Link>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cactus-sage text-white font-cactus font-bold shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90"
-          >
-            <Plus className="w-4 h-4" />
-            Add Transaction
-          </button>
-        </div>
-      </div>
-
-      {/* Recurring Patterns Panel */}
-      {showRecurring && <RecurringPatternsPanel />}
-
-      {/* Filters Panel */}
-      {showFilters && (
-        <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
-                Account
-              </label>
-              <select
-                value={filters.accountId}
-                onChange={(e) => setFilters({ ...filters, accountId: e.target.value })}
-                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none bg-white"
-              >
-                <option value="">All accounts</option>
-                {accounts?.map((account) => (
-                  <option key={account.id} value={account.id}>
-                    {account.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
-                Status
-              </label>
-              <select
-                value={filters.isClassified}
-                onChange={(e) => setFilters({ ...filters, isClassified: e.target.value })}
-                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none bg-white"
-              >
-                <option value="">All</option>
-                <option value="true">Classified</option>
-                <option value="false">Unclassified</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
-                From
-              </label>
-              <input
-                type="date"
-                value={filters.startDate}
-                onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
-                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
-                To
-              </label>
-              <input
-                type="date"
-                value={filters.endDate}
-                onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
-                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
-              />
-            </div>
+    <div className="bg-brand-cream min-h-screen font-sans-brand p-6 md:p-10 animate-fade-in">
+      <div className="max-w-6xl mx-auto">
+        <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+              All activity
+            </p>
+            <h1 className="font-display font-medium text-[2.25rem] leading-[1.05] tracking-[-0.018em] text-brand-text">
+              Transactions
+            </h1>
           </div>
-          <div className="flex justify-end gap-3 mt-4">
+          <div className="flex flex-wrap gap-2">
             <button
-              onClick={clearFilters}
-              className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-4 py-2 rounded-xl font-cactus font-semibold"
+              onClick={() => setShowRecurring(!showRecurring)}
+              className={`${toolbarBase} ${showRecurring ? toolbarActive : toolbarIdle}`}
             >
-              Clear
+              <Repeat className="w-3.5 h-3.5" />
+              Recurring
             </button>
             <button
-              onClick={applyFilters}
-              className="px-4 py-2 rounded-xl bg-cactus-sage text-white font-cactus font-bold shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90"
+              onClick={() => setShowFilters(!showFilters)}
+              className={`${toolbarBase} ${showFilters ? toolbarActive : toolbarIdle}`}
             >
-              Apply Filters
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Bulk Action Bar */}
-      {selectedTransactionIds.size > 0 && (
-        <div className="bg-cactus-sage-light border border-cactus-sage rounded-2xl p-4 mb-6 flex items-center justify-between">
-          <span className="text-cactus-charcoal font-cactus font-semibold">
-            {selectedTransactionIds.size} transaction{selectedTransactionIds.size !== 1 ? 's' : ''}{' '}
-            selected
-          </span>
-          <div className="flex gap-3">
-            <button
-              onClick={clearSelection}
-              className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-4 py-2 rounded-xl font-cactus font-semibold"
-            >
-              Clear Selection
+              <Filter className="w-3.5 h-3.5" />
+              Filters
             </button>
             <button
-              onClick={() => setShowBulkClassifyModal(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cactus-sage text-white font-cactus font-bold shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90"
+              onClick={() => {
+                setBulkClassifyMode(!bulkClassifyMode);
+                if (bulkClassifyMode) {
+                  clearSelection();
+                }
+              }}
+              className={`${toolbarBase} ${bulkClassifyMode ? toolbarActive : toolbarIdle}`}
             >
-              <Tag className="w-4 h-4" />
-              Classify Selected
+              <Tag className="w-3.5 h-3.5" />
+              Bulk classify
+            </button>
+            <Link to="/import" className={`${toolbarBase} ${toolbarIdle}`}>
+              <Upload className="w-3.5 h-3.5" />
+              Import
+            </Link>
+            <button
+              onClick={() => setShowAddModal(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-full font-sans-brand font-semibold text-[13px] text-white bg-brand-sage shadow-[0_6px_20px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_10px_28px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream transition-all"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              Add transaction
             </button>
           </div>
-        </div>
-      )}
+        </header>
 
-      {/* Transactions List */}
-      <div className="bg-white border border-cactus-overlay rounded-2xl">
-        {isLoading ? (
-          <div className="p-8 text-center text-cactus-charcoal/60 font-cactus">
-            Loading transactions...
-          </div>
-        ) : transactionsData?.items.length === 0 ? (
-          <div className="p-8 text-center font-cactus">
-            <AlertCircle className="w-12 h-12 mx-auto mb-4 text-cactus-charcoal/40" />
-            <p className="text-cactus-charcoal/60">No transactions found</p>
-          </div>
-        ) : (
-          <>
-            {/* Select All Header - only in bulk classify mode */}
-            {bulkClassifyMode && unclassifiedTransactions.length > 0 && (
-              <div className="px-4 py-3 border-b border-cactus-overlay bg-cactus-sandstone">
-                <button
-                  onClick={toggleSelectAllUnclassified}
-                  className="flex items-center gap-2 text-sm font-cactus font-semibold text-cactus-charcoal hover:text-cactus-charcoal"
+        {/* Recurring Patterns Panel */}
+        {showRecurring && <RecurringPatternsPanel />}
+
+        {/* Filters Panel */}
+        {showFilters && (
+          <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 mb-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
+                <label className="block font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+                  Account
+                </label>
+                <select
+                  value={filters.accountId}
+                  onChange={(e) => setFilters({ ...filters, accountId: e.target.value })}
+                  className="w-full bg-brand-cream/40 border border-brand-border focus:border-brand-sage focus:bg-brand-surface focus:ring-2 focus:ring-brand-sage/15 rounded-xl px-4 py-2.5 font-sans-brand text-[14px] text-brand-text outline-none transition-all"
                 >
-                  {allUnclassifiedSelected ? (
-                    <CheckSquare className="w-5 h-5 text-cactus-sage" />
-                  ) : someUnclassifiedSelected ? (
-                    <Minus className="w-5 h-5 text-cactus-sage" />
-                  ) : (
-                    <Square className="w-5 h-5 text-cactus-charcoal/40" />
-                  )}
-                  Select all unclassified ({unclassifiedTransactions.length})
-                </button>
+                  <option value="">All accounts</option>
+                  {accounts?.map((account) => (
+                    <option key={account.id} value={account.id}>
+                      {account.name}
+                    </option>
+                  ))}
+                </select>
               </div>
-            )}
-            <div className="divide-y divide-cactus-overlay">
-              {transactionsData?.items.map((transaction) => (
-                <div
-                  key={transaction.id}
-                  className={`py-2.5 px-4 hover:bg-cactus-sage-light/30 transition-colors ${
-                    selectedTransactionIds.has(transaction.id) ? 'bg-cactus-sage-light' : ''
-                  } ${!transaction.isClassified ? 'border-l-2 border-cactus-prickly' : ''}`}
+              <div>
+                <label className="block font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+                  Status
+                </label>
+                <select
+                  value={filters.isClassified}
+                  onChange={(e) => setFilters({ ...filters, isClassified: e.target.value })}
+                  className="w-full bg-brand-cream/40 border border-brand-border focus:border-brand-sage focus:bg-brand-surface focus:ring-2 focus:ring-brand-sage/15 rounded-xl px-4 py-2.5 font-sans-brand text-[14px] text-brand-text outline-none transition-all"
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 flex-1">
-                      {/* Checkbox - only in bulk classify mode */}
-                      {bulkClassifyMode && (
-                        <button
-                          onClick={() => toggleTransactionSelection(transaction.id)}
-                          className="shrink-0"
-                        >
-                          {selectedTransactionIds.has(transaction.id) ? (
-                            <CheckSquare className="w-5 h-5 text-cactus-sage" />
-                          ) : (
-                            <Square className="w-5 h-5 text-cactus-charcoal/40 hover:text-cactus-charcoal/60" />
-                          )}
-                        </button>
-                      )}
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3">
-                          <p className="text-cactus-charcoal font-cactus font-semibold">
+                  <option value="">All</option>
+                  <option value="true">Classified</option>
+                  <option value="false">Unclassified</option>
+                </select>
+              </div>
+              <div>
+                <label className="block font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+                  From
+                </label>
+                <input
+                  type="date"
+                  value={filters.startDate}
+                  onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
+                  className="w-full bg-brand-cream/40 border border-brand-border focus:border-brand-sage focus:bg-brand-surface focus:ring-2 focus:ring-brand-sage/15 rounded-xl px-4 py-2.5 font-sans-brand text-[14px] text-brand-text outline-none transition-all"
+                />
+              </div>
+              <div>
+                <label className="block font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+                  To
+                </label>
+                <input
+                  type="date"
+                  value={filters.endDate}
+                  onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
+                  className="w-full bg-brand-cream/40 border border-brand-border focus:border-brand-sage focus:bg-brand-surface focus:ring-2 focus:ring-brand-sage/15 rounded-xl px-4 py-2.5 font-sans-brand text-[14px] text-brand-text outline-none transition-all"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-5">
+              <button onClick={clearFilters} className={`${toolbarBase} ${toolbarIdle}`}>
+                Clear
+              </button>
+              <button
+                onClick={applyFilters}
+                className="px-4 py-2 rounded-full font-sans-brand font-semibold text-[13px] text-white bg-brand-sage shadow-[0_6px_20px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_10px_28px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream transition-all"
+              >
+                Apply filters
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Bulk Action Bar */}
+        {selectedTransactionIds.size > 0 && (
+          <div className="bg-brand-sage-soft border-l-[3px] border-brand-sage rounded-r-2xl pl-5 pr-4 py-3.5 mb-6 flex items-center justify-between">
+            <span className="font-sans-brand font-semibold text-[14px] text-brand-text">
+              <span className="tabular-lining">{selectedTransactionIds.size}</span> transaction
+              {selectedTransactionIds.size !== 1 ? 's' : ''} selected
+            </span>
+            <div className="flex gap-2">
+              <button onClick={clearSelection} className={`${toolbarBase} ${toolbarIdle}`}>
+                Clear selection
+              </button>
+              <button
+                onClick={() => setShowBulkClassifyModal(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-full font-sans-brand font-semibold text-[13px] text-white bg-brand-sage shadow-[0_6px_20px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_10px_28px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px transition-all"
+              >
+                <Tag className="w-3.5 h-3.5" />
+                Classify selected
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Transactions List */}
+        <div className="bg-brand-surface border border-brand-border rounded-3xl shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)] overflow-hidden">
+          {isLoading ? (
+            <div className="p-10 text-center text-brand-text-muted font-sans-brand text-[14px]">
+              Loading transactions…
+            </div>
+          ) : transactionsData?.items.length === 0 ? (
+            <div className="p-12 text-center font-sans-brand">
+              <AlertCircle className="w-10 h-10 mx-auto mb-4 text-brand-text-faint" />
+              <p className="text-brand-text-muted text-[14px]">No transactions found</p>
+            </div>
+          ) : (
+            <>
+              {/* Select All Header - only in bulk classify mode */}
+              {bulkClassifyMode && unclassifiedTransactions.length > 0 && (
+                <div className="px-5 py-3 border-b border-brand-border bg-brand-cream/60">
+                  <button
+                    onClick={toggleSelectAllUnclassified}
+                    className="flex items-center gap-2 font-sans-brand text-[13px] font-semibold text-brand-text"
+                  >
+                    {allUnclassifiedSelected ? (
+                      <CheckSquare className="w-4 h-4 text-brand-sage" />
+                    ) : someUnclassifiedSelected ? (
+                      <Minus className="w-4 h-4 text-brand-sage" />
+                    ) : (
+                      <Square className="w-4 h-4 text-brand-text-faint" />
+                    )}
+                    Select all unclassified ({unclassifiedTransactions.length})
+                  </button>
+                </div>
+              )}
+              <div className="divide-y divide-brand-border">
+                {transactionsData?.items.map((transaction) => (
+                  <div
+                    key={transaction.id}
+                    className={`py-3 px-5 hover:bg-brand-sage-soft/40 transition-colors ${
+                      selectedTransactionIds.has(transaction.id) ? 'bg-brand-sage-soft' : ''
+                    } ${!transaction.isClassified ? 'border-l-[3px] border-brand-terracotta bg-brand-terracotta-soft/30' : ''}`}
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        {/* Checkbox - only in bulk classify mode */}
+                        {bulkClassifyMode && (
+                          <button
+                            onClick={() => toggleTransactionSelection(transaction.id)}
+                            className="shrink-0"
+                          >
+                            {selectedTransactionIds.has(transaction.id) ? (
+                              <CheckSquare className="w-4 h-4 text-brand-sage" />
+                            ) : (
+                              <Square className="w-4 h-4 text-brand-text-faint hover:text-brand-text-muted" />
+                            )}
+                          </button>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-brand-text font-sans-brand font-semibold text-[14px] truncate">
                             {transaction.merchantName || transaction.description}
                           </p>
-                        </div>
-                        <div className="flex items-center gap-3 mt-1">
-                          <span className="text-sm text-cactus-charcoal/60 font-cactus">
-                            {formatDate(transaction.transactionDate)}
-                          </span>
-                          <span className="text-sm text-cactus-charcoal/40">-</span>
-                          <span className="text-sm text-cactus-charcoal/60 font-cactus">
-                            {transaction.accountName}
-                          </span>
-                          {transaction.isClassified && transaction.macroCategoryName && (
-                            <>
-                              <span className="text-sm text-cactus-charcoal/40">-</span>
-                              <span
-                                className={`font-cactus font-semibold text-xs px-2 py-0.5 rounded-full ${getMacroCategoryColor(
-                                  categories?.find((c) => c.id === transaction.macroCategoryId)
-                                    ?.type
-                                )}`}
-                              >
-                                {transaction.macroCategoryName}
-                              </span>
-                              {transaction.categoryName && (
-                                <span className="text-sm text-cactus-charcoal/60 font-cactus">
-                                  {transaction.categoryName}
+                          <div className="flex items-center gap-2 mt-1 flex-wrap">
+                            <span className="font-sans-brand text-[12px] text-brand-text-faint tabular-lining">
+                              {formatDate(transaction.transactionDate)}
+                            </span>
+                            <span className="text-brand-text-faint">·</span>
+                            <span className="font-sans-brand text-[12px] text-brand-text-muted">
+                              {transaction.accountName}
+                            </span>
+                            {transaction.isClassified && transaction.macroCategoryName && (
+                              <>
+                                <span className="text-brand-text-faint">·</span>
+                                <span
+                                  className={`font-sans-brand font-semibold text-[11px] uppercase tracking-[0.08em] px-2 py-0.5 rounded-full ${getMacroCategoryColor(
+                                    categories?.find((c) => c.id === transaction.macroCategoryId)
+                                      ?.type
+                                  )}`}
+                                >
+                                  {transaction.macroCategoryName}
                                 </span>
-                              )}
-                            </>
-                          )}
+                                {transaction.categoryName && (
+                                  <span className="font-sans-brand text-[12px] text-brand-text-muted">
+                                    {transaction.categoryName}
+                                  </span>
+                                )}
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <span
-                        className={`font-cactus font-bold tabular-nums ${
-                          transaction.type === TransactionType.Credit
-                            ? 'text-cactus-sage'
-                            : 'text-cactus-prickly'
-                        }`}
-                      >
-                        {transaction.type === TransactionType.Credit ? '+' : '-'}
-                        {formatCurrency(Math.abs(transaction.amount))}
-                      </span>
-                      <button
-                        onClick={() => openClassifyModal(transaction)}
-                        className={`p-2 rounded-xl ${
-                          transaction.isClassified
-                            ? 'text-cactus-charcoal/40 hover:text-cactus-charcoal hover:bg-cactus-sage-light/40'
-                            : 'text-cactus-sage hover:bg-cactus-sage-light'
-                        }`}
-                        title={transaction.isClassified ? 'Reclassify' : 'Classify'}
-                      >
-                        <Tag className="w-5 h-5" />
-                      </button>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span
+                          className={`font-display font-medium tabular-lining text-[17px] ${
+                            transaction.type === TransactionType.Credit
+                              ? 'text-brand-sage'
+                              : 'text-brand-text'
+                          }`}
+                        >
+                          {transaction.type === TransactionType.Credit ? '+' : '-'}
+                          {formatCurrency(Math.abs(transaction.amount))}
+                        </span>
+                        <button
+                          onClick={() => openClassifyModal(transaction)}
+                          className={`p-2 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface transition-colors ${
+                            transaction.isClassified
+                              ? 'text-brand-text-faint hover:text-brand-text hover:bg-brand-sage-soft/60'
+                              : 'text-brand-sage hover:bg-brand-sage-soft'
+                          }`}
+                          title={transaction.isClassified ? 'Reclassify' : 'Classify'}
+                        >
+                          <Tag className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Pagination */}
-            {transactionsData && transactionsData.totalPages > 1 && (
-              <div className="flex items-center justify-between px-4 py-3 border-t border-cactus-overlay">
-                <p className="text-sm text-cactus-charcoal/60 font-cactus">
-                  Page {transactionsData.page} of {transactionsData.totalPages}
-                </p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setPage(page - 1)}
-                    disabled={page === 1}
-                    className="p-2 rounded-xl bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 disabled:opacity-40 disabled:cursor-not-allowed font-cactus font-semibold"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => setPage(page + 1)}
-                    disabled={page === transactionsData.totalPages}
-                    className="p-2 rounded-xl bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 disabled:opacity-40 disabled:cursor-not-allowed font-cactus font-semibold"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
+                ))}
               </div>
-            )}
-          </>
+
+              {/* Pagination */}
+              {transactionsData && transactionsData.totalPages > 1 && (
+                <div className="flex items-center justify-between px-5 py-3 border-t border-brand-border">
+                  <p className="font-sans-brand text-[12px] text-brand-text-muted">
+                    Page <span className="tabular-lining">{transactionsData.page}</span> of{' '}
+                    <span className="tabular-lining">{transactionsData.totalPages}</span>
+                  </p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setPage(page - 1)}
+                      disabled={page === 1}
+                      className="p-2 rounded-full bg-brand-surface border border-brand-border text-brand-text hover:bg-brand-sage-soft/60 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface transition-colors"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setPage(page + 1)}
+                      disabled={page === transactionsData.totalPages}
+                      className="p-2 rounded-full bg-brand-surface border border-brand-border text-brand-text hover:bg-brand-sage-soft/60 disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface transition-colors"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+
+        {/* Classify Modal */}
+        {showClassifyModal && selectedTransaction && (
+          <ClassifyModal
+            transaction={selectedTransaction}
+            categories={categories || []}
+            onClose={() => {
+              setShowClassifyModal(false);
+              setSelectedTransaction(null);
+            }}
+            onSuccess={() => {
+              queryClient.invalidateQueries({ queryKey: ['transactions'] });
+              queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+              setShowClassifyModal(false);
+              setSelectedTransaction(null);
+            }}
+          />
+        )}
+
+        {/* Add Transaction Modal */}
+        {showAddModal && (
+          <AddTransactionModal
+            accounts={accounts || []}
+            categories={categories || []}
+            onClose={() => setShowAddModal(false)}
+            onSuccess={() => {
+              queryClient.invalidateQueries({ queryKey: ['transactions'] });
+              queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+              setShowAddModal(false);
+            }}
+          />
+        )}
+
+        {/* Bulk Classify Modal */}
+        {showBulkClassifyModal && selectedTransactionIds.size > 0 && (
+          <BulkClassifyModal
+            transactionIds={Array.from(selectedTransactionIds)}
+            categories={categories || []}
+            onClose={() => setShowBulkClassifyModal(false)}
+            onSuccess={() => {
+              queryClient.invalidateQueries({ queryKey: ['transactions'] });
+              queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+              setShowBulkClassifyModal(false);
+              clearSelection();
+            }}
+          />
         )}
       </div>
-
-      {/* Classify Modal */}
-      {showClassifyModal && selectedTransaction && (
-        <ClassifyModal
-          transaction={selectedTransaction}
-          categories={categories || []}
-          onClose={() => {
-            setShowClassifyModal(false);
-            setSelectedTransaction(null);
-          }}
-          onSuccess={() => {
-            queryClient.invalidateQueries({ queryKey: ['transactions'] });
-            queryClient.invalidateQueries({ queryKey: ['dashboard'] });
-            setShowClassifyModal(false);
-            setSelectedTransaction(null);
-          }}
-        />
-      )}
-
-      {/* Add Transaction Modal */}
-      {showAddModal && (
-        <AddTransactionModal
-          accounts={accounts || []}
-          categories={categories || []}
-          onClose={() => setShowAddModal(false)}
-          onSuccess={() => {
-            queryClient.invalidateQueries({ queryKey: ['transactions'] });
-            queryClient.invalidateQueries({ queryKey: ['dashboard'] });
-            setShowAddModal(false);
-          }}
-        />
-      )}
-
-      {/* Bulk Classify Modal */}
-      {showBulkClassifyModal && selectedTransactionIds.size > 0 && (
-        <BulkClassifyModal
-          transactionIds={Array.from(selectedTransactionIds)}
-          categories={categories || []}
-          onClose={() => setShowBulkClassifyModal(false)}
-          onSuccess={() => {
-            queryClient.invalidateQueries({ queryKey: ['transactions'] });
-            queryClient.invalidateQueries({ queryKey: ['dashboard'] });
-            setShowBulkClassifyModal(false);
-            clearSelection();
-          }}
-        />
-      )}
     </div>
   );
 }
