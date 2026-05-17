@@ -34,6 +34,6 @@ describe('GoalsPage', () => {
 
     await user.click(screen.getByRole('button', { name: /new goal/i }));
 
-    expect(await screen.findByRole('heading', { name: /create new goal/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /create a goal/i })).toBeInTheDocument();
   });
 });
