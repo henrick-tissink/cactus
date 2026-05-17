@@ -31,17 +31,17 @@ import {
   TrendDirection,
 } from '../types';
 
-const BRAND_CHART_COLORS = {
-  needs: '#77DD77', // cactus-sage
-  wants: '#FFCC00', // cactus-desert
-  goals: '#FF6F61', // cactus-prickly
-  surplus: '#77DD77', // cactus-sage
-  deficit: '#FF6F61', // cactus-prickly
-  gridline: 'rgba(51, 51, 51, 0.06)', // cactus-overlay
-  axisText: '#333333', // cactus-charcoal
-};
 // Hex strings used directly because Recharts props don't read CSS vars at runtime.
 // If brand tokens shift, update this map alongside index.css.
+const BRAND_CHART_COLORS = {
+  needs: '#1f6f4a', // brand-sage
+  wants: '#c9743a', // brand-terracotta
+  goals: '#8c4a1e', // brand-accent-ink
+  surplus: '#1f6f4a', // brand-sage
+  deficit: '#c9743a', // brand-terracotta
+  gridline: 'rgba(235, 229, 213, 0.6)', // brand-border at ~0.6
+  axisText: '#6b5e4a', // brand-text-muted
+};
 
 const MONTH_NAMES = [
   'Jan',
@@ -70,24 +70,24 @@ const macroColorMap: Record<
 > = {
   [MacroCategoryType.Needs]: {
     chartHex: BRAND_CHART_COLORS.needs,
-    bucketBg: 'bg-cactus-sage',
-    bucketSoftBg: 'bg-cactus-needs-bg/40',
-    dotBg: 'bg-cactus-sage',
-    accentText: 'text-cactus-sage',
+    bucketBg: 'bg-brand-sage',
+    bucketSoftBg: 'bg-brand-sage-soft/60',
+    dotBg: 'bg-brand-sage',
+    accentText: 'text-brand-sage',
   },
   [MacroCategoryType.Wants]: {
     chartHex: BRAND_CHART_COLORS.wants,
-    bucketBg: 'bg-cactus-desert',
-    bucketSoftBg: 'bg-cactus-wants-bg/40',
-    dotBg: 'bg-cactus-desert',
-    accentText: 'text-cactus-desert',
+    bucketBg: 'bg-brand-terracotta',
+    bucketSoftBg: 'bg-brand-terracotta-soft/60',
+    dotBg: 'bg-brand-terracotta',
+    accentText: 'text-brand-terracotta',
   },
   [MacroCategoryType.Goals]: {
     chartHex: BRAND_CHART_COLORS.goals,
-    bucketBg: 'bg-cactus-prickly',
-    bucketSoftBg: 'bg-cactus-goals-bg/40',
-    dotBg: 'bg-cactus-prickly',
-    accentText: 'text-cactus-prickly',
+    bucketBg: 'bg-brand-accent-ink',
+    bucketSoftBg: 'bg-brand-accent-ink/10',
+    dotBg: 'bg-brand-accent-ink',
+    accentText: 'text-brand-accent-ink',
   },
 };
 
@@ -99,10 +99,10 @@ const GUIDELINE = {
 
 function LoadingState() {
   return (
-    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-cactus-sage" />
-        <span className="ml-3 text-cactus-charcoal/60 font-cactus">Loading insights...</span>
+    <div className="bg-brand-cream min-h-screen font-sans-brand p-6 md:p-10 animate-fade-in">
+      <div className="max-w-6xl mx-auto flex items-center justify-center h-64">
+        <Loader2 className="w-6 h-6 animate-spin text-brand-sage" />
+        <span className="ml-3 text-[14px] text-brand-text-muted">Loading insights…</span>
       </div>
     </div>
   );
@@ -110,13 +110,21 @@ function LoadingState() {
 
 function ErrorState({ error }: { error: Error }) {
   return (
-    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
-      <div className="bg-cactus-goals-bg border border-cactus-overlay rounded-2xl p-6 text-center">
-        <AlertCircle className="w-12 h-12 text-cactus-prickly mx-auto mb-4" />
-        <h2 className="text-lg font-cactus font-bold text-cactus-charcoal mb-2">
-          Failed to load insights
-        </h2>
-        <p className="text-cactus-charcoal font-cactus">{error.message}</p>
+    <div className="bg-brand-cream min-h-screen font-sans-brand p-6 md:p-10 animate-fade-in">
+      <div className="max-w-6xl mx-auto">
+        <div className="bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-3xl pl-6 pr-6 py-6">
+          <div className="flex items-start gap-4">
+            <AlertCircle className="w-6 h-6 shrink-0 text-brand-terracotta mt-0.5" />
+            <div>
+              <h2 className="font-display font-medium text-[1.5rem] leading-[1.1] tracking-[-0.018em] text-brand-text">
+                Failed to load insights
+              </h2>
+              <p className="text-[14px] text-brand-accent-ink mt-2 leading-relaxed">
+                {error.message}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -124,20 +132,31 @@ function ErrorState({ error }: { error: Error }) {
 
 function EmptyState() {
   return (
-    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
-      <div className="mb-8">
-        <h1 className="text-cactus-charcoal font-cactus font-bold text-2xl">Insights</h1>
-        <p className="text-cactus-charcoal/60 font-cactus">
-          Analyze your spending trends and patterns.
-        </p>
-      </div>
-      <div className="bg-white border border-cactus-overlay rounded-2xl p-12 text-center">
-        <TrendingUp className="w-16 h-16 text-cactus-charcoal/40 mx-auto mb-4" />
-        <h2 className="text-xl font-cactus font-bold text-cactus-charcoal mb-2">No insights yet</h2>
-        <p className="text-cactus-charcoal/60 font-cactus max-w-md mx-auto">
-          Start tracking your transactions and spending to see insights about your financial trends.
-          Insights will appear after you have transaction data for at least one month.
-        </p>
+    <div className="bg-brand-cream min-h-screen font-sans-brand p-6 md:p-10 animate-fade-in">
+      <div className="max-w-6xl mx-auto">
+        <header className="mb-8">
+          <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+            Patterns
+          </p>
+          <h1 className="font-display font-medium text-[2.25rem] leading-[1.05] tracking-[-0.018em] text-brand-text">
+            Insights.
+          </h1>
+          <p className="text-[14px] text-brand-text-muted leading-relaxed mt-2">
+            Analyze your spending trends and patterns.
+          </p>
+        </header>
+        <div className="bg-brand-surface border border-brand-border rounded-3xl p-12 text-center shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+          <div className="inline-flex p-4 bg-brand-sage-soft rounded-3xl mb-4">
+            <TrendingUp className="w-10 h-10 text-brand-sage" />
+          </div>
+          <h2 className="font-display font-medium text-[1.5rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-2">
+            No insights yet
+          </h2>
+          <p className="text-[14px] text-brand-text-muted max-w-md mx-auto leading-relaxed">
+            Start tracking your transactions and spending to see insights about your financial
+            trends. Insights will appear after you have transaction data for at least one month.
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -147,25 +166,25 @@ function TrendSummaryCard({ trendDirection }: { trendDirection: TrendDirection }
   const trendConfig = {
     [TrendDirection.Improving]: {
       icon: TrendingUp,
-      iconColor: 'text-cactus-sage',
-      cardBg: 'bg-cactus-sage-light',
-      iconBg: 'bg-cactus-sage-light',
+      iconColor: 'text-brand-sage',
+      iconBg: 'bg-brand-sage-soft',
+      accentBorder: 'border-brand-sage',
       title: 'Improving',
       message: "You're improving! Your savings rate has increased in recent months.",
     },
     [TrendDirection.Stable]: {
       icon: Minus,
-      iconColor: 'text-cactus-charcoal/60',
-      cardBg: 'bg-white',
-      iconBg: 'bg-cactus-sandstone',
+      iconColor: 'text-brand-text-muted',
+      iconBg: 'bg-brand-border/50',
+      accentBorder: 'border-brand-border',
       title: 'Stable',
       message: "You're maintaining a consistent spending pattern. Keep it up!",
     },
     [TrendDirection.Declining]: {
       icon: TrendingDown,
-      iconColor: 'text-cactus-prickly',
-      cardBg: 'bg-cactus-goals-bg',
-      iconBg: 'bg-cactus-goals-bg',
+      iconColor: 'text-brand-terracotta',
+      iconBg: 'bg-brand-terracotta-soft',
+      accentBorder: 'border-brand-terracotta',
       title: 'Declining',
       message: 'Consider adjusting your spending. Your savings rate has decreased recently.',
     },
@@ -175,16 +194,23 @@ function TrendSummaryCard({ trendDirection }: { trendDirection: TrendDirection }
   const Icon = config.icon;
 
   return (
-    <div className={`${config.cardBg} border border-cactus-overlay rounded-2xl p-6`}>
+    <div
+      className={`bg-brand-surface border border-brand-border border-l-[3px] ${config.accentBorder} rounded-3xl p-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]`}
+    >
       <div className="flex items-center gap-4">
-        <div className={`p-3 rounded-full ${config.iconBg}`}>
-          <Icon className={`w-8 h-8 ${config.iconColor}`} />
+        <div className={`p-3 rounded-2xl ${config.iconBg}`}>
+          <Icon className={`w-7 h-7 ${config.iconColor}`} />
         </div>
         <div>
-          <h3 className="text-lg font-cactus font-bold text-cactus-charcoal">
-            Trend: {config.title}
+          <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+            Trend
+          </p>
+          <h3 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text">
+            {config.title}
           </h3>
-          <p className="text-cactus-charcoal/70 font-cactus mt-1">{config.message}</p>
+          <p className="text-[14px] text-brand-text-muted mt-1.5 leading-relaxed">
+            {config.message}
+          </p>
         </div>
       </div>
     </div>
@@ -254,21 +280,23 @@ function CircularProgress({
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-2xl text-cactus-charcoal font-cactus font-bold tabular-nums">
+          <span className="font-display font-medium tabular-lining text-[1.625rem] text-brand-text">
             {percentage.toFixed(0)}%
           </span>
         </div>
       </div>
-      <p className="mt-3 font-cactus font-semibold text-cactus-charcoal">{label}</p>
-      <p className="text-sm font-cactus text-cactus-charcoal/60">
+      <p className="mt-3 text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted">
+        {label}
+      </p>
+      <p className="text-[12px] mt-1">
         {isAboveGuideline ? (
-          <span className="text-cactus-prickly">
+          <span className="text-brand-terracotta">
             +{diff}% above {guideline}% guideline
           </span>
         ) : percentage === guideline ? (
-          <span className="text-cactus-sage">On target ({guideline}%)</span>
+          <span className="text-brand-sage">On target ({guideline}%)</span>
         ) : (
-          <span className="text-cactus-sage">
+          <span className="text-brand-sage">
             {diff}% below {guideline}% guideline
           </span>
         )}
@@ -279,9 +307,12 @@ function CircularProgress({
 
 function AverageSplitCard({ data }: { data: InsightsData }) {
   return (
-    <div className="bg-white border border-cactus-overlay rounded-2xl p-6">
-      <h3 className="text-lg text-cactus-charcoal font-cactus font-bold mb-6">
-        Average N/W/G Split
+    <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+      <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+        Average
+      </p>
+      <h3 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-6">
+        N/W/G split
       </h3>
       <div className="grid grid-cols-3 gap-8">
         <CircularProgress
@@ -303,9 +334,9 @@ function AverageSplitCard({ data }: { data: InsightsData }) {
           macroType={MacroCategoryType.Goals}
         />
       </div>
-      <div className="mt-6 pt-4 border-t border-cactus-overlay">
-        <p className="text-sm font-cactus text-cactus-charcoal/60 text-center">
-          Compared to the 50/30/20 guideline (Needs/Wants/Goals)
+      <div className="mt-6 pt-4 border-t border-brand-border">
+        <p className="text-[12px] text-brand-text-faint text-center">
+          Compared to the 50/30/20 guideline (Needs / Wants / Goals)
         </p>
       </div>
     </div>
@@ -321,9 +352,12 @@ function MonthlyTrendChart({ monthlyBreakdowns }: { monthlyBreakdowns: MonthlyBr
   }));
 
   return (
-    <div className="bg-white border border-cactus-overlay rounded-2xl p-5">
-      <h3 className="text-lg text-cactus-charcoal font-cactus font-bold mb-6">
-        Monthly Spending Trend
+    <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+      <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+        Monthly
+      </p>
+      <h3 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-6">
+        Spending trend
       </h3>
       <div className="h-72">
         <ResponsiveContainer width="100%" height="100%">
@@ -342,13 +376,15 @@ function MonthlyTrendChart({ monthlyBreakdowns }: { monthlyBreakdowns: MonthlyBr
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: '#FFFFFF',
-                border: '1px solid rgba(51,51,51,0.06)',
+                backgroundColor: '#ffffff',
+                border: '1px solid #ebe5d5',
                 borderRadius: 12,
+                fontSize: 13,
+                color: '#2d2418',
               }}
               formatter={(value) => [`${Number(value).toFixed(1)}%`]}
             />
-            <Legend />
+            <Legend wrapperStyle={{ fontSize: 12, color: '#6b5e4a' }} />
             <Line
               type="monotone"
               dataKey="Needs"
@@ -394,18 +430,27 @@ function SurplusDeficitChart({
   }));
 
   return (
-    <div className="bg-white border border-cactus-overlay rounded-2xl p-5">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg text-cactus-charcoal font-cactus font-bold">
-          Monthly Surplus/Deficit
-        </h3>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-cactus text-cactus-charcoal/60">Average:</span>
+    <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+      <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
+        <div>
+          <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+            Monthly
+          </p>
+          <h3 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text">
+            Surplus / deficit
+          </h3>
+        </div>
+        <div className="flex items-baseline gap-2">
+          <span className="text-[11px] uppercase tracking-[0.14em] font-semibold text-brand-text-faint">
+            Average
+          </span>
           <span
-            className={`text-lg font-cactus font-bold tabular-nums ${averageSurplus >= 0 ? 'text-cactus-sage' : 'text-cactus-prickly'}`}
+            className={`font-display font-medium tabular-lining text-[1.25rem] ${averageSurplus >= 0 ? 'text-brand-sage' : 'text-brand-terracotta'}`}
           >
             R{Math.abs(averageSurplus).toLocaleString()}
-            {averageSurplus >= 0 ? ' surplus' : ' deficit'}
+          </span>
+          <span className="text-[12px] text-brand-text-muted">
+            {averageSurplus >= 0 ? 'surplus' : 'deficit'}
           </span>
         </div>
       </div>
@@ -425,9 +470,11 @@ function SurplusDeficitChart({
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: '#FFFFFF',
-                border: '1px solid rgba(51,51,51,0.06)',
+                backgroundColor: '#ffffff',
+                border: '1px solid #ebe5d5',
                 borderRadius: 12,
+                fontSize: 13,
+                color: '#2d2418',
               }}
               formatter={(value) => {
                 const numValue = Number(value);
@@ -446,14 +493,14 @@ function SurplusDeficitChart({
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="mt-4 flex items-center justify-center gap-6 text-sm font-cactus">
+      <div className="mt-4 flex items-center justify-center gap-6 text-[12px]">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-cactus-sage" />
-          <span className="text-cactus-charcoal/60">Surplus</span>
+          <div className="w-3 h-3 rounded bg-brand-sage" />
+          <span className="text-brand-text-muted">Surplus</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-cactus-prickly" />
-          <span className="text-cactus-charcoal/60">Deficit</span>
+          <div className="w-3 h-3 rounded bg-brand-terracotta" />
+          <span className="text-brand-text-muted">Deficit</span>
         </div>
       </div>
     </div>
@@ -483,11 +530,14 @@ function CategoryAveragesCard({ categoryAverages }: { categoryAverages: Category
 
   if (categoryAverages.length === 0) {
     return (
-      <div className="bg-white border border-cactus-overlay rounded-2xl p-6">
-        <h3 className="text-lg text-cactus-charcoal font-cactus font-bold mb-4">
-          Category Averages
+      <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+        <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+          By category
+        </p>
+        <h3 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-4">
+          Category averages
         </h3>
-        <p className="text-cactus-charcoal/60 font-cactus text-center py-8">
+        <p className="text-[14px] text-brand-text-muted text-center py-8 leading-relaxed">
           Classify your transactions to unlock spending insights by category.
         </p>
       </div>
@@ -495,8 +545,13 @@ function CategoryAveragesCard({ categoryAverages }: { categoryAverages: Category
   }
 
   return (
-    <div className="bg-white border border-cactus-overlay rounded-2xl p-6">
-      <h3 className="text-lg text-cactus-charcoal font-cactus font-bold mb-6">Category Averages</h3>
+    <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+      <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+        By category
+      </p>
+      <h3 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-6">
+        Category averages
+      </h3>
       <div className="space-y-6">
         {macroOrder.map((macroType) => {
           const categories = groupedCategories[macroType];
@@ -507,11 +562,11 @@ function CategoryAveragesCard({ categoryAverages }: { categoryAverages: Category
           return (
             <div
               key={macroType}
-              className={`${color.bucketSoftBg} border border-cactus-overlay rounded-2xl p-4`}
+              className={`${color.bucketSoftBg} border border-brand-border rounded-2xl p-4`}
             >
               <div className="flex items-center gap-2 mb-3">
-                <div className={`w-3 h-3 rounded-full ${color.dotBg}`} />
-                <h4 className="font-cactus font-bold text-cactus-charcoal">
+                <div className={`w-2.5 h-2.5 rounded-full ${color.dotBg}`} />
+                <h4 className="text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text">
                   {macroNames[macroType]}
                 </h4>
               </div>
@@ -519,19 +574,21 @@ function CategoryAveragesCard({ categoryAverages }: { categoryAverages: Category
                 {categories.slice(0, 5).map((cat) => (
                   <div
                     key={cat.categoryId}
-                    className="flex items-center justify-between py-2 px-3 rounded-xl bg-white border border-cactus-overlay"
+                    className="flex items-center justify-between gap-3 py-2 px-3 rounded-xl bg-brand-surface border border-brand-border"
                   >
-                    <span className="text-cactus-charcoal font-cactus font-semibold">
+                    <span className="text-[14px] text-brand-text font-semibold truncate">
                       {cat.categoryName}
                     </span>
-                    <span className="font-cactus font-bold tabular-nums text-cactus-charcoal">
+                    <span className="font-display font-medium tabular-lining text-[15px] text-brand-text shrink-0">
                       R{cat.averageAmount.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                      <span className="text-cactus-charcoal/60 text-sm font-normal">/mo</span>
+                      <span className="text-brand-text-faint text-[12px] font-sans-brand font-normal ml-0.5">
+                        /mo
+                      </span>
                     </span>
                   </div>
                 ))}
                 {categories.length > 5 && (
-                  <p className="text-sm font-cactus text-cactus-charcoal/60 text-center py-1">
+                  <p className="text-[12px] text-brand-text-faint text-center py-1">
                     +{categories.length - 5} more categories
                   </p>
                 )}
@@ -567,11 +624,14 @@ function GuidelineComparisonCard({ data }: { data: InsightsData }) {
   ];
 
   return (
-    <div className="bg-white border border-cactus-overlay rounded-2xl p-6">
-      <h3 className="text-lg text-cactus-charcoal font-cactus font-bold mb-4">
-        vs. 50/30/20 Guideline
+    <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+      <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+        Benchmark
+      </p>
+      <h3 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-5">
+        vs. 50/30/20
       </h3>
-      <div className="space-y-4">
+      <div className="space-y-5">
         {comparisons.map(({ label, actual, guideline, macroType }) => {
           const diff = actual - guideline;
           const isGood =
@@ -584,42 +644,44 @@ function GuidelineComparisonCard({ data }: { data: InsightsData }) {
           return (
             <div key={label} className="flex items-center gap-4">
               <div className="w-16">
-                <span className={`font-cactus font-semibold ${color.accentText}`}>{label}</span>
+                <span
+                  className={`text-[11px] uppercase tracking-[0.18em] font-semibold ${color.accentText}`}
+                >
+                  {label}
+                </span>
               </div>
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm font-cactus font-bold tabular-nums text-cactus-charcoal">
+                <div className="flex items-baseline gap-2 mb-1.5">
+                  <span className="font-display font-medium tabular-lining text-[15px] text-brand-text">
                     {actual.toFixed(1)}%
                   </span>
-                  <span className="text-sm font-cactus text-cactus-charcoal/40">vs</span>
-                  <span className="text-sm font-cactus font-bold tabular-nums text-cactus-charcoal/60">
+                  <span className="text-[12px] text-brand-text-faint">vs</span>
+                  <span className="font-display font-medium tabular-lining text-[13px] text-brand-text-muted">
                     {guideline}%
                   </span>
                 </div>
-                <div className="relative h-2 bg-cactus-overlay rounded-xl overflow-hidden">
+                <div className="relative h-2 bg-brand-border/60 rounded-full overflow-hidden">
                   <div
                     className={`h-full ${color.bucketBg} transition-all duration-500`}
                     style={{ width: `${Math.min(actual, 100)}%` }}
                   />
                   {/* Guideline marker */}
                   <div
-                    className="absolute top-0 bottom-0 w-px bg-cactus-charcoal/40"
+                    className="absolute top-0 bottom-0 w-px bg-brand-text/40"
                     style={{ left: `${guidelineLeftPct}%` }}
                   />
                 </div>
               </div>
               <div className="w-24 text-right">
                 {isGood ? (
-                  <span className="inline-flex items-center gap-1 text-sm font-cactus text-cactus-sage">
-                    <CheckCircle className="w-4 h-4" />
+                  <span className="inline-flex items-center gap-1 text-[12px] text-brand-sage font-semibold">
+                    <CheckCircle className="w-3.5 h-3.5" />
                     On track
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 text-sm font-cactus text-cactus-prickly">
-                    <AlertTriangle className="w-4 h-4" />
-                    <span className="font-bold tabular-nums">
-                      {Math.abs(diff).toFixed(1)}%
-                    </span>{' '}
+                  <span className="inline-flex items-center gap-1 text-[12px] text-brand-terracotta font-semibold">
+                    <AlertTriangle className="w-3.5 h-3.5" />
+                    <span className="tabular-lining">{Math.abs(diff).toFixed(1)}%</span>{' '}
                     {diff > 0 ? 'over' : 'under'}
                   </span>
                 )}
@@ -663,42 +725,46 @@ export function InsightsPage() {
   const startMonth = sixMonthsAgo.toLocaleDateString('en-ZA', { month: 'long', year: 'numeric' });
 
   return (
-    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-cactus-charcoal font-cactus font-bold text-2xl">Insights</h1>
-        <p className="text-cactus-charcoal/60 font-cactus">
-          {startMonth} - {endMonth}
-        </p>
-      </div>
+    <div className="bg-brand-cream min-h-screen font-sans-brand p-6 md:p-10 animate-fade-in">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <header className="mb-8">
+          <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+            {startMonth} – {endMonth}
+          </p>
+          <h1 className="font-display font-medium text-[2.25rem] leading-[1.05] tracking-[-0.018em] text-brand-text">
+            Insights.
+          </h1>
+        </header>
 
-      {/* Trend Summary */}
-      <div className="mb-6">
-        <TrendSummaryCard trendDirection={insights.trendDirection} />
-      </div>
+        {/* Trend Summary */}
+        <div className="mb-6">
+          <TrendSummaryCard trendDirection={insights.trendDirection} />
+        </div>
 
-      {/* Average Split and Guideline Comparison */}
-      <div className="grid grid-cols-2 gap-6 mb-6">
-        <AverageSplitCard data={insights} />
-        <GuidelineComparisonCard data={insights} />
-      </div>
+        {/* Average Split and Guideline Comparison */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <AverageSplitCard data={insights} />
+          <GuidelineComparisonCard data={insights} />
+        </div>
 
-      {/* Monthly Trend Chart */}
-      <div className="mb-6">
-        <MonthlyTrendChart monthlyBreakdowns={insights.monthlyBreakdowns} />
-      </div>
+        {/* Monthly Trend Chart */}
+        <div className="mb-6">
+          <MonthlyTrendChart monthlyBreakdowns={insights.monthlyBreakdowns} />
+        </div>
 
-      {/* Surplus/Deficit Chart */}
-      <div className="mb-6">
-        <SurplusDeficitChart
-          monthlyBreakdowns={insights.monthlyBreakdowns}
-          averageSurplus={insights.averageSurplus}
-        />
-      </div>
+        {/* Surplus/Deficit Chart */}
+        <div className="mb-6">
+          <SurplusDeficitChart
+            monthlyBreakdowns={insights.monthlyBreakdowns}
+            averageSurplus={insights.averageSurplus}
+          />
+        </div>
 
-      {/* Category Averages */}
-      <div className="mb-6">
-        <CategoryAveragesCard categoryAverages={insights.categoryAverages} />
+        {/* Category Averages */}
+        <div className="mb-6">
+          <CategoryAveragesCard categoryAverages={insights.categoryAverages} />
+        </div>
       </div>
     </div>
   );
