@@ -20,8 +20,8 @@ describe('CactusLogo', () => {
     expect(container.firstChild).toHaveClass('my-custom-class');
   });
 
-  it('renders the dark-tone variant with mint wordmark color', () => {
+  it('renders the dark-tone variant with cream wordmark color', () => {
     render(<CactusLogo tone="dark" />);
-    expect(screen.getByText('cactus')).toHaveClass('text-cactus-mint');
+    expect(screen.getByText('cactus')).toHaveClass('text-brand-cream');
   });
 });

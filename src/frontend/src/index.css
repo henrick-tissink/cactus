@@ -1,25 +1,12 @@
 @import 'tailwindcss';
 
-/* Self-hosted fonts. PR-1 added Fraunces + Inter; PR-2 (2026-05-13) flipped --font-cactus to Inter and removed the Quicksand CDN import. */
+/* Self-hosted fonts. PR-1 added Fraunces + Inter. */
 @import '@fontsource-variable/fraunces/wght.css';
 @import '@fontsource-variable/fraunces/wght-italic.css';
 @import '@fontsource-variable/inter/wght.css';
 
-/* ── Cactus brand tokens — registered with Tailwind v4 ── */
+/* ── Axis H brand tokens — registered with Tailwind v4 ── */
 @theme {
-  --color-cactus-charcoal: #2d2418;
-  --color-cactus-sage: #1f6f4a;
-  --color-cactus-sage-light: #e8f5ee;
-  --color-cactus-desert: #ffcc00;
-  --color-cactus-prickly: #c9743a;
-  --color-cactus-sandstone: #faf5ec;
-  --color-cactus-mint: #e8f5ee;
-  --color-cactus-needs-bg: #e6f9e6;
-  --color-cactus-wants-bg: #fff5e0;
-  --color-cactus-goals-bg: #ffe8e8;
-  --color-cactus-overlay: rgba(51, 51, 51, 0.06);
-
-  /* ── Axis H brand tokens (2026-05-13) — coexist with cactus-* until PR-8 cleanup ── */
   --color-brand-cream: #faf5ec;
   --color-brand-surface: #ffffff;
   --color-brand-border: #ebe5d5;
@@ -44,8 +31,6 @@
   --radius-2xl: 20px;
   --radius-pill: 9999px;
 
-  --font-cactus: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
-
   --animate-fade-up: fadeUp 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
@@ -62,9 +47,9 @@
 
 /* ── Base ── */
 body {
-  font-family: var(--font-cactus);
-  background-color: var(--color-cactus-sandstone);
-  color: var(--color-cactus-charcoal);
+  font-family: var(--font-sans-brand);
+  background-color: var(--color-brand-cream);
+  color: var(--color-brand-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -158,15 +143,15 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(51, 51, 51, 0.15);
+  background: rgba(45, 36, 24, 0.15);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(51, 51, 51, 0.3);
+  background: rgba(45, 36, 24, 0.3);
 }
 
 /* ── Phase 2 slider thumb (cross-browser) ── */
-.cactus-slider {
+.brand-slider {
   -webkit-appearance: none;
   appearance: none;
   outline: none;
@@ -174,7 +159,7 @@ body {
   height: 8px;
   border-radius: 4px;
 }
-.cactus-slider::-webkit-slider-thumb {
+.brand-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 24px;
   height: 24px;
@@ -185,7 +170,7 @@ body {
   cursor: pointer;
   margin-top: -8px;
 }
-.cactus-slider::-moz-range-thumb {
+.brand-slider::-moz-range-thumb {
   width: 20px;
   height: 20px;
   border-radius: 50%;

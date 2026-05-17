@@ -15,9 +15,9 @@ export function Dots({ current, total, className = '' }: DotsProps) {
             key={i}
             data-dot
             data-active={active}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              isCurrent ? 'w-7' : 'w-2'
-            } ${active ? 'bg-cactus-sage' : 'bg-cactus-overlay'}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              isCurrent ? 'w-8' : 'w-1.5'
+            } ${active ? 'bg-brand-sage' : 'bg-brand-border'}`}
           />
         );
       })}
