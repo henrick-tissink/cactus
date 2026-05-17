@@ -26,7 +26,7 @@ describe('FinalScreen', () => {
 
   it('renders the all-set splash with goal summary', () => {
     renderWithProviders(<FinalScreen goalType="save" monthlyGoalAmount={5000} />);
-    expect(screen.getByRole('heading', { name: /you're all set/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /you're ready/i })).toBeInTheDocument();
     expect(screen.getByText(/r5[\s,]000/i)).toBeInTheDocument();
   });
 

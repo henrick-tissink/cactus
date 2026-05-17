@@ -25,7 +25,7 @@ describe('GoalPickScreen', () => {
     await waitFor(() =>
       expect(screen.getByText(/building a safety net first/i)).toBeInTheDocument()
     );
-    expect(screen.getByText(/recommended for you/i)).toBeInTheDocument();
+    expect(screen.getByText(/^recommended$/i)).toBeInTheDocument();
   });
 
   it('renders all 3 goal options', async () => {
@@ -56,7 +56,7 @@ describe('GoalPickScreen', () => {
     const onContinue = vi.fn();
     renderWithProviders(<GoalPickScreen onContinue={onContinue} />);
 
-    await waitFor(() => expect(screen.getByText(/recommended for you/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/^recommended$/i)).toBeInTheDocument());
 
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: /reduce my debt/i }));
@@ -81,7 +81,7 @@ describe('GoalPickScreen', () => {
     );
     renderWithProviders(<GoalPickScreen onContinue={() => {}} />);
 
-    await waitFor(() => expect(screen.getByText(/recommended for you/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/^recommended$/i)).toBeInTheDocument());
     expect(screen.getByRole('button', { name: /lock in this goal/i })).toBeDisabled();
   });
 });
