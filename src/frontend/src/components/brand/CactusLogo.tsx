@@ -6,8 +6,8 @@ interface CactusLogoProps {
 }
 
 export function CactusLogo({ className = '', tone = 'light' }: CactusLogoProps) {
-  const wordmarkClass = tone === 'dark' ? 'text-cactus-mint' : 'text-cactus-charcoal';
-  const glyphClass = tone === 'dark' ? 'text-cactus-mint' : 'text-cactus-sage';
+  const wordmarkClass = tone === 'dark' ? 'text-brand-cream' : 'text-brand-text';
+  const glyphClass = tone === 'dark' ? 'text-brand-cream' : 'text-brand-sage';
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <CactusGlyph className={glyphClass} size={28} />

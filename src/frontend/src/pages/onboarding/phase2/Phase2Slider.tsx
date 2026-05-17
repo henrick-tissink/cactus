@@ -89,7 +89,7 @@ export function Phase2Slider({ onContinue }: Phase2SliderProps) {
               value={income}
               onChange={(e) => setIncome(parseInt(e.target.value))}
               aria-label="Income amount"
-              className="cactus-slider w-4/5"
+              className="brand-slider w-4/5"
               style={sliderStyle(COLOR_MUTED, income - 5000, 145000)}
             />
             <p className="font-sans-brand text-[12px] text-brand-text-faint mt-2 m-0">
@@ -228,7 +228,7 @@ function SliderRow({
         value={value}
         onChange={(e) => onChange(parseInt(e.target.value))}
         aria-label={inputAriaLabel}
-        className="cactus-slider"
+        className="brand-slider"
         style={sliderStyle(colorHex, value)}
       />
     </div>

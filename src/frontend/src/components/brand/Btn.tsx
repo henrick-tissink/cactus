@@ -13,7 +13,7 @@ export function Btn({ children, onClick, disabled = false, className = '' }: Btn
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`w-full px-6 py-4 rounded-2xl font-semibold text-base text-white transition-all bg-cactus-sage shadow-[0_4px_16px_rgba(31,111,74,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed ${className}`}
+      className={`w-full px-6 py-4 rounded-2xl font-semibold text-base text-white transition-all bg-brand-sage shadow-[0_4px_16px_rgba(31,111,74,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-brand-border disabled:text-brand-text-faint disabled:shadow-none disabled:cursor-not-allowed ${className}`}
     >
       {children}
     </button>

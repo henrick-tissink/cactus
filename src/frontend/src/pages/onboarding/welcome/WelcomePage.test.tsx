@@ -15,7 +15,7 @@ describe('WelcomePage', () => {
     const user = userEvent.setup();
     renderWithProviders(<WelcomePage />);
 
-    expect(screen.getByRole('heading', { name: /welcome to cactus/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /let's get to know/i })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /let's do this/i }));
 
     expect(screen.getByRole('heading', { name: /what matters most/i })).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('WelcomePage', () => {
     await user.click(screen.getByRole('button', { name: /credit card debt/i }));
     await user.click(screen.getByRole('button', { name: /^finish$/i }));
 
-    expect(screen.getByRole('heading', { name: /nice one/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /hard part done/i })).toBeInTheDocument();
   });
 
   it('persists answers in localStorage as questions are answered', async () => {
