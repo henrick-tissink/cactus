@@ -59,33 +59,36 @@ export function EstimateScreen({ selectedNeeds, selectedWants, onContinue }: Est
   });
 
   return (
-    <div className="flex flex-col min-h-screen bg-cactus-sandstone font-cactus px-6 animate-fade-up">
-      <div className="flex-1 pt-6 overflow-auto">
-        <div className="text-4xl mb-2.5" aria-hidden="true">
+    <div className="flex flex-col min-h-screen bg-brand-cream font-sans-brand px-6 animate-fade-up">
+      <div className="flex-1 pt-7 overflow-auto">
+        <div className="text-3xl mb-3" aria-hidden="true">
           ⚡
         </div>
-        <h1 className="font-cactus font-bold text-[21px] text-cactus-charcoal m-0 mb-1.5">
-          Quick estimates
+        <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+          Ballpark
+        </p>
+        <h1 className="font-display font-medium text-[1.625rem] leading-[1.1] tracking-[-0.018em] text-brand-text m-0 mb-2">
+          Quick estimates.
         </h1>
-        <p className="font-cactus text-[13.5px] text-cactus-charcoal/40 font-medium m-0 mb-1 leading-relaxed">
+        <p className="font-sans-brand text-[13.5px] text-brand-text-muted m-0 mb-3 leading-relaxed">
           Roughly how much do you spend per month on each? Don't overthink it — ballpark is perfect.
         </p>
-        <div className="inline-flex items-center gap-1.5 bg-cactus-needs-bg rounded-lg py-1.5 px-2.5 mb-5 mt-2">
+        <div className="inline-flex items-center gap-1.5 bg-brand-sage-soft/60 border border-brand-sage/20 rounded-full py-1 px-3 mb-5">
           <span className="text-sm" aria-hidden="true">
             ⏱️
           </span>
-          <span className="font-cactus text-xs font-semibold text-cactus-charcoal/50">
-            Should take less than 5 minutes
+          <span className="font-sans-brand text-[11px] uppercase tracking-[0.14em] font-semibold text-brand-sage">
+            Less than 5 minutes
           </span>
         </div>
-        <p className="font-cactus text-[11.5px] text-cactus-charcoal/40 font-medium m-0 mb-4 leading-relaxed">
+        <p className="font-sans-brand text-[12px] text-brand-text-faint m-0 mb-6 leading-relaxed">
           The real numbers will flow in once your bank is connected. This is just to get you started
           — momentum is what matters. 🚀
         </p>
 
         <EstimateBucket
           label="Needs"
-          dotClass="bg-cactus-sage"
+          dotClass="bg-brand-sage"
           rows={needsRows}
           amounts={amounts}
           setAmount={setAmount}
@@ -93,7 +96,7 @@ export function EstimateScreen({ selectedNeeds, selectedWants, onContinue }: Est
         />
         <EstimateBucket
           label="Wants"
-          dotClass="bg-cactus-desert"
+          dotClass="bg-brand-terracotta"
           rows={wantsRows}
           amounts={amounts}
           setAmount={setAmount}
@@ -101,11 +104,11 @@ export function EstimateScreen({ selectedNeeds, selectedWants, onContinue }: Est
         />
 
         {grandTotal > 0 && (
-          <div className="bg-cactus-sandstone/80 border border-cactus-overlay rounded-xl py-3 px-3.5 flex justify-between items-center mb-2">
-            <span className="font-cactus font-bold text-sm text-cactus-charcoal">
+          <div className="bg-brand-surface border border-brand-border rounded-2xl py-3.5 px-4 flex justify-between items-center mb-3">
+            <span className="font-sans-brand font-semibold text-[14px] text-brand-text">
               Estimated monthly spend
             </span>
-            <span className="font-cactus font-bold text-base text-cactus-charcoal">
+            <span className="font-display font-medium tabular-lining text-[1.125rem] text-brand-text">
               {fmt(grandTotal)}
             </span>
           </div>
@@ -131,34 +134,35 @@ interface EstimateBucketProps {
 
 function EstimateBucket({ label, dotClass, rows, amounts, setAmount, total }: EstimateBucketProps) {
   return (
-    <div className="mb-5">
-      <div className="flex items-center gap-1.5 mb-2">
-        <div className={`w-2.5 h-2.5 rounded-sm ${dotClass}`} />
-        <span className="font-cactus font-bold text-sm text-cactus-charcoal">{label}</span>
-        <span className="font-cactus font-semibold text-xs text-cactus-charcoal/30 ml-auto">
+    <div className="mb-6">
+      <div className="flex items-center gap-2 mb-3">
+        <div className={`w-2 h-2 rounded-full ${dotClass}`} />
+        <span className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text">
+          {label}
+        </span>
+        <span className="font-display font-medium tabular-lining text-[13px] text-brand-text-faint ml-auto">
           {fmt(total)}
         </span>
       </div>
       {rows.map((row) => (
-        <div
-          key={row.name}
-          className="flex items-center gap-2.5 py-2.5 border-b border-cactus-overlay"
-        >
+        <div key={row.name} className="flex items-center gap-3 py-3 border-b border-brand-border">
           <span className="text-lg shrink-0" aria-hidden="true">
             {row.icon}
           </span>
-          <span className="font-cactus font-semibold text-sm text-cactus-charcoal flex-1">
+          <span className="font-sans-brand font-semibold text-[14px] text-brand-text flex-1">
             {row.name}
           </span>
-          <div className="flex items-center gap-0.5 bg-cactus-sandstone rounded-lg py-2 px-3 w-[110px]">
-            <span className="font-cactus font-semibold text-sm text-cactus-charcoal/40">R</span>
+          <div className="flex items-center gap-1 bg-brand-cream/60 border border-brand-border focus-within:border-brand-sage focus-within:bg-brand-surface focus-within:ring-2 focus-within:ring-brand-sage/15 rounded-xl py-2 px-3 w-[120px] transition-all">
+            <span className="font-display font-medium tabular-lining text-[14px] text-brand-text-faint">
+              R
+            </span>
             <input
               type="text"
               inputMode="numeric"
               value={amounts[row.name] ?? ''}
               onChange={(e) => setAmount(row.name, e.target.value)}
               placeholder="0"
-              className="border-none bg-transparent outline-none font-cactus font-semibold text-sm text-cactus-charcoal w-full text-right"
+              className="border-none bg-transparent outline-none font-display font-medium tabular-lining text-[14px] text-brand-text placeholder:text-brand-text-faint w-full text-right"
             />
           </div>
         </div>

@@ -61,24 +61,27 @@ export function GoalDetailScreen({
   });
 
   return (
-    <div className="flex flex-col min-h-screen bg-cactus-sandstone font-cactus px-6 animate-fade-up">
+    <div className="flex flex-col min-h-screen bg-brand-cream font-sans-brand px-6 animate-fade-up">
       <div className="flex-1 pt-7 overflow-auto">
-        <div className="text-4xl mb-3" aria-hidden="true">
+        <div className="text-3xl mb-3" aria-hidden="true">
           {c.emoji}
         </div>
-        <h1 className="font-cactus font-bold text-[21px] text-cactus-charcoal m-0 mb-1.5 leading-tight">
+        <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+          Goal detail
+        </p>
+        <h1 className="font-display font-medium text-[1.625rem] leading-[1.1] tracking-[-0.018em] text-brand-text m-0 mb-2">
           {c.title}
         </h1>
-        <p className="font-cactus text-[13.5px] text-cactus-charcoal/40 font-medium m-0 mb-6 leading-relaxed">
+        <p className="font-sans-brand text-[13.5px] text-brand-text-muted m-0 mb-7 leading-relaxed">
           {c.subtitle}
         </p>
 
-        <label className="font-cactus font-semibold text-[13px] text-cactus-charcoal/50 block mb-2">
+        <label className="block font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
           Target amount
         </label>
         <MoneyInput value={amount} onChange={setAmount} placeholder={c.amountPlaceholder} />
 
-        <label className="font-cactus font-semibold text-[13px] text-cactus-charcoal/50 block mb-2 mt-5">
+        <label className="block font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2 mt-5">
           I want to reach this in
         </label>
         <div className="flex items-center gap-2.5">
@@ -88,36 +91,36 @@ export function GoalDetailScreen({
             value={months}
             onChange={(e) => setMonths(e.target.value.replace(/[^0-9]/g, ''))}
             placeholder="e.g. 12"
-            className="flex-1 bg-white border-2 border-cactus-overlay rounded-xl py-3 px-4 font-cactus font-bold text-lg text-cactus-charcoal outline-none focus:border-cactus-sage"
+            className="flex-1 bg-brand-cream/40 border border-brand-border focus:border-brand-sage focus:bg-brand-surface focus:ring-2 focus:ring-brand-sage/15 rounded-xl py-3 px-4 font-display font-medium tabular-lining text-[1.125rem] text-brand-text placeholder:text-brand-text-faint outline-none transition-all"
           />
-          <span className="font-cactus font-semibold text-[15px] text-cactus-charcoal/40">
+          <span className="font-sans-brand font-semibold text-[14px] text-brand-text-muted">
             months
           </span>
         </div>
 
-        <div className="bg-cactus-sandstone/80 border border-cactus-overlay rounded-xl py-3 px-3.5 mt-5 mb-4">
-          <div className="flex justify-between mb-1">
-            <span className="font-cactus font-medium text-xs text-cactus-charcoal/40">
+        <div className="bg-brand-surface border border-brand-border rounded-2xl py-4 px-4 mt-6 mb-4">
+          <div className="flex justify-between mb-1.5">
+            <span className="font-sans-brand text-[12px] text-brand-text-muted">
               Monthly income
             </span>
-            <span className="font-cactus font-semibold text-xs text-cactus-charcoal/50">
+            <span className="font-display font-medium tabular-lining text-[13px] text-brand-text">
               {fmt(totalIncome)}
             </span>
           </div>
-          <div className="flex justify-between mb-1">
-            <span className="font-cactus font-medium text-xs text-cactus-charcoal/40">
+          <div className="flex justify-between mb-2">
+            <span className="font-sans-brand text-[12px] text-brand-text-muted">
               Estimated expenses
             </span>
-            <span className="font-cactus font-semibold text-xs text-cactus-charcoal/50">
-              – {fmt(totalExpenses)}
+            <span className="font-display font-medium tabular-lining text-[13px] text-brand-text-muted">
+              − {fmt(totalExpenses)}
             </span>
           </div>
-          <div className="flex justify-between border-t border-cactus-overlay pt-1 mt-1">
-            <span className="font-cactus font-bold text-[13px] text-cactus-charcoal">
+          <div className="flex justify-between border-t border-brand-border pt-2 mt-1">
+            <span className="font-sans-brand font-semibold text-[13px] text-brand-text">
               Available for goals
             </span>
             <span
-              className={`font-cactus font-bold text-[13px] ${leftover >= 0 ? 'text-cactus-sage' : 'text-cactus-prickly'}`}
+              className={`font-display font-medium tabular-lining text-[14px] ${leftover >= 0 ? 'text-brand-sage' : 'text-brand-terracotta'}`}
             >
               {fmt(leftover)}/mo
             </span>
@@ -126,26 +129,30 @@ export function GoalDetailScreen({
 
         {amtNum > 0 && monthsNum > 0 && (
           <div
-            className={`rounded-2xl p-4 animate-fade-up ${canAfford ? 'bg-cactus-needs-bg' : 'bg-cactus-goals-bg'}`}
+            className={`rounded-2xl border-l-[3px] rounded-r-2xl p-4 animate-fade-up ${
+              canAfford
+                ? 'bg-brand-sage-soft/60 border-brand-sage'
+                : 'bg-brand-terracotta-soft border-brand-terracotta'
+            }`}
           >
-            <div className="flex items-center gap-2 mb-1.5">
+            <div className="flex items-center gap-2 mb-2">
               <span className="text-lg">{canAfford ? '✅' : '⚠️'}</span>
-              <span className="font-cactus font-bold text-[15px] text-cactus-charcoal">
+              <span className="font-sans-brand font-semibold text-[14px] text-brand-text">
                 {canAfford ? "That's doable!" : 'Might be a stretch'}
               </span>
             </div>
             <div
-              className={`font-cactus font-bold text-[22px] mb-1 ${canAfford ? 'text-cactus-sage' : 'text-cactus-prickly'}`}
+              className={`font-display font-medium tabular-lining text-[1.75rem] leading-[1.1] tracking-[-0.018em] mb-1.5 ${canAfford ? 'text-brand-sage' : 'text-brand-terracotta'}`}
             >
               {fmt(monthlyNeeded)}/month
             </div>
-            <p className="font-cactus text-xs text-cactus-charcoal/50 font-medium m-0">
+            <p className="font-sans-brand text-[12px] text-brand-text-muted m-0 leading-relaxed">
               {canAfford
                 ? `That's ${Math.round((monthlyNeeded / leftover) * 100)}% of your available ${fmt(leftover)}/mo — totally achievable.`
                 : `You have ${fmt(leftover)}/mo available. Consider extending your timeline or adjusting your expenses.`}
             </p>
             {!canAfford && leftover > 0 && (
-              <p className="font-cactus text-xs text-cactus-charcoal/40 font-medium mt-2 m-0">
+              <p className="font-sans-brand text-[12px] text-brand-text-faint mt-2 m-0">
                 💡 At {fmt(leftover)}/month, it would take {Math.ceil(amtNum / leftover)} months
                 instead.
               </p>

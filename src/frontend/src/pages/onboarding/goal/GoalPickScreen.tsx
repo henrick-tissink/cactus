@@ -43,25 +43,28 @@ export function GoalPickScreen({ onContinue }: GoalPickScreenProps) {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-cactus-sandstone font-cactus px-6 animate-fade-up">
+    <div className="flex flex-col min-h-screen bg-brand-cream font-sans-brand px-6 animate-fade-up">
       <div className="flex-1 pt-7">
-        <div className="text-4xl mb-3" aria-hidden="true">
+        <div className="text-3xl mb-3" aria-hidden="true">
           🏁
         </div>
-        <h1 className="font-cactus font-bold text-[22px] text-cactus-charcoal m-0 mb-1.5 leading-tight">
-          Let's set your first goal
-        </h1>
-        <p className="font-cactus text-sm text-cactus-charcoal/40 font-medium m-0 mb-1.5 leading-relaxed">
-          Pick one to start with. Just one — you can always add more later.
+        <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+          First goal
         </p>
-        <p className="font-cactus text-[12.5px] text-cactus-charcoal/40 font-medium m-0 mb-6 leading-snug">
+        <h1 className="font-display font-medium text-[1.625rem] leading-[1.1] tracking-[-0.018em] text-brand-text m-0 mb-2">
+          Pick where to start.
+        </h1>
+        <p className="font-sans-brand text-[13.5px] text-brand-text-muted m-0 mb-1.5 leading-relaxed">
+          Just one for now — you can always add more later.
+        </p>
+        <p className="font-sans-brand text-[12px] text-brand-text-faint m-0 mb-6 leading-relaxed">
           Starting small keeps things manageable. Once this one's rolling, we'll help you stack more
           goals on top. 🧱
         </p>
 
         {recommendation && (
-          <div className="bg-cactus-sage-light/40 rounded-2xl px-4 py-3 mb-5 animate-fade-up">
-            <p className="font-cactus text-[13px] text-cactus-charcoal/70 font-medium m-0 leading-relaxed">
+          <div className="bg-brand-sage-soft/60 border-l-[3px] border-brand-sage rounded-r-xl px-4 py-3 mb-5 animate-fade-up">
+            <p className="font-sans-brand text-[13px] text-brand-text m-0 leading-relaxed">
               💡 Based on what you told us: {recommendation.reason}
             </p>
           </div>
@@ -76,27 +79,27 @@ export function GoalPickScreen({ onContinue }: GoalPickScreenProps) {
                 key={opt.value}
                 type="button"
                 onClick={() => setSelected(isSelected ? null : opt.value)}
-                className={`flex items-center gap-3.5 p-4 px-[18px] rounded-2xl border-[2.5px] cursor-pointer transition-all text-left animate-fade-up ${
+                className={`flex items-center gap-3.5 p-4 px-[18px] rounded-2xl border cursor-pointer transition-all text-left animate-fade-up focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream ${
                   isSelected
-                    ? `${opt.bgClass} border-current ${opt.colorClass}`
-                    : 'bg-white border-cactus-overlay'
+                    ? `${opt.bgClass} border-brand-sage/60`
+                    : 'bg-brand-surface border-brand-border hover:border-brand-sage/30'
                 }`}
               >
                 <div className="text-3xl shrink-0" aria-hidden="true">
                   {opt.icon}
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-0.5">
-                    <span className="font-cactus font-bold text-base text-cactus-charcoal">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <span className="font-display font-medium text-[1.0625rem] tracking-[-0.012em] text-brand-text">
                       {opt.label}
                     </span>
                     {isRecommended && (
-                      <span className="font-cactus font-bold text-[10px] uppercase tracking-wide text-cactus-sage bg-cactus-sage-light px-2 py-0.5 rounded-full">
-                        Recommended for you
+                      <span className="font-sans-brand font-semibold text-[10px] uppercase tracking-[0.14em] text-brand-sage bg-brand-surface border border-brand-sage/40 px-2 py-0.5 rounded-full">
+                        Recommended
                       </span>
                     )}
                   </div>
-                  <span className="font-cactus font-medium text-[12.5px] text-cactus-charcoal/40 leading-snug block">
+                  <span className="font-sans-brand text-[13px] text-brand-text-muted leading-relaxed block">
                     {opt.subtitle}
                   </span>
                 </div>

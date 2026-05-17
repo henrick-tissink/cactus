@@ -32,26 +32,32 @@ export function FinalScreen({ goalType, monthlyGoalAmount }: FinalScreenProps) {
   });
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-6 py-10 text-center bg-cactus-sandstone font-cactus animate-fade-up">
-      <div className="text-6xl mb-4" aria-hidden="true">
+    <div className="flex flex-col items-center justify-center min-h-screen px-6 py-10 text-center bg-brand-cream font-sans-brand animate-fade-up">
+      <div className="text-5xl mb-5" aria-hidden="true">
         🌵
       </div>
-      <h1 className="font-cactus font-bold text-2xl text-cactus-charcoal m-0 mb-2">
-        You're all set!
-      </h1>
-      <p className="font-cactus text-[15px] text-cactus-charcoal/60 font-medium m-0 mb-1.5 leading-relaxed max-w-xs">
-        Your Spending Plan is ready with {fmt(monthlyGoalAmount)}/month going toward{' '}
-        {goalLabels[goalType] ?? 'your goal'}.
+      <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-3">
+        All set
       </p>
-      <p className="font-cactus text-[13px] text-cactus-charcoal/40 font-medium m-0 mb-6 leading-relaxed max-w-[260px]">
+      <h1 className="font-display font-medium text-[2.25rem] leading-[1.05] tracking-[-0.018em] text-brand-text m-0 mb-3 max-w-sm">
+        You're ready.
+      </h1>
+      <p className="font-sans-brand text-[15px] text-brand-text-muted m-0 mb-2 leading-relaxed max-w-xs">
+        Your Spending Plan is ready with{' '}
+        <span className="font-display font-medium tabular-lining text-brand-text">
+          {fmt(monthlyGoalAmount)}/month
+        </span>{' '}
+        going toward {goalLabels[goalType] ?? 'your goal'}.
+      </p>
+      <p className="font-sans-brand text-[13px] text-brand-text-faint m-0 mb-7 leading-relaxed max-w-[280px]">
         Next up: connecting your bank so real transactions start flowing in. The more you use
         Cactus, the smarter it gets. 💪
       </p>
-      <div className="bg-cactus-sage-light rounded-xl py-3.5 px-5 inline-flex items-center gap-2 mb-8">
-        <span className="text-lg" aria-hidden="true">
+      <div className="bg-brand-sage-soft border border-brand-sage/20 rounded-full py-2.5 px-5 inline-flex items-center gap-2 mb-9">
+        <span className="text-base" aria-hidden="true">
           🏦
         </span>
-        <span className="font-cactus font-semibold text-sm text-cactus-charcoal">
+        <span className="font-sans-brand font-semibold text-[13px] text-brand-text">
           Bank connection coming next…
         </span>
       </div>
