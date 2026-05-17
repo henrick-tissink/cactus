@@ -16,25 +16,31 @@ import {
 type Bucket = 'needs' | 'wants' | 'goals';
 
 const bucketBgFill: Record<Bucket, string> = {
-  needs: 'bg-cactus-sage',
-  wants: 'bg-cactus-desert',
-  goals: 'bg-cactus-prickly',
+  needs: 'bg-brand-sage',
+  wants: 'bg-brand-terracotta',
+  goals: 'bg-brand-accent-ink',
 };
 
 const bucketSoftBg: Record<Bucket, string> = {
-  needs: 'bg-cactus-needs-bg',
-  wants: 'bg-cactus-wants-bg',
-  goals: 'bg-cactus-goals-bg',
+  needs: 'bg-brand-sage-soft/40',
+  wants: 'bg-brand-terracotta-soft/40',
+  goals: 'bg-brand-accent-ink/10',
+};
+
+const bucketAccentText: Record<Bucket, string> = {
+  needs: 'text-brand-sage',
+  wants: 'text-brand-terracotta',
+  goals: 'text-brand-accent-ink',
 };
 
 const bucketAccent: Record<Bucket, string> = {
-  needs: 'accent-cactus-sage',
-  wants: 'accent-cactus-desert',
-  goals: 'accent-cactus-prickly',
+  needs: 'accent-brand-sage',
+  wants: 'accent-brand-terracotta',
+  goals: 'accent-brand-accent-ink',
 };
 
 const primaryButtonClass =
-  'inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-cactus font-bold text-sm text-white transition-all bg-cactus-sage shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed';
+  'inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-semibold text-[13px] text-white transition-all bg-brand-sage shadow-[0_8px_24px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_12px_32px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream disabled:bg-brand-border disabled:text-brand-text-faint disabled:shadow-none disabled:cursor-not-allowed disabled:hover:translate-y-0';
 
 export function SpendingPlanPage() {
   const queryClient = useQueryClient();
@@ -143,22 +149,26 @@ export function SpendingPlanPage() {
 
   if (isLoading) {
     return (
-      <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
+      <div className="bg-brand-cream min-h-screen font-sans-brand p-6 md:p-10 animate-fade-in">
         <div className="max-w-4xl mx-auto animate-pulse space-y-6">
-          <div className="h-8 bg-cactus-overlay rounded-xl w-1/4"></div>
-          <div className="h-64 bg-cactus-overlay rounded-2xl"></div>
+          <div className="h-10 bg-brand-border/50 rounded-2xl w-1/3"></div>
+          <div className="h-64 bg-brand-border/50 rounded-3xl"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
+    <div className="bg-brand-cream min-h-screen font-sans-brand p-6 md:p-10 animate-fade-in">
       <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
+        <header className="flex flex-wrap items-end justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-cactus-charcoal font-cactus font-bold text-2xl">Budget</h1>
-            <p className="text-cactus-charcoal/60 font-cactus mt-1">{currentMonth}</p>
+            <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+              {currentMonth}
+            </p>
+            <h1 className="font-display font-medium text-[2.25rem] leading-[1.05] tracking-[-0.018em] text-brand-text">
+              Budget.
+            </h1>
           </div>
           <button
             type="button"
@@ -167,85 +177,85 @@ export function SpendingPlanPage() {
             className={primaryButtonClass}
           >
             {saveMutation.isPending ? (
-              <RefreshCw className="w-4 h-4 animate-spin" />
+              <RefreshCw className="w-3.5 h-3.5 animate-spin" />
             ) : (
-              <Save className="w-4 h-4" />
+              <Save className="w-3.5 h-3.5" />
             )}
-            {saveMutation.isPending ? 'Saving...' : 'Save Changes'}
+            {saveMutation.isPending ? 'Saving…' : 'Save changes'}
           </button>
-        </div>
+        </header>
 
         {/* Error Message */}
         {error && (
-          <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-6 flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-cactus-prickly shrink-0" />
+          <div className="bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 text-[14px] text-brand-accent-ink flex items-center gap-2 mb-6">
+            <AlertCircle className="w-4 h-4 shrink-0 text-brand-terracotta" />
             <span>{error}</span>
           </div>
         )}
 
         {/* Suggestion Card */}
         {suggestion?.hasSuggestion && (
-          <div className="bg-cactus-sage-light border border-cactus-overlay rounded-2xl p-5 mb-6">
+          <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 mb-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
             <div className="flex items-start gap-4">
-              <div className="p-2 bg-white border border-cactus-overlay rounded-xl shrink-0">
-                <Lightbulb className="w-5 h-5 text-cactus-sage" />
+              <div className="p-2.5 bg-brand-sage-soft rounded-2xl shrink-0">
+                <Lightbulb className="w-5 h-5 text-brand-sage" />
               </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <Sparkles className="w-4 h-4 text-cactus-sage" />
-                  <h3 className="text-cactus-charcoal font-cactus font-bold">
-                    Suggested Adjustment
-                  </h3>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <Sparkles className="w-3.5 h-3.5 text-brand-sage" />
+                  <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted">
+                    Suggested adjustment
+                  </p>
                 </div>
-                <p className="text-cactus-charcoal/70 font-cactus text-sm leading-relaxed mb-4">
+                <h3 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-3">
+                  Rebalance your allocations
+                </h3>
+                <p className="text-[14px] text-brand-text-muted leading-relaxed mb-5">
                   {suggestion.explanation}
                 </p>
 
                 {/* Visual Comparison: Current -> Suggested */}
-                <div className="bg-white border border-cactus-overlay rounded-xl p-4 mb-4">
+                <div className="bg-brand-cream/40 border border-brand-border rounded-2xl p-4 mb-5">
                   <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                      <span className="text-cactus-charcoal/60 font-cactus text-xs block mb-1">
-                        Needs
-                      </span>
-                      <div className="flex items-center justify-center gap-2">
-                        <span className="font-cactus font-semibold tabular-nums text-sm text-cactus-sage">
-                          {suggestion.currentNeeds}%
+                    {[
+                      {
+                        label: 'Needs',
+                        current: suggestion.currentNeeds,
+                        suggested: suggestion.suggestedNeeds,
+                        accent: bucketAccentText.needs,
+                      },
+                      {
+                        label: 'Wants',
+                        current: suggestion.currentWants,
+                        suggested: suggestion.suggestedWants,
+                        accent: bucketAccentText.wants,
+                      },
+                      {
+                        label: 'Goals',
+                        current: suggestion.currentGoals,
+                        suggested: suggestion.suggestedGoals,
+                        accent: bucketAccentText.goals,
+                      },
+                    ].map((row) => (
+                      <div key={row.label}>
+                        <span className="block text-[11px] uppercase tracking-[0.14em] font-semibold text-brand-text-faint mb-1.5">
+                          {row.label}
                         </span>
-                        <ArrowRight className="w-3 h-3 text-cactus-charcoal/40" />
-                        <span className="font-cactus font-bold tabular-nums text-sm text-cactus-sage">
-                          {suggestion.suggestedNeeds}%
-                        </span>
+                        <div className="flex items-center justify-center gap-1.5">
+                          <span
+                            className={`font-display font-medium tabular-lining text-[15px] ${row.accent} opacity-60`}
+                          >
+                            {row.current}%
+                          </span>
+                          <ArrowRight className="w-3 h-3 text-brand-text-faint" />
+                          <span
+                            className={`font-display font-medium tabular-lining text-[17px] ${row.accent}`}
+                          >
+                            {row.suggested}%
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <span className="text-cactus-charcoal/60 font-cactus text-xs block mb-1">
-                        Wants
-                      </span>
-                      <div className="flex items-center justify-center gap-2">
-                        <span className="font-cactus font-semibold tabular-nums text-sm text-cactus-desert">
-                          {suggestion.currentWants}%
-                        </span>
-                        <ArrowRight className="w-3 h-3 text-cactus-charcoal/40" />
-                        <span className="font-cactus font-bold tabular-nums text-sm text-cactus-desert">
-                          {suggestion.suggestedWants}%
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <span className="text-cactus-charcoal/60 font-cactus text-xs block mb-1">
-                        Goals
-                      </span>
-                      <div className="flex items-center justify-center gap-2">
-                        <span className="font-cactus font-semibold tabular-nums text-sm text-cactus-prickly">
-                          {suggestion.currentGoals}%
-                        </span>
-                        <ArrowRight className="w-3 h-3 text-cactus-charcoal/40" />
-                        <span className="font-cactus font-bold tabular-nums text-sm text-cactus-prickly">
-                          {suggestion.suggestedGoals}%
-                        </span>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
 
@@ -254,8 +264,8 @@ export function SpendingPlanPage() {
                   onClick={handleApplySuggestion}
                   className={primaryButtonClass}
                 >
-                  <Sparkles className="w-4 h-4" />
-                  Apply Suggestion
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Apply suggestion
                 </button>
               </div>
             </div>
@@ -263,149 +273,118 @@ export function SpendingPlanPage() {
         )}
 
         {/* Income Input */}
-        <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mb-6">
-          <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-2">
-            Monthly Income (after tax)
+        <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 mb-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+          <label className="block font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-3">
+            Monthly income (after tax)
           </label>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-cactus-charcoal font-cactus font-bold">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 font-display font-medium tabular-lining text-[1.5rem] text-brand-text-muted">
               R
             </span>
             <input
               type="number"
               value={income || ''}
               onChange={(e) => handleIncomeChange(parseFloat(e.target.value) || 0)}
-              className="w-full pl-9 pr-4 py-3 border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl font-cactus font-bold tabular-nums text-cactus-charcoal text-xl outline-none transition-colors"
+              className="w-full pl-10 pr-4 py-3 bg-brand-cream/40 border border-brand-border focus:border-brand-sage focus:bg-brand-surface focus:ring-2 focus:ring-brand-sage/15 rounded-xl font-display font-medium tabular-lining text-brand-text text-[1.75rem] outline-none transition-all"
               placeholder="0"
             />
           </div>
         </div>
 
         {/* Allocation Sliders */}
-        <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mb-6">
-          <h2 className="text-cactus-charcoal font-cactus font-bold text-lg mb-6">Allocations</h2>
+        <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 mb-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+          <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+            Split
+          </p>
+          <h2 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-6">
+            Allocations
+          </h2>
 
           {/* Validation Warning */}
           {!isValid && (
-            <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-6 flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-cactus-prickly shrink-0" />
+            <div className="bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 text-[14px] text-brand-accent-ink flex items-center gap-2 mb-6">
+              <AlertTriangle className="w-4 h-4 shrink-0 text-brand-terracotta" />
               <span>Allocations must total 100%. Currently at {totalPercentage}%.</span>
             </div>
           )}
 
           {/* Visual Bar */}
-          <div className="h-8 rounded-full overflow-hidden flex bg-cactus-overlay mb-8">
+          <div className="h-3 rounded-full overflow-hidden flex bg-brand-border/60 mb-8">
             <div
-              className="bg-cactus-sage transition-all duration-300"
+              className="bg-brand-sage transition-all duration-300"
               style={{ width: `${percentages.needs}%` }}
             />
             <div
-              className="bg-cactus-desert transition-all duration-300"
+              className="bg-brand-terracotta transition-all duration-300"
               style={{ width: `${percentages.wants}%` }}
             />
             <div
-              className="bg-cactus-prickly transition-all duration-300"
+              className="bg-brand-accent-ink transition-all duration-300"
               style={{ width: `${percentages.goals}%` }}
             />
           </div>
 
           {/* Sliders */}
-          <div className="space-y-8">
-            {/* Needs */}
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full bg-cactus-sage" />
-                  <span className="text-cactus-charcoal font-cactus font-bold">Needs</span>
-                  <span className="text-cactus-charcoal/60 font-cactus text-sm">
-                    Essential expenses
-                  </span>
+          <div className="space-y-7">
+            {[
+              {
+                key: 'needs' as const,
+                label: 'Needs',
+                desc: 'Essential expenses',
+                amount: needsAmount,
+              },
+              {
+                key: 'wants' as const,
+                label: 'Wants',
+                desc: 'Discretionary spending',
+                amount: wantsAmount,
+              },
+              {
+                key: 'goals' as const,
+                label: 'Goals',
+                desc: 'Savings & debt payoff',
+                amount: goalsAmount,
+              },
+            ].map(({ key, label, desc, amount }) => (
+              <div key={key}>
+                <div className="flex justify-between items-center mb-2 gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className={`w-2.5 h-2.5 rounded-full ${bucketBgFill[key]} shrink-0`} />
+                    <span className="text-brand-text font-semibold text-[15px]">{label}</span>
+                    <span className="text-[12px] text-brand-text-muted hidden sm:inline">
+                      {desc}
+                    </span>
+                  </div>
+                  <div className="text-right flex items-baseline gap-2 shrink-0">
+                    <span className="font-display font-medium tabular-lining text-brand-text text-[1.25rem]">
+                      {percentages[key]}%
+                    </span>
+                    <span className="font-display font-medium tabular-lining text-brand-text-muted text-[13px]">
+                      {formatCurrency(amount)}
+                    </span>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <span className="font-cactus font-bold tabular-nums text-cactus-charcoal text-lg">
-                    {percentages.needs}%
-                  </span>
-                  <span className="text-cactus-charcoal/60 font-cactus font-bold tabular-nums text-sm ml-2">
-                    {formatCurrency(needsAmount)}
-                  </span>
-                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={percentages[key]}
+                  onChange={(e) => handlePercentageChange(key, parseInt(e.target.value))}
+                  className={`w-full h-2 bg-brand-border/60 rounded-lg appearance-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface ${bucketAccent[key]}`}
+                />
               </div>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={percentages.needs}
-                onChange={(e) => handlePercentageChange('needs', parseInt(e.target.value))}
-                className={`w-full h-2 bg-cactus-overlay rounded-lg appearance-none cursor-pointer ${bucketAccent.needs}`}
-              />
-            </div>
-
-            {/* Wants */}
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full bg-cactus-desert" />
-                  <span className="text-cactus-charcoal font-cactus font-bold">Wants</span>
-                  <span className="text-cactus-charcoal/60 font-cactus text-sm">
-                    Discretionary spending
-                  </span>
-                </div>
-                <div className="text-right">
-                  <span className="font-cactus font-bold tabular-nums text-cactus-charcoal text-lg">
-                    {percentages.wants}%
-                  </span>
-                  <span className="text-cactus-charcoal/60 font-cactus font-bold tabular-nums text-sm ml-2">
-                    {formatCurrency(wantsAmount)}
-                  </span>
-                </div>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={percentages.wants}
-                onChange={(e) => handlePercentageChange('wants', parseInt(e.target.value))}
-                className={`w-full h-2 bg-cactus-overlay rounded-lg appearance-none cursor-pointer ${bucketAccent.wants}`}
-              />
-            </div>
-
-            {/* Goals */}
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full bg-cactus-prickly" />
-                  <span className="text-cactus-charcoal font-cactus font-bold">Goals</span>
-                  <span className="text-cactus-charcoal/60 font-cactus text-sm">
-                    Savings &amp; debt payoff
-                  </span>
-                </div>
-                <div className="text-right">
-                  <span className="font-cactus font-bold tabular-nums text-cactus-charcoal text-lg">
-                    {percentages.goals}%
-                  </span>
-                  <span className="text-cactus-charcoal/60 font-cactus font-bold tabular-nums text-sm ml-2">
-                    {formatCurrency(goalsAmount)}
-                  </span>
-                </div>
-              </div>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={percentages.goals}
-                onChange={(e) => handlePercentageChange('goals', parseInt(e.target.value))}
-                className={`w-full h-2 bg-cactus-overlay rounded-lg appearance-none cursor-pointer ${bucketAccent.goals}`}
-              />
-            </div>
+            ))}
           </div>
 
           {/* Total */}
-          <div className="mt-8 pt-6 border-t border-cactus-overlay">
-            <div className="flex justify-between items-center">
-              <span className="text-cactus-charcoal/60 font-cactus">Total</span>
+          <div className="mt-8 pt-6 border-t border-brand-border">
+            <div className="flex justify-between items-baseline">
+              <span className="text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted">
+                Total
+              </span>
               <span
-                className={`font-cactus font-bold tabular-nums text-xl ${
-                  isValid ? 'text-cactus-sage' : 'text-cactus-prickly'
+                className={`font-display font-medium tabular-lining text-[1.5rem] ${
+                  isValid ? 'text-brand-sage' : 'text-brand-terracotta'
                 }`}
               >
                 {totalPercentage}%
@@ -419,9 +398,12 @@ export function SpendingPlanPage() {
           (suggestion.actualNeeds > 0 ||
             suggestion.actualWants > 0 ||
             suggestion.actualGoals > 0) && (
-            <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mb-6">
-              <h2 className="text-cactus-charcoal font-cactus font-bold text-lg mb-4">
-                Actual vs Allocated (6-month average)
+            <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 mb-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+              <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+                6-month average
+              </p>
+              <h2 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-5">
+                Actual vs allocated
               </h2>
               <div className="grid grid-cols-3 gap-4">
                 <ActualVsAllocated
@@ -448,16 +430,19 @@ export function SpendingPlanPage() {
 
         {/* Quick Tips — only show for new users without a plan */}
         {!plan && (
-          <div className="bg-cactus-sage-light border border-cactus-overlay rounded-2xl p-5">
+          <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
             <div className="flex items-start gap-4">
-              <div className="p-2 bg-white border border-cactus-overlay rounded-xl shrink-0">
-                <TrendingUp className="w-5 h-5 text-cactus-sage" />
+              <div className="p-2.5 bg-brand-sage-soft rounded-2xl shrink-0">
+                <TrendingUp className="w-5 h-5 text-brand-sage" />
               </div>
               <div>
-                <h3 className="text-cactus-charcoal font-cactus font-bold mb-2">
-                  The 50/30/20 Rule
+                <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+                  Starting point
+                </p>
+                <h3 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-2">
+                  The 50 / 30 / 20 rule
                 </h3>
-                <p className="text-cactus-charcoal font-cactus text-sm leading-relaxed">
+                <p className="text-[14px] text-brand-text-muted leading-relaxed">
                   A popular starting point is 50% for Needs, 30% for Wants, and 20% for Goals. But
                   the best plan is one that works for YOUR situation. If you have debt, consider
                   increasing your Goals allocation to pay it off faster.
@@ -469,9 +454,12 @@ export function SpendingPlanPage() {
 
         {/* Plan vs Actual (if we have spent data) */}
         {plan && (plan.needsSpent > 0 || plan.wantsSpent > 0 || plan.goalsSpent > 0) && (
-          <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mt-6">
-            <h2 className="text-cactus-charcoal font-cactus font-bold text-lg mb-6">
-              Plan vs Actual
+          <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 mt-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+            <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+              This month
+            </p>
+            <h2 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-6">
+              Plan vs actual
             </h2>
             <div className="space-y-6">
               <BudgetBar
@@ -523,39 +511,39 @@ function BudgetBar({
     }).format(amount);
   };
 
-  const fillClass = isOverBudget ? 'bg-cactus-prickly' : bucketBgFill[bucket];
+  const fillClass = isOverBudget ? 'bg-brand-terracotta' : bucketBgFill[bucket];
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-cactus-charcoal font-cactus font-semibold">{label}</span>
-        <div className="text-sm">
+      <div className="flex flex-wrap justify-between items-baseline gap-2 mb-2">
+        <span className="text-[15px] text-brand-text font-semibold">{label}</span>
+        <div className="text-[13px] flex items-baseline gap-1">
           <span
-            className={`font-cactus font-bold tabular-nums ${
-              isOverBudget ? 'text-cactus-prickly' : 'text-cactus-charcoal'
+            className={`font-display font-medium tabular-lining text-[15px] ${
+              isOverBudget ? 'text-brand-terracotta' : 'text-brand-text'
             }`}
           >
             {formatCurrency(spent)}
           </span>
-          <span className="text-cactus-charcoal/40 font-cactus"> / </span>
-          <span className="text-cactus-charcoal font-cactus font-bold tabular-nums">
+          <span className="text-brand-text-faint">/</span>
+          <span className="font-display font-medium tabular-lining text-[13px] text-brand-text-muted">
             {formatCurrency(allocated)}
           </span>
         </div>
       </div>
-      <div className="h-3 bg-cactus-overlay rounded-xl overflow-hidden">
+      <div className="h-2.5 bg-brand-border/60 rounded-full overflow-hidden">
         <div
           className={`h-full ${fillClass} transition-all duration-500`}
           style={{ width: `${Math.min(percentage, 100)}%` }}
         />
       </div>
-      <div className="flex justify-between mt-1">
-        <span className="text-cactus-charcoal/60 font-cactus font-bold tabular-nums text-xs">
+      <div className="flex justify-between mt-1.5">
+        <span className="text-[12px] text-brand-text-muted tabular-lining">
           {isOverBudget
             ? `${formatCurrency(spent - allocated)} over budget`
             : `${formatCurrency(allocated - spent)} remaining`}
         </span>
-        <span className="text-cactus-charcoal/60 font-cactus font-bold tabular-nums text-xs">
+        <span className="text-[12px] text-brand-text-faint tabular-lining">
           {percentage.toFixed(0)}%
         </span>
       </div>
@@ -575,11 +563,11 @@ function ActualVsAllocated({
   actual: number;
 }) {
   const diff = actual - allocated;
-  const trackColor = 'rgba(51, 51, 51, 0.06)';
+  const trackColor = 'rgba(235, 229, 213, 0.6)'; // brand-border
   const bucketStrokeHex: Record<Bucket, string> = {
-    needs: '#77DD77',
-    wants: '#FFCC00',
-    goals: '#FF6F61',
+    needs: '#1f6f4a', // brand-sage
+    wants: '#c9743a', // brand-terracotta
+    goals: '#8c4a1e', // brand-accent-ink
   };
   const radius = 28;
   const circumference = 2 * Math.PI * radius;
@@ -587,10 +575,10 @@ function ActualVsAllocated({
   const strokeDashoffset = circumference * (1 - progress);
 
   return (
-    <div
-      className={`bg-white border border-cactus-overlay rounded-2xl p-4 ${bucketSoftBg[bucket]}`}
-    >
-      <p className="text-cactus-charcoal/60 font-cactus text-xs mb-3">{label}</p>
+    <div className={`border border-brand-border rounded-2xl p-4 ${bucketSoftBg[bucket]}`}>
+      <p className="text-[11px] uppercase tracking-[0.14em] font-semibold text-brand-text-faint mb-3">
+        {label}
+      </p>
       <div className="flex items-center justify-center mb-2">
         <div className="relative w-20 h-20">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 64 64">
@@ -609,19 +597,17 @@ function ActualVsAllocated({
             />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-cactus-charcoal font-cactus font-bold tabular-nums text-sm">
+            <span className="font-display font-medium tabular-lining text-[15px] text-brand-text">
               {actual.toFixed(0)}%
             </span>
           </div>
         </div>
       </div>
-      <p className="text-center text-cactus-charcoal/60 font-cactus text-xs">
-        of {allocated}% allocated
-      </p>
+      <p className="text-center text-[12px] text-brand-text-muted">of {allocated}% allocated</p>
       {Math.abs(diff) > 2 && (
         <p
-          className={`text-center font-cactus font-bold tabular-nums text-xs mt-2 ${
-            diff > 0 ? 'text-cactus-prickly' : 'text-cactus-sage'
+          className={`text-center font-semibold tabular-lining text-[12px] mt-2 ${
+            diff > 0 ? 'text-brand-terracotta' : 'text-brand-sage'
           }`}
         >
           {diff > 0 ? '+' : ''}
