@@ -27,7 +27,8 @@ describe('ImportTransactionsPage', () => {
 
   it('renders the import transactions heading', () => {
     renderWithProviders(<ImportTransactionsPage />);
-    expect(screen.getByRole('heading', { name: /import transactions/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /transactions/i })).toBeInTheDocument();
+    expect(screen.getByText('Import')).toBeInTheDocument();
   });
 
   it('renders the upload step indicator label', () => {
@@ -39,7 +40,7 @@ describe('ImportTransactionsPage', () => {
 
   it('renders the dropzone copy', () => {
     renderWithProviders(<ImportTransactionsPage />);
-    expect(screen.getByText(/drag and drop|select a file/i)).toBeInTheDocument();
+    expect(screen.getByText(/drop your bank statement here/i)).toBeInTheDocument();
   });
 
   it('renders the account selector populated from /accounts', async () => {
