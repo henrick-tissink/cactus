@@ -4,11 +4,12 @@ import { apiClient } from '../api/client';
 import { useAuthStore } from '../store/authStore';
 import { AlertCircle, Check, ShieldCheck } from 'lucide-react';
 
+const labelClass =
+  'block font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2';
 const inputClass =
-  'w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none transition-colors';
-const labelClass = 'font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5';
+  'w-full bg-brand-cream/40 border border-brand-border focus:border-brand-sage focus:bg-brand-surface focus:ring-2 focus:ring-brand-sage/15 rounded-xl px-4 py-3 text-[15px] text-brand-text placeholder:text-brand-text-faint outline-none transition-all';
 const submitButtonClass =
-  'w-full px-6 py-4 rounded-2xl font-cactus font-bold text-base text-white transition-all bg-cactus-sage shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed';
+  'inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-semibold text-[13px] text-white transition-all bg-brand-sage shadow-[0_8px_24px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_12px_32px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream disabled:bg-brand-border disabled:text-brand-text-faint disabled:shadow-none disabled:cursor-not-allowed disabled:hover:translate-y-0';
 
 export function SettingsPage() {
   const { user, setUser } = useAuthStore();
@@ -83,61 +84,69 @@ export function SettingsPage() {
   };
 
   return (
-    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
+    <div className="bg-brand-cream min-h-screen font-sans-brand p-6 md:p-10 animate-fade-in">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-cactus-charcoal font-cactus font-bold text-2xl mb-6">Settings</h1>
+        <header className="mb-8">
+          <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+            Your account
+          </p>
+          <h1 className="font-display font-medium text-[2.25rem] leading-[1.05] tracking-[-0.018em] text-brand-text">
+            Settings.
+          </h1>
+        </header>
 
         {/* Email Verification Banner */}
         {user && user.isEmailVerified === false && (
-          <div className="bg-cactus-goals-bg border border-cactus-overlay rounded-xl p-4 flex items-center gap-3 mb-6">
-            <AlertCircle className="w-5 h-5 text-cactus-prickly shrink-0" />
-            <div className="flex-1">
-              <p className="font-cactus text-sm text-cactus-charcoal">
-                Your email is not verified.
-              </p>
-            </div>
+          <div className="bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 flex items-center gap-3 mb-6">
+            <AlertCircle className="w-4 h-4 shrink-0 text-brand-terracotta" />
+            <p className="text-[14px] text-brand-accent-ink flex-1">Your email is not verified.</p>
             <ResendVerificationButton />
           </div>
         )}
 
         {user && user.isEmailVerified === true && (
-          <div className="bg-cactus-sage-light border border-cactus-overlay rounded-xl p-4 flex items-center gap-3 mb-6">
-            <ShieldCheck className="w-5 h-5 text-cactus-sage shrink-0" />
-            <p className="font-cactus text-sm text-cactus-charcoal">Email verified</p>
+          <div className="bg-brand-sage-soft border-l-[3px] border-brand-sage rounded-r-xl pl-4 pr-3 py-3 flex items-center gap-3 mb-6">
+            <ShieldCheck className="w-4 h-4 shrink-0 text-brand-sage" />
+            <p className="text-[14px] text-brand-text">Email verified</p>
           </div>
         )}
 
         {/* Profile Section */}
-        <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mb-6">
-          <h2 className="text-cactus-charcoal font-cactus font-bold text-lg mb-4">Profile</h2>
+        <section className="bg-brand-surface border border-brand-border rounded-3xl p-7 mb-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+          <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+            About you
+          </p>
+          <h2 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-6">
+            Profile
+          </h2>
 
           {profileError && (
-            <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-cactus-prickly shrink-0" />
+            <div className="bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 text-[14px] text-brand-accent-ink flex items-center gap-2 mb-5">
+              <AlertCircle className="w-4 h-4 shrink-0 text-brand-terracotta" />
               <span>{profileError}</span>
             </div>
           )}
 
           {profileSuccess && (
-            <div className="bg-cactus-sage-light border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
-              <Check className="w-4 h-4 text-cactus-sage shrink-0" />
+            <div className="bg-brand-sage-soft border-l-[3px] border-brand-sage rounded-r-xl pl-4 pr-3 py-3 text-[14px] text-brand-text flex items-center gap-2 mb-5">
+              <Check className="w-4 h-4 shrink-0 text-brand-sage" />
               <span>Profile updated successfully</span>
             </div>
           )}
 
-          <form onSubmit={handleProfileSubmit} className="space-y-4">
+          <form onSubmit={handleProfileSubmit} className="space-y-5">
             <div>
               <label className={labelClass}>Email</label>
               <input
                 type="email"
                 value={user?.email || ''}
                 disabled
-                className={`${inputClass} bg-cactus-overlay/20 text-cactus-charcoal/60 cursor-not-allowed`}
+                className={`${inputClass} bg-brand-border/30 text-brand-text-faint cursor-not-allowed`}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className={labelClass}>First Name</label>
+                <label className={labelClass}>First name</label>
                 <input
                   type="text"
                   value={profileForm.firstName}
@@ -147,7 +156,7 @@ export function SettingsPage() {
                 />
               </div>
               <div>
-                <label className={labelClass}>Last Name</label>
+                <label className={labelClass}>Last name</label>
                 <input
                   type="text"
                   value={profileForm.lastName}
@@ -162,34 +171,37 @@ export function SettingsPage() {
               disabled={updateProfileMutation.isPending}
               className={submitButtonClass}
             >
-              {updateProfileMutation.isPending ? 'Saving...' : 'Save Profile'}
+              {updateProfileMutation.isPending ? 'Saving…' : 'Save profile'}
             </button>
           </form>
-        </div>
+        </section>
 
         {/* Password Section */}
-        <div className="bg-white border border-cactus-overlay rounded-2xl p-6 mb-6">
-          <h2 className="text-cactus-charcoal font-cactus font-bold text-lg mb-4">
-            Change Password
+        <section className="bg-brand-surface border border-brand-border rounded-3xl p-7 mb-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+          <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+            Security
+          </p>
+          <h2 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-6">
+            Change password
           </h2>
 
           {passwordError && (
-            <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-cactus-prickly shrink-0" />
+            <div className="bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 text-[14px] text-brand-accent-ink flex items-center gap-2 mb-5">
+              <AlertCircle className="w-4 h-4 shrink-0 text-brand-terracotta" />
               <span>{passwordError}</span>
             </div>
           )}
 
           {passwordSuccess && (
-            <div className="bg-cactus-sage-light border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-4 flex items-center gap-2">
-              <Check className="w-4 h-4 text-cactus-sage shrink-0" />
+            <div className="bg-brand-sage-soft border-l-[3px] border-brand-sage rounded-r-xl pl-4 pr-3 py-3 text-[14px] text-brand-text flex items-center gap-2 mb-5">
+              <Check className="w-4 h-4 shrink-0 text-brand-sage" />
               <span>Password changed successfully</span>
             </div>
           )}
 
-          <form onSubmit={handlePasswordSubmit} className="space-y-4">
+          <form onSubmit={handlePasswordSubmit} className="space-y-5">
             <div>
-              <label className={labelClass}>Current Password</label>
+              <label className={labelClass}>Current password</label>
               <input
                 type="password"
                 value={passwordForm.currentPassword}
@@ -201,7 +213,7 @@ export function SettingsPage() {
               />
             </div>
             <div>
-              <label className={labelClass}>New Password</label>
+              <label className={labelClass}>New password</label>
               <input
                 type="password"
                 value={passwordForm.newPassword}
@@ -210,12 +222,12 @@ export function SettingsPage() {
                 required
                 minLength={8}
               />
-              <p className="font-cactus text-xs text-cactus-charcoal/60 mt-1">
-                At least 8 characters with uppercase, lowercase, and a digit
+              <p className="text-[12px] text-brand-text-faint mt-1.5">
+                At least 8 characters with uppercase, lowercase, and a digit.
               </p>
             </div>
             <div>
-              <label className={labelClass}>Confirm New Password</label>
+              <label className={labelClass}>Confirm new password</label>
               <input
                 type="password"
                 value={passwordForm.confirmPassword}
@@ -231,10 +243,10 @@ export function SettingsPage() {
               disabled={changePasswordMutation.isPending}
               className={submitButtonClass}
             >
-              {changePasswordMutation.isPending ? 'Changing...' : 'Change Password'}
+              {changePasswordMutation.isPending ? 'Changing…' : 'Change password'}
             </button>
           </form>
-        </div>
+        </section>
       </div>
     </div>
   );
@@ -256,12 +268,16 @@ function ResendVerificationButton() {
   });
 
   if (sent) {
-    return <span className="font-cactus text-sm text-cactus-sage font-semibold">Sent!</span>;
+    return (
+      <span className="text-[13px] text-brand-sage font-semibold tracking-[-0.005em]">Sent!</span>
+    );
   }
 
   if (failed) {
     return (
-      <span className="font-cactus text-sm text-cactus-prickly font-semibold">Failed to send</span>
+      <span className="text-[13px] text-brand-terracotta font-semibold tracking-[-0.005em]">
+        Failed to send
+      </span>
     );
   }
 
@@ -270,9 +286,9 @@ function ResendVerificationButton() {
       type="button"
       onClick={() => resendMutation.mutate()}
       disabled={resendMutation.isPending}
-      className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 disabled:opacity-50 px-4 py-2 rounded-xl font-cactus font-semibold text-sm transition-colors"
+      className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-border bg-brand-surface text-brand-text-muted hover:bg-brand-sage-soft/60 hover:text-brand-text font-semibold text-[12px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream disabled:opacity-50 transition-colors"
     >
-      {resendMutation.isPending ? 'Sending...' : 'Resend'}
+      {resendMutation.isPending ? 'Sending…' : 'Resend'}
     </button>
   );
 }
