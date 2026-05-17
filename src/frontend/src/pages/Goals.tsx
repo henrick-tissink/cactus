@@ -30,37 +30,37 @@ const GOAL_TYPE_INFO: Record<number, GoalTypeStyle> = {
   [GoalType.MiniBuffer]: {
     label: 'Mini Buffer',
     icon: Wallet,
-    iconBg: 'bg-cactus-wants-bg',
-    iconText: 'text-cactus-charcoal',
-    borderActive: 'border-cactus-desert',
+    iconBg: 'bg-brand-terracotta-soft',
+    iconText: 'text-brand-accent-ink',
+    borderActive: 'border-brand-terracotta/60',
   },
   [GoalType.DebtPayoff]: {
     label: 'Debt Payoff',
     icon: CreditCard,
-    iconBg: 'bg-cactus-goals-bg',
-    iconText: 'text-cactus-prickly',
-    borderActive: 'border-cactus-prickly',
+    iconBg: 'bg-brand-accent-ink/10',
+    iconText: 'text-brand-accent-ink',
+    borderActive: 'border-brand-accent-ink/40',
   },
   [GoalType.EmergencyFund]: {
     label: 'Emergency Fund',
     icon: PiggyBank,
-    iconBg: 'bg-cactus-wants-bg',
-    iconText: 'text-cactus-charcoal',
-    borderActive: 'border-cactus-desert',
+    iconBg: 'bg-brand-terracotta-soft',
+    iconText: 'text-brand-accent-ink',
+    borderActive: 'border-brand-terracotta/60',
   },
   [GoalType.Savings]: {
     label: 'Savings',
     icon: Target,
-    iconBg: 'bg-cactus-sage-light',
-    iconText: 'text-cactus-sage',
-    borderActive: 'border-cactus-sage',
+    iconBg: 'bg-brand-sage-soft',
+    iconText: 'text-brand-sage',
+    borderActive: 'border-brand-sage/60',
   },
   [GoalType.Investment]: {
     label: 'Investment',
     icon: LineChart,
-    iconBg: 'bg-cactus-overlay',
-    iconText: 'text-cactus-charcoal/60',
-    borderActive: 'border-cactus-overlay',
+    iconBg: 'bg-brand-border/50',
+    iconText: 'text-brand-text-muted',
+    borderActive: 'border-brand-border',
   },
 };
 
@@ -124,12 +124,12 @@ export function GoalsPage() {
 
   if (isLoading) {
     return (
-      <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-cactus-overlay rounded w-1/4"></div>
+      <div className="bg-brand-cream min-h-screen font-sans-brand p-6 md:p-10 animate-fade-in">
+        <div className="max-w-6xl mx-auto animate-pulse space-y-6">
+          <div className="h-10 bg-brand-border/50 rounded-2xl w-1/3"></div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="h-48 bg-cactus-overlay rounded-2xl"></div>
-            <div className="h-48 bg-cactus-overlay rounded-2xl"></div>
+            <div className="h-48 bg-brand-border/50 rounded-3xl"></div>
+            <div className="h-48 bg-brand-border/50 rounded-3xl"></div>
           </div>
         </div>
       </div>
@@ -137,179 +137,192 @@ export function GoalsPage() {
   }
 
   return (
-    <div className="bg-cactus-sandstone min-h-screen font-cactus p-6 animate-fade-in">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-cactus-charcoal font-cactus font-bold text-2xl">Goals</h1>
-          <p className="text-cactus-charcoal/60 font-cactus mt-1">
-            {activeGoals.length} active goal{activeGoals.length !== 1 ? 's' : ''}
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-6 py-3 rounded-2xl font-cactus font-bold text-white bg-cactus-sage shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          New Goal
-        </button>
-      </div>
-
-      {/* Recommended Sequence (if no goals yet) */}
-      {activeGoals.length === 0 && recommendations && (
-        <div className="bg-cactus-sage-light border border-cactus-overlay rounded-2xl p-5 mb-6">
-          <div className="flex items-start gap-4 mb-6">
-            <div className="p-2 bg-cactus-sage/15 rounded-xl">
-              <Sparkles className="w-5 h-5 text-cactus-sage" />
-            </div>
-            <div>
-              <h2 className="text-cactus-charcoal font-cactus font-bold">
-                Recommended Goal Sequence
-              </h2>
-              <p className="text-cactus-charcoal/70 font-cactus text-sm mt-1">
-                Following the Cactus methodology, here's the recommended order for your goals:
-              </p>
-            </div>
+    <div className="bg-brand-cream min-h-screen font-sans-brand p-6 md:p-10 animate-fade-in">
+      <div className="max-w-6xl mx-auto">
+        <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+              {activeGoals.length} active goal{activeGoals.length !== 1 ? 's' : ''}
+            </p>
+            <h1 className="font-display font-medium text-[2.25rem] leading-[1.05] tracking-[-0.018em] text-brand-text">
+              Goals.
+            </h1>
           </div>
+          <button
+            type="button"
+            onClick={() => setShowCreateModal(true)}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold text-[13px] text-white bg-brand-sage shadow-[0_8px_24px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_12px_32px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream transition-all"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            New goal
+          </button>
+        </header>
 
-          <div className="space-y-3">
-            {recommendations.map((rec, index) => {
-              const typeInfo = GOAL_TYPE_INFO[rec.goalType];
-              const Icon = typeInfo?.icon || Target;
-              return (
-                <div
-                  key={rec.order}
-                  className="flex items-center gap-4 bg-white border border-cactus-overlay rounded-2xl p-4"
-                >
-                  <div className="bg-cactus-sage text-white font-cactus font-bold rounded-full w-8 h-8 flex items-center justify-center shrink-0">
-                    {index + 1}
-                  </div>
+        {/* Recommended Sequence (if no goals yet) */}
+        {activeGoals.length === 0 && recommendations && (
+          <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 mb-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+            <div className="flex items-start gap-4 mb-6">
+              <div className="p-2.5 bg-brand-sage-soft rounded-2xl shrink-0">
+                <Sparkles className="w-5 h-5 text-brand-sage" />
+              </div>
+              <div>
+                <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+                  Recommended
+                </p>
+                <h2 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text">
+                  Your goal sequence
+                </h2>
+                <p className="text-[14px] text-brand-text-muted leading-relaxed mt-2">
+                  Following the Cactus methodology, here's the recommended order for your goals.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {recommendations.map((rec, index) => {
+                const typeInfo = GOAL_TYPE_INFO[rec.goalType];
+                const Icon = typeInfo?.icon || Target;
+                return (
                   <div
-                    className={`p-2 rounded-xl ${typeInfo?.iconBg || 'bg-cactus-overlay'} ${typeInfo?.iconText || 'text-cactus-charcoal/60'} shrink-0`}
+                    key={rec.order}
+                    className="flex items-center gap-4 bg-brand-cream/40 border border-brand-border rounded-2xl p-4"
                   >
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <p className="text-cactus-charcoal font-cactus font-semibold">{rec.title}</p>
-                      {rec.alreadyExists && (
-                        <span className="px-2 py-0.5 bg-cactus-sage text-white text-[10px] uppercase font-cactus font-bold tracking-wide rounded-full">
-                          Active
-                        </span>
+                    <div className="bg-brand-sage text-white font-display font-medium tabular-lining text-[15px] rounded-full w-8 h-8 flex items-center justify-center shrink-0">
+                      {index + 1}
+                    </div>
+                    <div
+                      className={`p-2 rounded-xl ${typeInfo?.iconBg || 'bg-brand-border/50'} ${typeInfo?.iconText || 'text-brand-text-muted'} shrink-0`}
+                    >
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-brand-text font-semibold text-[14px]">{rec.title}</p>
+                        {rec.alreadyExists && (
+                          <span className="px-2 py-0.5 bg-brand-sage-soft text-brand-sage text-[10px] uppercase font-semibold tracking-[0.14em] rounded-full">
+                            Active
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[13px] text-brand-text-muted leading-relaxed mt-0.5">
+                        {rec.description}
+                      </p>
+                      {rec.alreadyExists && rec.currentProgress > 0 && rec.suggestedAmount > 0 && (
+                        <div className="mt-2">
+                          <div className="h-1.5 bg-brand-border/60 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-brand-sage"
+                              style={{
+                                width: `${Math.min((rec.currentProgress / rec.suggestedAmount) * 100, 100)}%`,
+                              }}
+                            />
+                          </div>
+                          <p className="text-[12px] text-brand-text-faint mt-1">
+                            <span className="font-semibold tabular-lining">
+                              {formatCurrency(rec.currentProgress)}
+                            </span>{' '}
+                            of{' '}
+                            <span className="font-semibold tabular-lining">
+                              {formatCurrency(rec.suggestedAmount)}
+                            </span>
+                          </p>
+                        </div>
                       )}
                     </div>
-                    <p className="text-sm text-cactus-charcoal/60 font-cactus">{rec.description}</p>
-                    {rec.alreadyExists && rec.currentProgress > 0 && rec.suggestedAmount > 0 && (
-                      <div className="mt-2">
-                        <div className="h-1.5 bg-cactus-overlay rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-cactus-sage"
-                            style={{
-                              width: `${Math.min((rec.currentProgress / rec.suggestedAmount) * 100, 100)}%`,
-                            }}
-                          />
-                        </div>
-                        <p className="text-xs text-cactus-charcoal/40 font-cactus mt-1">
-                          <span className="font-cactus font-bold tabular-nums">
-                            {formatCurrency(rec.currentProgress)}
-                          </span>{' '}
-                          of{' '}
-                          <span className="font-cactus font-bold tabular-nums">
-                            {formatCurrency(rec.suggestedAmount)}
-                          </span>
+                    {rec.suggestedAmount > 0 && (
+                      <div className="text-right shrink-0">
+                        <p className="text-[11px] uppercase tracking-[0.14em] text-brand-text-faint font-semibold">
+                          Suggested
+                        </p>
+                        <p className="font-display font-medium tabular-lining text-[17px] text-brand-text mt-0.5">
+                          {formatCurrency(rec.suggestedAmount)}
                         </p>
                       </div>
                     )}
                   </div>
-                  {rec.suggestedAmount > 0 && (
-                    <div className="text-right shrink-0">
-                      <p className="text-xs text-cactus-charcoal/60 font-cactus">Suggested</p>
-                      <p className="text-cactus-charcoal font-cactus font-bold tabular-nums">
-                        {formatCurrency(rec.suggestedAmount)}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Primary Goal (Highlighted) */}
-      {primaryGoal && (
-        <div className="mb-8">
-          <h2 className="text-cactus-charcoal font-cactus font-bold text-lg mb-4">Primary Focus</h2>
-          <GoalCard
-            goal={primaryGoal}
-            isPrimary={true}
-            onUpdateProgress={() => openProgressModal(primaryGoal)}
+        {/* Primary Goal (Highlighted) */}
+        {primaryGoal && (
+          <div className="mb-8">
+            <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-3">
+              Primary focus
+            </p>
+            <GoalCard
+              goal={primaryGoal}
+              isPrimary={true}
+              onUpdateProgress={() => openProgressModal(primaryGoal)}
+            />
+          </div>
+        )}
+
+        {/* Other Active Goals */}
+        {nonPrimaryActiveGoals.length > 0 && (
+          <div className="mb-8">
+            <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-3">
+              Other active goals
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {nonPrimaryActiveGoals.map((goal) => (
+                <GoalCard
+                  key={goal.id}
+                  goal={goal}
+                  onUpdateProgress={() => openProgressModal(goal)}
+                  onSetPrimary={() => handleSetPrimary(goal.id)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Completed Goals */}
+        {completedGoals.length > 0 && (
+          <div>
+            <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-3 flex items-center gap-2">
+              <Trophy className="w-3.5 h-3.5 text-brand-sage" />
+              Completed
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {completedGoals.map((goal) => (
+                <GoalCard key={goal.id} goal={goal} completed />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Create Goal Modal */}
+        {showCreateModal && (
+          <CreateGoalModal
+            onClose={() => setShowCreateModal(false)}
+            onSuccess={() => {
+              queryClient.invalidateQueries({ queryKey: ['goals'] });
+              queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+              setShowCreateModal(false);
+            }}
           />
-        </div>
-      )}
+        )}
 
-      {/* Other Active Goals */}
-      {nonPrimaryActiveGoals.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-cactus-charcoal font-cactus font-bold text-lg mb-4">
-            Other Active Goals
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {nonPrimaryActiveGoals.map((goal) => (
-              <GoalCard
-                key={goal.id}
-                goal={goal}
-                onUpdateProgress={() => openProgressModal(goal)}
-                onSetPrimary={() => handleSetPrimary(goal.id)}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Completed Goals */}
-      {completedGoals.length > 0 && (
-        <div>
-          <h2 className="text-cactus-charcoal font-cactus font-bold text-lg mb-4 flex items-center gap-2">
-            <Trophy className="w-5 h-5 text-cactus-sage" />
-            Completed Goals
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {completedGoals.map((goal) => (
-              <GoalCard key={goal.id} goal={goal} completed />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Create Goal Modal */}
-      {showCreateModal && (
-        <CreateGoalModal
-          onClose={() => setShowCreateModal(false)}
-          onSuccess={() => {
-            queryClient.invalidateQueries({ queryKey: ['goals'] });
-            queryClient.invalidateQueries({ queryKey: ['dashboard'] });
-            setShowCreateModal(false);
-          }}
-        />
-      )}
-
-      {/* Update Progress Modal */}
-      {showProgressModal && selectedGoal && (
-        <UpdateProgressModal
-          goal={selectedGoal}
-          onClose={() => {
-            setShowProgressModal(false);
-            setSelectedGoal(null);
-          }}
-          onSuccess={() => {
-            queryClient.invalidateQueries({ queryKey: ['goals'] });
-            queryClient.invalidateQueries({ queryKey: ['dashboard'] });
-            setShowProgressModal(false);
-            setSelectedGoal(null);
-          }}
-        />
-      )}
+        {/* Update Progress Modal */}
+        {showProgressModal && selectedGoal && (
+          <UpdateProgressModal
+            goal={selectedGoal}
+            onClose={() => {
+              setShowProgressModal(false);
+              setSelectedGoal(null);
+            }}
+            onSuccess={() => {
+              queryClient.invalidateQueries({ queryKey: ['goals'] });
+              queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+              setShowProgressModal(false);
+              setSelectedGoal(null);
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 }
@@ -329,8 +342,8 @@ function GoalCard({
 }) {
   const typeInfo = GOAL_TYPE_INFO[goal.goalType];
   const Icon = typeInfo?.icon || Target;
-  const iconBg = typeInfo?.iconBg || 'bg-cactus-overlay';
-  const iconText = typeInfo?.iconText || 'text-cactus-charcoal/60';
+  const iconBg = typeInfo?.iconBg || 'bg-brand-border/50';
+  const iconText = typeInfo?.iconText || 'text-brand-text-muted';
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-ZA', {
@@ -347,38 +360,40 @@ function GoalCard({
   const remaining = Math.max(goal.targetAmount - goal.currentAmount, 0);
 
   const containerClass = isPrimary
-    ? 'bg-cactus-sage-light border border-cactus-overlay rounded-2xl p-6 transition-all'
+    ? 'bg-brand-surface border border-brand-sage/30 rounded-3xl p-6 shadow-[0_24px_56px_-24px_rgba(31,111,74,0.12)] transition-all'
     : completed
-      ? 'bg-white border border-cactus-overlay rounded-2xl p-5 transition-all opacity-70'
-      : 'bg-white border border-cactus-overlay rounded-2xl p-5 transition-all hover:bg-cactus-sage-light/30';
+      ? 'bg-brand-surface border border-brand-border rounded-3xl p-5 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.08)] opacity-75 transition-all'
+      : 'bg-brand-surface border border-brand-border rounded-3xl p-5 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)] hover:border-brand-sage/30 transition-all';
 
   return (
     <div className={containerClass}>
-      <div className="flex items-start justify-between mb-4 gap-2">
+      <div className="flex items-start justify-between mb-5 gap-2">
         <div className="flex items-center gap-3 min-w-0">
           <div
-            className={`${iconBg} ${iconText} rounded-xl w-10 h-10 flex items-center justify-center shrink-0`}
+            className={`${iconBg} ${iconText} rounded-2xl w-10 h-10 flex items-center justify-center shrink-0`}
           >
             <Icon className={isPrimary ? 'w-6 h-6' : 'w-5 h-5'} />
           </div>
           <div className="min-w-0">
             <h3
-              className={`text-cactus-charcoal font-cactus font-bold ${isPrimary ? 'text-lg' : 'text-base'} truncate`}
+              className={`font-display font-medium tracking-[-0.018em] text-brand-text ${isPrimary ? 'text-[1.5rem] leading-[1.1]' : 'text-[1.125rem] leading-[1.15]'} truncate`}
             >
               {goal.name}
             </h3>
-            <p className="text-cactus-charcoal/60 font-cactus text-sm">{typeInfo?.label}</p>
+            <p className="text-[12px] uppercase tracking-[0.14em] text-brand-text-faint font-semibold mt-0.5">
+              {typeInfo?.label}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {isPrimary && (
-            <div className="bg-cactus-sage text-white text-[10px] uppercase font-cactus font-bold tracking-wide px-2 py-0.5 rounded-full flex items-center gap-1">
-              <Star className="w-3 h-3 fill-current text-cactus-sage bg-white rounded-full" />
+            <div className="bg-brand-sage text-white text-[10px] uppercase font-semibold tracking-[0.14em] px-2 py-0.5 rounded-full flex items-center gap-1">
+              <Star className="w-3 h-3 fill-current" />
               Primary
             </div>
           )}
           {completed && (
-            <div className="bg-cactus-sage text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+            <div className="bg-brand-sage-soft text-brand-sage text-[10px] uppercase font-semibold tracking-[0.14em] px-2 py-0.5 rounded-full flex items-center gap-1">
               <Check className="w-3 h-3" />
               Done
             </div>
@@ -387,29 +402,29 @@ function GoalCard({
       </div>
 
       {/* Progress Bar */}
-      <div className="mb-4">
-        <div className="flex justify-between text-sm mb-1">
-          <span className="text-cactus-charcoal font-cactus font-bold tabular-nums">
+      <div className="mb-5">
+        <div className="flex justify-between items-end mb-1.5">
+          <span className="font-display font-medium tabular-lining text-[1.25rem] text-brand-text">
             {formatCurrency(goal.currentAmount)}
           </span>
-          <span className="text-cactus-charcoal/60 font-cactus font-bold tabular-nums">
+          <span className="font-display font-medium tabular-lining text-[0.875rem] text-brand-text-muted">
             {formatCurrency(goal.targetAmount)}
           </span>
         </div>
-        <div className="h-3 bg-cactus-overlay rounded-full overflow-hidden">
+        <div className="h-2.5 bg-brand-border/60 rounded-full overflow-hidden">
           <div
-            className="h-full bg-cactus-sage transition-all duration-500"
+            className="h-full bg-brand-sage transition-all duration-500"
             style={{ width: `${Math.min(goal.progressPercentage, 100)}%` }}
           />
         </div>
-        <div className="flex justify-between items-center mt-1">
-          <p className="text-sm text-cactus-charcoal/60 font-cactus">
+        <div className="flex justify-between items-center mt-1.5">
+          <p className="text-[13px] text-brand-text-muted">
             {goal.currentAmount === 0
               ? 'Every rand counts. Start your journey today.'
               : `${goal.progressPercentage.toFixed(0)}% complete`}
           </p>
           {!completed && remaining > 0 && (
-            <p className="text-sm text-cactus-sage font-cactus font-bold tabular-nums">
+            <p className="text-[13px] text-brand-sage font-semibold tabular-lining">
               {formatCurrency(remaining)} to go
             </p>
           )}
@@ -418,29 +433,29 @@ function GoalCard({
 
       {/* Milestones */}
       {goal.milestones.length > 0 && (
-        <div className="mb-4">
+        <div className="mb-5">
           <div className="flex items-center gap-1 mb-2">
             {goal.milestones.map((milestone) => (
               <div
                 key={milestone.id}
                 className={`flex-1 h-1 rounded-full ${
-                  milestone.isReached ? 'bg-cactus-sage' : 'bg-cactus-overlay'
+                  milestone.isReached ? 'bg-brand-sage' : 'bg-brand-border/60'
                 }`}
                 title={milestone.name}
               />
             ))}
           </div>
           {nextMilestone && !completed && (
-            <p className="text-xs text-cactus-charcoal/60 font-cactus">
+            <p className="text-[12px] text-brand-text-muted">
               Next: {nextMilestone.name} (
-              <span className="font-cactus font-bold tabular-nums">
+              <span className="font-semibold tabular-lining text-brand-text">
                 {formatCurrency(nextMilestone.targetAmount)}
               </span>
               )
             </p>
           )}
           {completed && (
-            <p className="text-xs text-cactus-sage font-cactus font-semibold">
+            <p className="text-[12px] text-brand-sage font-semibold">
               All {goal.milestones.length} milestones reached!
             </p>
           )}
@@ -449,7 +464,7 @@ function GoalCard({
 
       {/* Linked Account/Debt */}
       {(goal.linkedAccountName || goal.linkedDebtName) && (
-        <p className="text-xs text-cactus-charcoal/40 font-cactus mb-4">
+        <p className="text-[12px] text-brand-text-faint mb-4">
           Linked to: {goal.linkedAccountName || goal.linkedDebtName}
         </p>
       )}
@@ -461,24 +476,24 @@ function GoalCard({
             <button
               type="button"
               onClick={onUpdateProgress}
-              className={`flex-1 py-2 px-4 rounded-xl font-cactus font-semibold flex items-center justify-center gap-2 transition-colors ${
+              className={
                 isPrimary
-                  ? 'bg-cactus-sage text-white hover:brightness-95'
-                  : 'text-cactus-charcoal/60 hover:text-cactus-sage hover:bg-cactus-sage-light/40 text-sm'
-              }`}
+                  ? 'flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-full bg-brand-sage text-white font-semibold text-[13px] shadow-[0_8px_24px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_12px_32px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface transition-all'
+                  : 'flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-full border border-brand-border bg-brand-surface text-brand-text-muted hover:bg-brand-sage-soft/60 hover:text-brand-text font-semibold text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface transition-colors'
+              }
             >
               <TrendingUp className="w-4 h-4" />
-              Update Progress
+              Update progress
             </button>
           )}
           {onSetPrimary && !isPrimary && (
             <button
               type="button"
               onClick={onSetPrimary}
-              className="py-2 px-4 rounded-xl text-cactus-charcoal/60 hover:text-cactus-sage hover:bg-cactus-sage-light/40 font-cactus font-semibold text-sm flex items-center justify-center gap-2 transition-colors"
+              className="flex items-center justify-center gap-2 py-2 px-4 rounded-full border border-brand-border bg-brand-surface text-brand-text-muted hover:bg-brand-sage-soft/60 hover:text-brand-text font-semibold text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface transition-colors"
             >
               <Star className="w-4 h-4" />
-              Set as Primary
+              Set as primary
             </button>
           )}
         </div>
@@ -516,45 +531,54 @@ function CreateGoalModal({ onClose, onSuccess }: { onClose: () => void; onSucces
     createMutation.mutate();
   };
 
+  const fieldLabel =
+    'block font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2';
+  const fieldInput =
+    'w-full bg-brand-cream/40 border border-brand-border focus:border-brand-sage focus:bg-brand-surface focus:ring-2 focus:ring-brand-sage/15 rounded-xl px-4 py-3 text-[15px] text-brand-text placeholder:text-brand-text-faint outline-none transition-all';
+
   return (
-    <div className="fixed inset-0 bg-cactus-charcoal/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white border border-cactus-overlay rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-auto">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-cactus-charcoal font-cactus font-bold text-xl">Create New Goal</h2>
+    <div className="fixed inset-0 bg-brand-text/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 font-sans-brand animate-fade-in">
+      <div className="bg-brand-surface border border-brand-border rounded-3xl p-7 max-w-md w-full max-h-[90vh] overflow-auto shadow-[0_32px_72px_-32px_rgba(31,111,74,0.25)]">
+        <div className="flex justify-between items-start mb-6 gap-4">
+          <div>
+            <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+              New
+            </p>
+            <h2 className="font-display font-medium text-[1.5rem] leading-[1.1] tracking-[-0.018em] text-brand-text">
+              Create a goal
+            </h2>
+          </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-cactus-charcoal/40 hover:text-cactus-charcoal p-1"
+            aria-label="Close"
+            className="text-brand-text-faint hover:text-brand-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface rounded-full p-1 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <div className="p-3 bg-cactus-goals-bg border border-cactus-overlay rounded-xl flex items-center gap-2 text-cactus-prickly">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span className="text-sm font-cactus">{error}</span>
+            <div className="bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 text-[14px] text-brand-accent-ink flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-brand-terracotta" />
+              <span>{error}</span>
             </div>
           )}
           <div>
-            <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5">
-              Goal Name
-            </label>
+            <label className={fieldLabel}>Goal name</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
+              className={fieldInput}
               placeholder="e.g., Emergency Fund"
             />
           </div>
 
           <div>
-            <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5">
-              Goal Type
-            </label>
+            <label className={fieldLabel}>Goal type</label>
             <div className="grid grid-cols-2 gap-2">
               {Object.entries(GOAL_TYPE_INFO).map(([type, info]) => {
                 const Icon = info.icon;
@@ -565,18 +589,16 @@ function CreateGoalModal({ onClose, onSuccess }: { onClose: () => void; onSucces
                     key={type}
                     type="button"
                     onClick={() => setFormData({ ...formData, goalType: typeNum })}
-                    className={`rounded-xl p-3 font-cactus font-semibold flex flex-col items-center gap-2 transition-all border-2 ${
+                    className={`rounded-2xl p-3 flex flex-col items-center gap-2 transition-all border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface ${
                       active
-                        ? `${info.iconBg} ${info.borderActive} text-cactus-charcoal`
-                        : 'bg-white border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40'
+                        ? `${info.iconBg} ${info.borderActive}`
+                        : 'bg-brand-surface border-brand-border hover:bg-brand-sage-soft/40'
                     }`}
                   >
                     <div className={`inline-flex p-1.5 rounded-xl ${info.iconBg} ${info.iconText}`}>
                       <Icon className="w-4 h-4" />
                     </div>
-                    <p className="text-sm font-cactus font-semibold text-cactus-charcoal">
-                      {info.label}
-                    </p>
+                    <p className="text-[13px] font-semibold text-brand-text">{info.label}</p>
                   </button>
                 );
               })}
@@ -584,11 +606,9 @@ function CreateGoalModal({ onClose, onSuccess }: { onClose: () => void; onSucces
           </div>
 
           <div>
-            <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5">
-              Target Amount
-            </label>
+            <label className={fieldLabel}>Target amount</label>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-cactus-charcoal/60 font-cactus">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-text-muted font-display font-medium tabular-lining">
                 R
               </span>
               <input
@@ -598,40 +618,38 @@ function CreateGoalModal({ onClose, onSuccess }: { onClose: () => void; onSucces
                 value={formData.targetAmount}
                 onChange={(e) => setFormData({ ...formData, targetAmount: e.target.value })}
                 required
-                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl pl-8 pr-4 py-3 font-cactus text-cactus-charcoal outline-none tabular-nums"
+                className={`${fieldInput} pl-8 tabular-lining`}
                 placeholder="0.00"
               />
             </div>
           </div>
 
           <div>
-            <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5">
-              Target Date (optional)
-            </label>
+            <label className={fieldLabel}>Target date (optional)</label>
             <input
               type="date"
               value={formData.targetDate}
               onChange={(e) => setFormData({ ...formData, targetDate: e.target.value })}
               min={new Date().toISOString().split('T')[0]}
-              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
+              className={fieldInput}
             />
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-3 pt-3">
             <button
               type="button"
               onClick={onClose}
-              className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-6 py-3 rounded-2xl font-cactus font-bold"
+              className="px-5 py-2.5 rounded-full border border-brand-border bg-brand-surface text-brand-text-muted hover:bg-brand-sage-soft/60 hover:text-brand-text font-semibold text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={!formData.name || !formData.targetAmount || createMutation.isPending}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-cactus font-bold text-white bg-cactus-sage shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed transition-all"
+              className="flex-1 flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-brand-sage text-white font-semibold text-[13px] shadow-[0_8px_24px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_12px_32px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface disabled:bg-brand-border disabled:text-brand-text-faint disabled:shadow-none disabled:cursor-not-allowed disabled:hover:translate-y-0 transition-all"
             >
               <Plus className="w-4 h-4" />
-              {createMutation.isPending ? 'Creating...' : 'Create Goal'}
+              {createMutation.isPending ? 'Creating…' : 'Create goal'}
             </button>
           </div>
         </form>
@@ -684,46 +702,60 @@ function UpdateProgressModal({
   const newAmount = goal.currentAmount + (parseFloat(amount) || 0);
   const newPercentage = (newAmount / goal.targetAmount) * 100;
 
+  const fieldLabel =
+    'block font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2';
+  const fieldInput =
+    'w-full bg-brand-cream/40 border border-brand-border focus:border-brand-sage focus:bg-brand-surface focus:ring-2 focus:ring-brand-sage/15 rounded-xl px-4 py-3 text-[15px] text-brand-text placeholder:text-brand-text-faint outline-none transition-all';
+
   return (
-    <div className="fixed inset-0 bg-cactus-charcoal/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white border border-cactus-overlay rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-auto">
-        <div className="flex justify-between items-center mb-1">
-          <h2 className="text-cactus-charcoal font-cactus font-bold text-xl">Update Progress</h2>
+    <div className="fixed inset-0 bg-brand-text/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 font-sans-brand animate-fade-in">
+      <div className="bg-brand-surface border border-brand-border rounded-3xl p-7 max-w-md w-full max-h-[90vh] overflow-auto shadow-[0_32px_72px_-32px_rgba(31,111,74,0.25)]">
+        <div className="flex justify-between items-start mb-1 gap-4">
+          <div>
+            <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+              Update
+            </p>
+            <h2 className="font-display font-medium text-[1.5rem] leading-[1.1] tracking-[-0.018em] text-brand-text">
+              {goal.name}
+            </h2>
+          </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-cactus-charcoal/40 hover:text-cactus-charcoal p-1"
+            aria-label="Close"
+            className="text-brand-text-faint hover:text-brand-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface rounded-full p-1 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
-        <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">{goal.name}</p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5 mt-5">
           {error && (
-            <div className="p-3 bg-cactus-goals-bg border border-cactus-overlay rounded-xl flex items-center gap-2 text-cactus-prickly">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span className="text-sm font-cactus">{error}</span>
+            <div className="bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 text-[14px] text-brand-accent-ink flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-brand-terracotta" />
+              <span>{error}</span>
             </div>
           )}
           {/* Current Progress */}
-          <div className="bg-cactus-sage-light/40 border border-cactus-overlay rounded-xl p-4">
-            <div className="flex justify-between text-sm mb-2">
-              <span className="text-cactus-charcoal/60 font-cactus">Current</span>
-              <span className="text-cactus-charcoal font-cactus font-bold tabular-nums">
+          <div className="bg-brand-cream/50 border border-brand-border rounded-2xl p-4">
+            <div className="flex justify-between items-end mb-2">
+              <span className="text-[11px] uppercase tracking-[0.14em] text-brand-text-muted font-semibold">
+                Current
+              </span>
+              <span className="font-display font-medium tabular-lining text-[1.125rem] text-brand-text">
                 {formatCurrency(goal.currentAmount)}
               </span>
             </div>
-            <div className="h-2 bg-cactus-overlay rounded-full overflow-hidden">
+            <div className="h-2 bg-brand-border/60 rounded-full overflow-hidden">
               <div
-                className="h-full bg-cactus-sage transition-all"
+                className="h-full bg-brand-sage transition-all"
                 style={{ width: `${goal.progressPercentage}%` }}
               />
             </div>
-            <div className="flex justify-between text-xs text-cactus-charcoal/60 font-cactus mt-1">
-              <span className="tabular-nums">{goal.progressPercentage.toFixed(0)}%</span>
+            <div className="flex justify-between text-[12px] text-brand-text-muted mt-1.5">
+              <span className="tabular-lining">{goal.progressPercentage.toFixed(0)}%</span>
               <span>
-                <span className="font-cactus font-bold tabular-nums">
+                <span className="font-semibold tabular-lining text-brand-text">
                   {formatCurrency(remaining)}
                 </span>{' '}
                 remaining
@@ -733,11 +765,9 @@ function UpdateProgressModal({
 
           {/* Amount Input */}
           <div>
-            <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5">
-              Amount to Add
-            </label>
+            <label className={fieldLabel}>Amount to add</label>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-cactus-charcoal/60 font-cactus">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-text-muted font-display font-medium tabular-lining">
                 R
               </span>
               <input
@@ -745,7 +775,7 @@ function UpdateProgressModal({
                 step="0.01"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl pl-8 pr-4 py-3 font-cactus text-cactus-charcoal outline-none tabular-nums"
+                className={`${fieldInput} pl-8 tabular-lining`}
                 placeholder="0.00"
                 autoFocus
               />
@@ -759,7 +789,7 @@ function UpdateProgressModal({
                 key={quickAmount}
                 type="button"
                 onClick={() => setAmount(quickAmount.toString())}
-                className="flex-1 bg-cactus-sage-light text-cactus-sage font-cactus font-semibold border border-cactus-overlay rounded-xl px-4 py-2 hover:bg-cactus-sage hover:text-white transition-colors text-sm tabular-nums"
+                className="flex-1 bg-brand-sage-soft text-brand-sage font-semibold border border-brand-sage/30 rounded-full px-4 py-2 hover:bg-brand-sage hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface transition-colors text-[13px] tabular-lining"
               >
                 +R{quickAmount}
               </button>
@@ -767,7 +797,7 @@ function UpdateProgressModal({
             <button
               type="button"
               onClick={() => setAmount(remaining.toString())}
-              className="flex-1 bg-cactus-sage-light text-cactus-sage font-cactus font-semibold border border-cactus-overlay rounded-xl px-4 py-2 hover:bg-cactus-sage hover:text-white transition-colors text-sm"
+              className="flex-1 bg-brand-sage-soft text-brand-sage font-semibold border border-brand-sage/30 rounded-full px-4 py-2 hover:bg-brand-sage hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface transition-colors text-[13px]"
             >
               Fill
             </button>
@@ -775,16 +805,18 @@ function UpdateProgressModal({
 
           {/* Preview */}
           {parseFloat(amount) > 0 && (
-            <div className="bg-cactus-sage-light border border-cactus-overlay rounded-xl p-3">
-              <p className="text-sm text-cactus-charcoal font-cactus">
+            <div className="bg-brand-sage-soft border-l-[3px] border-brand-sage rounded-r-xl pl-4 pr-3 py-3">
+              <p className="text-[14px] text-brand-text">
                 New balance:{' '}
-                <span className="font-cactus font-bold tabular-nums">
+                <span className="font-display font-medium tabular-lining text-brand-text">
                   {formatCurrency(newAmount)}
                 </span>{' '}
-                <span className="tabular-nums">({newPercentage.toFixed(0)}%)</span>
+                <span className="tabular-lining text-brand-text-muted">
+                  ({newPercentage.toFixed(0)}%)
+                </span>
               </p>
               {newAmount >= goal.targetAmount && (
-                <p className="text-sm text-cactus-sage font-cactus font-bold mt-1 flex items-center gap-1">
+                <p className="text-[13px] text-brand-sage font-semibold mt-1 flex items-center gap-1">
                   <Trophy className="w-4 h-4" />
                   Goal will be complete!
                 </p>
@@ -794,33 +826,31 @@ function UpdateProgressModal({
 
           {/* Note */}
           <div>
-            <label className="font-cactus font-semibold text-sm text-cactus-charcoal block mb-1.5">
-              Note (optional)
-            </label>
+            <label className={fieldLabel}>Note (optional)</label>
             <input
               type="text"
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
+              className={fieldInput}
               placeholder="e.g., Monthly contribution"
             />
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-3 pt-3">
             <button
               type="button"
               onClick={onClose}
-              className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-6 py-3 rounded-2xl font-cactus font-bold"
+              className="px-5 py-2.5 rounded-full border border-brand-border bg-brand-surface text-brand-text-muted hover:bg-brand-sage-soft/60 hover:text-brand-text font-semibold text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={!amount || parseFloat(amount) === 0 || updateMutation.isPending}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-cactus font-bold text-white bg-cactus-sage shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed transition-all"
+              className="flex-1 flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-brand-sage text-white font-semibold text-[13px] shadow-[0_8px_24px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_12px_32px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface disabled:bg-brand-border disabled:text-brand-text-faint disabled:shadow-none disabled:cursor-not-allowed disabled:hover:translate-y-0 transition-all"
             >
               <TrendingUp className="w-4 h-4" />
-              {updateMutation.isPending ? 'Saving...' : 'Update Progress'}
+              {updateMutation.isPending ? 'Saving…' : 'Update progress'}
             </button>
           </div>
         </form>
