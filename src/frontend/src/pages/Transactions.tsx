@@ -659,13 +659,13 @@ function ClassifyModal({
   const getMacroColor = (type: number) => {
     switch (type) {
       case MacroCategoryType.Needs:
-        return 'border-cactus-sage bg-cactus-needs-bg hover:bg-cactus-needs-bg/80';
+        return 'border-brand-sage/40 bg-brand-sage-soft hover:bg-brand-sage-soft/80';
       case MacroCategoryType.Wants:
-        return 'border-cactus-desert bg-cactus-wants-bg hover:bg-cactus-wants-bg/80';
+        return 'border-brand-terracotta/40 bg-brand-terracotta-soft hover:bg-brand-terracotta-soft/80';
       case MacroCategoryType.Goals:
-        return 'border-cactus-prickly bg-cactus-goals-bg hover:bg-cactus-goals-bg/80';
+        return 'border-brand-accent-ink/30 bg-brand-accent-ink/10 hover:bg-brand-accent-ink/15';
       default:
-        return 'border-cactus-overlay bg-cactus-sandstone hover:bg-cactus-sage-light/40';
+        return 'border-brand-border bg-brand-cream/60 hover:bg-brand-sage-soft/40';
     }
   };
 
@@ -677,25 +677,26 @@ function ClassifyModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-cactus-charcoal/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white border border-cactus-overlay rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-brand-text/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 font-sans-brand animate-fade-in">
+      <div className="bg-brand-surface border border-brand-border rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-[0_32px_72px_-32px_rgba(31,111,74,0.25)]">
         {/* Header */}
-        <div className="p-6 border-b border-cactus-overlay">
-          <div className="flex justify-between items-start">
+        <div className="p-7 border-b border-brand-border">
+          <div className="flex justify-between items-start gap-4">
             <div>
-              <h2 className="text-lg text-cactus-charcoal font-cactus font-bold">
-                Classify Transaction
-              </h2>
-              <p className="text-sm text-cactus-charcoal/60 font-cactus mt-1">
-                {transaction.merchantName || transaction.description}
+              <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+                Classify
               </p>
-              <p className="text-lg text-cactus-charcoal font-cactus font-bold tabular-nums mt-2">
+              <h2 className="font-display font-medium text-[1.625rem] leading-[1.1] tracking-[-0.018em] text-brand-text">
+                {transaction.merchantName || transaction.description}
+              </h2>
+              <p className="font-display font-medium tabular-lining text-[1.5rem] text-brand-text mt-3">
                 {formatCurrency(transaction.amount)}
               </p>
             </div>
             <button
               onClick={onClose}
-              className="text-cactus-charcoal/40 hover:text-cactus-charcoal"
+              aria-label="Close"
+              className="text-brand-text-faint hover:text-brand-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface rounded-full p-1 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -703,7 +704,7 @@ function ClassifyModal({
 
           {/* Breadcrumb */}
           {selectedMacro && (
-            <div className="flex items-center gap-2 mt-4 text-sm font-cactus">
+            <div className="flex items-center gap-2 mt-5 text-[13px]">
               <button
                 onClick={() => {
                   setStep('macro');
@@ -711,20 +712,20 @@ function ClassifyModal({
                   setSelectedCategory(null);
                   setSelectedSubCategory(null);
                 }}
-                className="text-cactus-sage font-semibold hover:underline"
+                className="font-semibold text-brand-sage hover:text-brand-accent-ink underline-offset-4 hover:underline transition-colors"
               >
                 {selectedMacro.name}
               </button>
               {selectedCategory && (
                 <>
-                  <span className="text-cactus-charcoal/40">/</span>
+                  <span className="text-brand-text-faint">/</span>
                   <button
                     onClick={() => {
                       setStep('category');
                       setSelectedCategory(null);
                       setSelectedSubCategory(null);
                     }}
-                    className="text-cactus-sage font-semibold hover:underline"
+                    className="font-semibold text-brand-sage hover:text-brand-accent-ink underline-offset-4 hover:underline transition-colors"
                   >
                     {selectedCategory.name}
                   </button>
@@ -732,8 +733,8 @@ function ClassifyModal({
               )}
               {selectedSubCategory && (
                 <>
-                  <span className="text-cactus-charcoal/40">/</span>
-                  <span className="text-cactus-charcoal/60">
+                  <span className="text-brand-text-faint">/</span>
+                  <span className="text-brand-text-muted">
                     {
                       selectedMacro.categories
                         .find((c) => c.id === selectedCategory?.id)
@@ -747,11 +748,11 @@ function ClassifyModal({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-auto p-7">
           {error && (
-            <div className="mb-4 p-3 bg-cactus-goals-bg border border-cactus-prickly rounded-xl flex items-center gap-2 text-cactus-charcoal font-cactus">
-              <AlertCircle className="w-4 h-4 shrink-0 text-cactus-prickly" />
-              <span className="text-sm">{error}</span>
+            <div className="mb-5 bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 text-[14px] text-brand-accent-ink flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-brand-terracotta" />
+              <span>{error}</span>
             </div>
           )}
 
@@ -759,21 +760,21 @@ function ClassifyModal({
           {step === 'macro' && !suggestionsLoading && bestSuggestion && (
             <button
               onClick={() => applySuggestion(bestSuggestion)}
-              className="w-full mb-4 p-4 rounded-xl border-2 border-cactus-desert bg-cactus-wants-bg hover:bg-cactus-wants-bg/70 text-left transition-all group"
+              className="w-full mb-5 p-4 rounded-2xl border border-brand-terracotta/40 bg-brand-terracotta-soft hover:bg-brand-terracotta-soft/80 text-left transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface"
             >
-              <div className="flex items-center gap-2 mb-1">
-                <Sparkles className="w-4 h-4 text-cactus-desert" />
-                <span className="text-sm font-cactus font-semibold text-cactus-charcoal">
+              <div className="flex flex-wrap items-center gap-2 mb-1">
+                <Sparkles className="w-4 h-4 text-brand-terracotta" />
+                <span className="text-[14px] font-semibold text-brand-text">
                   Suggested: {bestSuggestion.categoryName}
                 </span>
-                <span className="text-xs px-2 py-0.5 bg-cactus-sage-light text-cactus-sage border border-cactus-overlay font-cactus font-semibold rounded-full">
+                <span className="text-[11px] uppercase tracking-[0.14em] px-2 py-0.5 bg-brand-sage-soft text-brand-sage font-semibold rounded-full">
                   {Math.round(bestSuggestion.confidence * 100)}% confident
                 </span>
               </div>
-              <p className="text-sm text-cactus-charcoal/60 font-cactus">
+              <p className="text-[13px] text-brand-text-muted">
                 Based on: "{bestSuggestion.matchedPattern}"
               </p>
-              <p className="text-xs text-cactus-charcoal/60 font-cactus mt-1 group-hover:underline">
+              <p className="text-[12px] text-brand-text-faint mt-1 group-hover:underline underline-offset-4">
                 Click to apply this suggestion
               </p>
             </button>
@@ -781,17 +782,17 @@ function ClassifyModal({
 
           {step === 'macro' && (
             <div className="space-y-3">
-              <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">
+              <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-4">
                 Is this a Need, Want, or Goal?
               </p>
               {categories.map((macro) => (
                 <button
                   key={macro.id}
                   onClick={() => handleMacroSelect(macro)}
-                  className={`w-full p-4 rounded-xl border-2 text-left transition-all ${getMacroColor(macro.type)}`}
+                  className={`w-full p-4 rounded-2xl border text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface ${getMacroColor(macro.type)}`}
                 >
-                  <p className="text-cactus-charcoal font-cactus font-semibold">{macro.name}</p>
-                  <p className="text-sm text-cactus-charcoal/60 font-cactus mt-1">
+                  <p className="text-brand-text font-semibold text-[15px]">{macro.name}</p>
+                  <p className="text-[13px] text-brand-text-muted mt-1 leading-relaxed">
                     {macro.description}
                   </p>
                 </button>
@@ -801,20 +802,20 @@ function ClassifyModal({
 
           {step === 'category' && selectedMacro && (
             <div className="space-y-2">
-              <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">
+              <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-4">
                 What type of {selectedMacro.name.toLowerCase()}?
               </p>
               {selectedMacro.categories.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => handleCategorySelect(category)}
-                  className={`w-full p-3 rounded-xl border-2 text-left transition-all ${
+                  className={`w-full p-3.5 rounded-2xl border text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface ${
                     selectedCategory?.id === category.id
-                      ? 'border-cactus-sage bg-cactus-sage-light'
-                      : 'border-cactus-overlay bg-white hover:bg-cactus-sage-light/30'
+                      ? 'border-brand-sage/60 bg-brand-sage-soft'
+                      : 'border-brand-border bg-brand-surface hover:bg-brand-sage-soft/40'
                   }`}
                 >
-                  <p className="text-cactus-charcoal font-cactus font-semibold">{category.name}</p>
+                  <p className="text-brand-text font-semibold text-[15px]">{category.name}</p>
                 </button>
               ))}
             </div>
@@ -822,18 +823,18 @@ function ClassifyModal({
 
           {step === 'sub' && selectedMacro && selectedCategory && (
             <div className="space-y-2">
-              <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">
-                Optional: More specific category
+              <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-4">
+                Optional: more specific
               </p>
               <button
                 onClick={() => setSelectedSubCategory(null)}
-                className={`w-full p-3 rounded-xl border-2 text-left transition-all ${
+                className={`w-full p-3.5 rounded-2xl border text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface ${
                   !selectedSubCategory
-                    ? 'border-cactus-sage bg-cactus-sage-light'
-                    : 'border-cactus-overlay bg-white hover:bg-cactus-sage-light/30'
+                    ? 'border-brand-sage/60 bg-brand-sage-soft'
+                    : 'border-brand-border bg-brand-surface hover:bg-brand-sage-soft/40'
                 }`}
               >
-                <p className="text-cactus-charcoal font-cactus font-semibold">
+                <p className="text-brand-text font-semibold text-[15px]">
                   Skip (use "{selectedCategory.name}")
                 </p>
               </button>
@@ -843,13 +844,13 @@ function ClassifyModal({
                   <button
                     key={sub.id}
                     onClick={() => setSelectedSubCategory(sub.id)}
-                    className={`w-full p-3 rounded-xl border-2 text-left transition-all ${
+                    className={`w-full p-3.5 rounded-2xl border text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface ${
                       selectedSubCategory === sub.id
-                        ? 'border-cactus-sage bg-cactus-sage-light'
-                        : 'border-cactus-overlay bg-white hover:bg-cactus-sage-light/30'
+                        ? 'border-brand-sage/60 bg-brand-sage-soft'
+                        : 'border-brand-border bg-brand-surface hover:bg-brand-sage-soft/40'
                     }`}
                   >
-                    <p className="text-cactus-charcoal font-cactus font-semibold">{sub.name}</p>
+                    <p className="text-brand-text font-semibold text-[15px]">{sub.name}</p>
                   </button>
                 ))}
             </div>
@@ -858,14 +859,14 @@ function ClassifyModal({
           {/* Notes */}
           {selectedCategory && (
             <div className="mt-6">
-              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
+              <label className="block font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
                 Notes (optional)
               </label>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Add a note..."
-                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none resize-none"
+                className="w-full bg-brand-cream/40 border border-brand-border focus:border-brand-sage focus:bg-brand-surface focus:ring-2 focus:ring-brand-sage/15 rounded-xl px-4 py-3 text-[15px] text-brand-text placeholder:text-brand-text-faint outline-none resize-none transition-all"
                 rows={2}
               />
             </div>
@@ -873,19 +874,19 @@ function ClassifyModal({
 
           {/* Apply to Similar Checkbox */}
           {selectedCategory && similarCount && similarCount.count > 0 && (
-            <div className="mt-4 p-3 bg-cactus-sage-light border border-cactus-sage rounded-xl">
+            <div className="mt-4 bg-brand-sage-soft border-l-[3px] border-brand-sage rounded-r-xl pl-4 pr-3 py-3">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={applyToSimilar}
                   onChange={(e) => setUserOverrideApplyToSimilar(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-cactus-overlay text-cactus-sage focus:ring-cactus-sage"
+                  className="mt-0.5 h-4 w-4 rounded border-brand-border text-brand-sage focus:ring-brand-sage focus:ring-offset-0"
                 />
                 <div>
-                  <span className="text-sm text-cactus-charcoal font-cactus font-semibold">
+                  <span className="text-[14px] text-brand-text font-semibold">
                     Apply to similar transactions
                   </span>
-                  <p className="text-xs text-cactus-charcoal/60 font-cactus mt-0.5">
+                  <p className="text-[12px] text-brand-text-muted mt-0.5 leading-relaxed">
                     {similarCount.count} other unclassified transaction
                     {similarCount.count !== 1 ? 's' : ''} matching "{similarCount.matchPattern}"
                     will also be classified
@@ -897,17 +898,17 @@ function ClassifyModal({
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-cactus-overlay flex justify-end gap-3">
+        <div className="p-6 border-t border-brand-border flex justify-end gap-3 bg-brand-cream/30">
           <button
             onClick={onClose}
-            className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-4 py-2 rounded-xl font-cactus font-semibold"
+            className="px-5 py-2.5 rounded-full border border-brand-border bg-brand-surface text-brand-text-muted hover:bg-brand-sage-soft/60 hover:text-brand-text font-semibold text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={!selectedMacro || !selectedCategory || classifyMutation.isPending}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cactus-sage text-white font-cactus font-bold shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-sage text-white font-semibold text-[13px] shadow-[0_8px_24px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_12px_32px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream disabled:bg-brand-border disabled:text-brand-text-faint disabled:shadow-none disabled:cursor-not-allowed disabled:hover:translate-y-0 transition-all"
           >
             <Check className="w-4 h-4" />
             {classifyMutation.isPending
@@ -971,38 +972,49 @@ function AddTransactionModal({
     createMutation.mutate();
   };
 
+  const fieldLabel =
+    'block font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2';
+  const fieldInput =
+    'w-full bg-brand-cream/40 border border-brand-border focus:border-brand-sage focus:bg-brand-surface focus:ring-2 focus:ring-brand-sage/15 rounded-xl px-4 py-3 font-sans-brand text-[15px] text-brand-text placeholder:text-brand-text-faint outline-none transition-all';
+
   return (
-    <div className="fixed inset-0 bg-cactus-charcoal/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white border border-cactus-overlay rounded-2xl w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col">
-        <div className="p-6 border-b border-cactus-overlay">
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg text-cactus-charcoal font-cactus font-bold">Add Transaction</h2>
+    <div className="fixed inset-0 bg-brand-text/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 font-sans-brand animate-fade-in">
+      <div className="bg-brand-surface border border-brand-border rounded-3xl w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col shadow-[0_32px_72px_-32px_rgba(31,111,74,0.25)]">
+        <div className="p-7 border-b border-brand-border">
+          <div className="flex justify-between items-start gap-4">
+            <div>
+              <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+                New
+              </p>
+              <h2 className="font-display font-medium text-[1.625rem] leading-[1.1] tracking-[-0.018em] text-brand-text">
+                Add transaction
+              </h2>
+            </div>
             <button
               onClick={onClose}
-              className="text-cactus-charcoal/40 hover:text-cactus-charcoal"
+              aria-label="Close"
+              className="text-brand-text-faint hover:text-brand-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface rounded-full p-1 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex-1 overflow-auto p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="flex-1 overflow-auto p-7 space-y-5">
           {error && (
-            <div className="p-3 bg-cactus-goals-bg border border-cactus-prickly rounded-xl flex items-center gap-2 text-cactus-charcoal font-cactus">
-              <AlertCircle className="w-4 h-4 shrink-0 text-cactus-prickly" />
-              <span className="text-sm">{error}</span>
+            <div className="bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 text-[14px] text-brand-accent-ink flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-brand-terracotta" />
+              <span>{error}</span>
             </div>
           )}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
-                Account
-              </label>
+              <label className={fieldLabel}>Account</label>
               <select
                 value={formData.accountId}
                 onChange={(e) => setFormData({ ...formData, accountId: e.target.value })}
                 required
-                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none bg-white"
+                className={fieldInput}
               >
                 {accounts.map((account) => (
                   <option key={account.id} value={account.id}>
@@ -1012,13 +1024,11 @@ function AddTransactionModal({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
-                Type
-              </label>
+              <label className={fieldLabel}>Type</label>
               <select
                 value={formData.type}
                 onChange={(e) => setFormData({ ...formData, type: parseInt(e.target.value) })}
-                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none bg-white"
+                className={fieldInput}
               >
                 <option value={TransactionType.Debit}>Expense (Debit)</option>
                 <option value={TransactionType.Credit}>Income (Credit)</option>
@@ -1027,9 +1037,7 @@ function AddTransactionModal({
           </div>
 
           <div>
-            <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
-              Amount (R)
-            </label>
+            <label className={fieldLabel}>Amount (R)</label>
             <input
               type="number"
               step="0.01"
@@ -1037,64 +1045,56 @@ function AddTransactionModal({
               value={formData.amount}
               onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
               required
-              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
+              className={`${fieldInput} tabular-lining`}
               placeholder="0.00"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
-              Description
-            </label>
+            <label className={fieldLabel}>Description</label>
             <input
               type="text"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
-              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
+              className={fieldInput}
               placeholder="What was this for?"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
-              Merchant (optional)
-            </label>
+            <label className={fieldLabel}>Merchant (optional)</label>
             <input
               type="text"
               value={formData.merchantName}
               onChange={(e) => setFormData({ ...formData, merchantName: e.target.value })}
-              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
+              className={fieldInput}
               placeholder="e.g., Woolworths"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
-              Date
-            </label>
+            <label className={fieldLabel}>Date</label>
             <input
               type="date"
               value={formData.transactionDate}
               onChange={(e) => setFormData({ ...formData, transactionDate: e.target.value })}
               required
-              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none"
+              className={fieldInput}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
-                Category
-              </label>
+              <label className={fieldLabel}>Category</label>
               <select
                 value={formData.macroCategoryId}
                 onChange={(e) =>
                   setFormData({ ...formData, macroCategoryId: e.target.value, categoryId: '' })
                 }
-                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none bg-white"
+                className={fieldInput}
               >
-                <option value="">Select category...</option>
+                <option value="">Select category…</option>
                 {categories.map((macro) => (
                   <option key={macro.id} value={macro.id}>
                     {macro.name}
@@ -1103,16 +1103,14 @@ function AddTransactionModal({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
-                Sub-category
-              </label>
+              <label className={fieldLabel}>Sub-category</label>
               <select
                 value={formData.categoryId}
                 onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
                 disabled={!selectedMacro}
-                className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none bg-white disabled:bg-cactus-sandstone disabled:cursor-not-allowed"
+                className={`${fieldInput} disabled:bg-brand-border/30 disabled:text-brand-text-faint disabled:cursor-not-allowed`}
               >
-                <option value="">Select...</option>
+                <option value="">Select…</option>
                 {selectedMacro?.categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.name}
@@ -1123,23 +1121,22 @@ function AddTransactionModal({
           </div>
 
           <div>
-            <label className="block text-sm font-cactus font-semibold text-cactus-charcoal mb-1">
-              Notes (optional)
-            </label>
+            <label className={fieldLabel}>Notes (optional)</label>
             <textarea
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              className="w-full border-2 border-cactus-overlay focus:border-cactus-sage rounded-xl px-4 py-3 font-cactus text-cactus-charcoal outline-none resize-none"
+              className={`${fieldInput} resize-none`}
               rows={2}
-              placeholder="Additional notes..."
+              placeholder="Additional notes…"
             />
           </div>
         </form>
 
-        <div className="p-6 border-t border-cactus-overlay flex justify-end gap-3">
+        <div className="p-6 border-t border-brand-border flex justify-end gap-3 bg-brand-cream/30">
           <button
             onClick={onClose}
-            className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-4 py-2 rounded-xl font-cactus font-semibold"
+            type="button"
+            className="px-5 py-2.5 rounded-full border border-brand-border bg-brand-surface text-brand-text-muted hover:bg-brand-sage-soft/60 hover:text-brand-text font-semibold text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream transition-colors"
           >
             Cancel
           </button>
@@ -1152,10 +1149,10 @@ function AddTransactionModal({
               !formData.description ||
               createMutation.isPending
             }
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cactus-sage text-white font-cactus font-bold shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-sage text-white font-semibold text-[13px] shadow-[0_8px_24px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_12px_32px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream disabled:bg-brand-border disabled:text-brand-text-faint disabled:shadow-none disabled:cursor-not-allowed disabled:hover:translate-y-0 transition-all"
           >
             <Plus className="w-4 h-4" />
-            {createMutation.isPending ? 'Adding...' : 'Add Transaction'}
+            {createMutation.isPending ? 'Adding…' : 'Add transaction'}
           </button>
         </div>
       </div>
@@ -1236,37 +1233,37 @@ function BulkClassifyModal({
   const getMacroColor = (type: number) => {
     switch (type) {
       case MacroCategoryType.Needs:
-        return 'border-cactus-sage bg-cactus-needs-bg hover:bg-cactus-needs-bg/80';
+        return 'border-brand-sage/40 bg-brand-sage-soft hover:bg-brand-sage-soft/80';
       case MacroCategoryType.Wants:
-        return 'border-cactus-desert bg-cactus-wants-bg hover:bg-cactus-wants-bg/80';
+        return 'border-brand-terracotta/40 bg-brand-terracotta-soft hover:bg-brand-terracotta-soft/80';
       case MacroCategoryType.Goals:
-        return 'border-cactus-prickly bg-cactus-goals-bg hover:bg-cactus-goals-bg/80';
+        return 'border-brand-accent-ink/30 bg-brand-accent-ink/10 hover:bg-brand-accent-ink/15';
       default:
-        return 'border-cactus-overlay bg-cactus-sandstone hover:bg-cactus-sage-light/40';
+        return 'border-brand-border bg-brand-cream/60 hover:bg-brand-sage-soft/40';
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-cactus-charcoal/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white border border-cactus-overlay rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-brand-text/40 backdrop-blur-sm flex items-center justify-center z-50 p-4 font-sans-brand animate-fade-in">
+      <div className="bg-brand-surface border border-brand-border rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-[0_32px_72px_-32px_rgba(31,111,74,0.25)]">
         {/* Header */}
-        <div className="p-6 border-b border-cactus-overlay">
-          <div className="flex justify-between items-start">
+        <div className="p-7 border-b border-brand-border">
+          <div className="flex justify-between items-start gap-4">
             <div>
-              <h2 className="text-lg text-cactus-charcoal font-cactus font-bold">
-                Bulk Classification
+              <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+                Bulk classify
+              </p>
+              <h2 className="font-display font-medium text-[1.625rem] leading-[1.1] tracking-[-0.018em] text-brand-text">
+                {transactionIds.length} transaction{transactionIds.length !== 1 ? 's' : ''} selected
               </h2>
-              <p className="text-sm text-cactus-charcoal/60 font-cactus mt-1">
-                Classifying{' '}
-                <span className="inline-block bg-cactus-sage-light text-cactus-sage border border-cactus-overlay text-xs font-cactus font-semibold px-2 py-0.5 rounded-full align-middle">
-                  {transactionIds.length}
-                </span>{' '}
-                transaction{transactionIds.length !== 1 ? 's' : ''}
+              <p className="text-[13px] text-brand-text-muted mt-2">
+                Pick a category to apply to all of them at once.
               </p>
             </div>
             <button
               onClick={onClose}
-              className="text-cactus-charcoal/40 hover:text-cactus-charcoal"
+              aria-label="Close"
+              className="text-brand-text-faint hover:text-brand-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface rounded-full p-1 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -1274,7 +1271,7 @@ function BulkClassifyModal({
 
           {/* Breadcrumb */}
           {selectedMacro && (
-            <div className="flex items-center gap-2 mt-4 text-sm font-cactus">
+            <div className="flex items-center gap-2 mt-5 text-[13px]">
               <button
                 onClick={() => {
                   setStep('macro');
@@ -1282,20 +1279,20 @@ function BulkClassifyModal({
                   setSelectedCategory(null);
                   setSelectedSubCategory(null);
                 }}
-                className="text-cactus-sage font-semibold hover:underline"
+                className="font-semibold text-brand-sage hover:text-brand-accent-ink underline-offset-4 hover:underline transition-colors"
               >
                 {selectedMacro.name}
               </button>
               {selectedCategory && (
                 <>
-                  <span className="text-cactus-charcoal/40">/</span>
+                  <span className="text-brand-text-faint">/</span>
                   <button
                     onClick={() => {
                       setStep('category');
                       setSelectedCategory(null);
                       setSelectedSubCategory(null);
                     }}
-                    className="text-cactus-sage font-semibold hover:underline"
+                    className="font-semibold text-brand-sage hover:text-brand-accent-ink underline-offset-4 hover:underline transition-colors"
                   >
                     {selectedCategory.name}
                   </button>
@@ -1303,8 +1300,8 @@ function BulkClassifyModal({
               )}
               {selectedSubCategory && (
                 <>
-                  <span className="text-cactus-charcoal/40">/</span>
-                  <span className="text-cactus-charcoal/60">
+                  <span className="text-brand-text-faint">/</span>
+                  <span className="text-brand-text-muted">
                     {
                       selectedMacro.categories
                         .find((c) => c.id === selectedCategory?.id)
@@ -1318,26 +1315,26 @@ function BulkClassifyModal({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-auto p-7">
           {error && (
-            <div className="mb-4 p-3 bg-cactus-goals-bg border border-cactus-prickly rounded-xl flex items-center gap-2 text-cactus-charcoal font-cactus">
-              <AlertCircle className="w-4 h-4 shrink-0 text-cactus-prickly" />
-              <span className="text-sm">{error}</span>
+            <div className="mb-5 bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 text-[14px] text-brand-accent-ink flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-brand-terracotta" />
+              <span>{error}</span>
             </div>
           )}
           {step === 'macro' && (
             <div className="space-y-3">
-              <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">
+              <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-4">
                 Is this a Need, Want, or Goal?
               </p>
               {categories.map((macro) => (
                 <button
                   key={macro.id}
                   onClick={() => handleMacroSelect(macro)}
-                  className={`w-full p-4 rounded-xl border-2 text-left transition-all ${getMacroColor(macro.type)}`}
+                  className={`w-full p-4 rounded-2xl border text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface ${getMacroColor(macro.type)}`}
                 >
-                  <p className="text-cactus-charcoal font-cactus font-semibold">{macro.name}</p>
-                  <p className="text-sm text-cactus-charcoal/60 font-cactus mt-1">
+                  <p className="text-brand-text font-semibold text-[15px]">{macro.name}</p>
+                  <p className="text-[13px] text-brand-text-muted mt-1 leading-relaxed">
                     {macro.description}
                   </p>
                 </button>
@@ -1347,20 +1344,20 @@ function BulkClassifyModal({
 
           {step === 'category' && selectedMacro && (
             <div className="space-y-2">
-              <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">
+              <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-4">
                 What type of {selectedMacro.name.toLowerCase()}?
               </p>
               {selectedMacro.categories.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => handleCategorySelect(category)}
-                  className={`w-full p-3 rounded-xl border-2 text-left transition-all ${
+                  className={`w-full p-3.5 rounded-2xl border text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface ${
                     selectedCategory?.id === category.id
-                      ? 'border-cactus-sage bg-cactus-sage-light'
-                      : 'border-cactus-overlay bg-white hover:bg-cactus-sage-light/30'
+                      ? 'border-brand-sage/60 bg-brand-sage-soft'
+                      : 'border-brand-border bg-brand-surface hover:bg-brand-sage-soft/40'
                   }`}
                 >
-                  <p className="text-cactus-charcoal font-cactus font-semibold">{category.name}</p>
+                  <p className="text-brand-text font-semibold text-[15px]">{category.name}</p>
                 </button>
               ))}
             </div>
@@ -1368,18 +1365,18 @@ function BulkClassifyModal({
 
           {step === 'sub' && selectedMacro && selectedCategory && (
             <div className="space-y-2">
-              <p className="text-sm text-cactus-charcoal/60 font-cactus mb-4">
-                Optional: More specific category
+              <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-4">
+                Optional: more specific
               </p>
               <button
                 onClick={() => setSelectedSubCategory(null)}
-                className={`w-full p-3 rounded-xl border-2 text-left transition-all ${
+                className={`w-full p-3.5 rounded-2xl border text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface ${
                   !selectedSubCategory
-                    ? 'border-cactus-sage bg-cactus-sage-light'
-                    : 'border-cactus-overlay bg-white hover:bg-cactus-sage-light/30'
+                    ? 'border-brand-sage/60 bg-brand-sage-soft'
+                    : 'border-brand-border bg-brand-surface hover:bg-brand-sage-soft/40'
                 }`}
               >
-                <p className="text-cactus-charcoal font-cactus font-semibold">
+                <p className="text-brand-text font-semibold text-[15px]">
                   Skip (use "{selectedCategory.name}")
                 </p>
               </button>
@@ -1389,13 +1386,13 @@ function BulkClassifyModal({
                   <button
                     key={sub.id}
                     onClick={() => setSelectedSubCategory(sub.id)}
-                    className={`w-full p-3 rounded-xl border-2 text-left transition-all ${
+                    className={`w-full p-3.5 rounded-2xl border text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface ${
                       selectedSubCategory === sub.id
-                        ? 'border-cactus-sage bg-cactus-sage-light'
-                        : 'border-cactus-overlay bg-white hover:bg-cactus-sage-light/30'
+                        ? 'border-brand-sage/60 bg-brand-sage-soft'
+                        : 'border-brand-border bg-brand-surface hover:bg-brand-sage-soft/40'
                     }`}
                   >
-                    <p className="text-cactus-charcoal font-cactus font-semibold">{sub.name}</p>
+                    <p className="text-brand-text font-semibold text-[15px]">{sub.name}</p>
                   </button>
                 ))}
             </div>
@@ -1403,22 +1400,22 @@ function BulkClassifyModal({
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-cactus-overlay flex justify-end gap-3">
+        <div className="p-6 border-t border-brand-border flex justify-end gap-3 bg-brand-cream/30">
           <button
             onClick={onClose}
-            className="bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 px-4 py-2 rounded-xl font-cactus font-semibold"
+            className="px-5 py-2.5 rounded-full border border-brand-border bg-brand-surface text-brand-text-muted hover:bg-brand-sage-soft/60 hover:text-brand-text font-semibold text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={!selectedMacro || !selectedCategory || bulkClassifyMutation.isPending}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cactus-sage text-white font-cactus font-bold shadow-[0_4px_16px_rgba(119,221,119,0.25)] hover:brightness-95 active:brightness-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-sage text-white font-semibold text-[13px] shadow-[0_8px_24px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_12px_32px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-cream disabled:bg-brand-border disabled:text-brand-text-faint disabled:shadow-none disabled:cursor-not-allowed disabled:hover:translate-y-0 transition-all"
           >
             <Check className="w-4 h-4" />
             {bulkClassifyMutation.isPending
-              ? 'Classifying...'
-              : `Classify ${transactionIds.length} Transaction${transactionIds.length !== 1 ? 's' : ''}`}
+              ? 'Classifying…'
+              : `Classify ${transactionIds.length} transaction${transactionIds.length !== 1 ? 's' : ''}`}
           </button>
         </div>
       </div>
@@ -1454,29 +1451,34 @@ function RecurringPatternsPanel() {
     }).format(amount);
 
   return (
-    <div className="bg-white border border-cactus-overlay rounded-2xl p-5 mb-6">
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-2">
-          <Repeat className="w-5 h-5 text-cactus-sage" />
-          <h2 className="text-cactus-charcoal font-cactus font-bold">Recurring Patterns</h2>
+    <div className="bg-brand-surface border border-brand-border rounded-3xl p-6 mb-6 shadow-[0_16px_40px_-20px_rgba(31,111,74,0.10)]">
+      <div className="flex flex-wrap gap-3 justify-between items-center mb-5">
+        <div>
+          <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-1">
+            Recurring
+          </p>
+          <h2 className="font-display font-medium text-[1.375rem] leading-[1.1] tracking-[-0.018em] text-brand-text flex items-center gap-2">
+            <Repeat className="w-4 h-4 text-brand-sage" />
+            Detected patterns
+          </h2>
         </div>
         <button
           onClick={() => detectMutation.mutate()}
           disabled={detectMutation.isPending}
-          className="flex items-center gap-2 px-3 py-1.5 text-sm bg-white border border-cactus-overlay text-cactus-charcoal hover:bg-cactus-sage-light/40 rounded-xl font-cactus font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-4 py-2 rounded-full border border-brand-border bg-brand-surface text-brand-text-muted hover:bg-brand-sage-soft/60 hover:text-brand-text font-semibold text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          <RefreshCw className={`w-3 h-3 ${detectMutation.isPending ? 'animate-spin' : ''}`} />
-          {detectMutation.isPending ? 'Detecting...' : 'Detect Patterns'}
+          <RefreshCw className={`w-3.5 h-3.5 ${detectMutation.isPending ? 'animate-spin' : ''}`} />
+          {detectMutation.isPending ? 'Detecting…' : 'Detect patterns'}
         </button>
       </div>
 
-      {isLoading && (
-        <p className="text-sm text-cactus-charcoal/60 font-cactus">Loading patterns...</p>
-      )}
+      {isLoading && <p className="text-[14px] text-brand-text-muted">Loading patterns…</p>}
 
       {patterns && patterns.length === 0 && (
-        <p className="text-sm text-cactus-charcoal/60 font-cactus">
-          No recurring patterns detected yet. Click "Detect Patterns" to analyze your transactions.
+        <p className="text-[14px] text-brand-text-muted leading-relaxed">
+          No recurring patterns detected yet. Click{' '}
+          <span className="text-brand-text font-semibold">Detect patterns</span> to analyze your
+          transactions.
         </p>
       )}
 
@@ -1485,21 +1487,21 @@ function RecurringPatternsPanel() {
           {patterns.map((p) => (
             <div
               key={p.id}
-              className="flex items-center justify-between bg-white border border-cactus-overlay rounded-xl hover:bg-cactus-sage-light/30 p-4"
+              className="flex items-center justify-between gap-4 bg-brand-cream/40 border border-brand-border rounded-2xl hover:bg-brand-sage-soft/40 p-4 transition-colors"
             >
-              <div>
-                <p className="text-cactus-charcoal font-cactus font-semibold">{p.description}</p>
-                <div className="flex gap-3 mt-1 items-center">
-                  <span className="bg-cactus-sage text-white text-[10px] uppercase font-cactus font-bold tracking-wide px-2 py-0.5 rounded-full">
+              <div className="min-w-0">
+                <p className="text-brand-text font-semibold text-[14px] truncate">
+                  {p.description}
+                </p>
+                <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1.5 items-center">
+                  <span className="bg-brand-sage-soft text-brand-sage text-[10px] uppercase font-semibold tracking-[0.14em] px-2 py-0.5 rounded-full">
                     {p.frequencyLabel}
                   </span>
                   {p.categoryName && (
-                    <span className="text-xs text-cactus-charcoal/60 font-cactus">
-                      {p.categoryName}
-                    </span>
+                    <span className="text-[12px] text-brand-text-muted">{p.categoryName}</span>
                   )}
                   {p.nextExpectedDate && (
-                    <span className="text-xs text-cactus-charcoal/40 font-cactus">
+                    <span className="text-[12px] text-brand-text-faint">
                       Next:{' '}
                       {new Date(p.nextExpectedDate).toLocaleDateString('en-ZA', {
                         month: 'short',
@@ -1509,7 +1511,7 @@ function RecurringPatternsPanel() {
                   )}
                 </div>
               </div>
-              <span className="text-cactus-charcoal font-cactus font-bold tabular-nums">
+              <span className="font-display font-medium tabular-lining text-[17px] text-brand-text shrink-0">
                 {formatCurrency(p.averageAmount)}
               </span>
             </div>
