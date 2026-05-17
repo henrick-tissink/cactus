@@ -16,8 +16,8 @@ export const frameworkCards: FrameworkCard[] = [
     subtitle: 'The stuff that keeps life running',
     emoji: '🏠',
     percent: 50,
-    colorClass: 'text-cactus-sage',
-    bgClass: 'bg-cactus-needs-bg',
+    colorClass: 'text-brand-sage',
+    bgClass: 'bg-brand-sage-soft/50',
     examples: 'Rent, groceries, transport, utilities, insurance, minimum debt payments',
   },
   {
@@ -25,8 +25,8 @@ export const frameworkCards: FrameworkCard[] = [
     subtitle: 'The stuff that makes life fun',
     emoji: '🛍️',
     percent: 30,
-    colorClass: 'text-cactus-desert',
-    bgClass: 'bg-cactus-wants-bg',
+    colorClass: 'text-brand-terracotta',
+    bgClass: 'bg-brand-terracotta-soft/60',
     examples: 'Dining out, entertainment, subscriptions, shopping, hobbies',
   },
   {
@@ -34,8 +34,8 @@ export const frameworkCards: FrameworkCard[] = [
     subtitle: 'The stuff that builds your future',
     emoji: '🎯',
     percent: 20,
-    colorClass: 'text-cactus-prickly',
-    bgClass: 'bg-cactus-goals-bg',
+    colorClass: 'text-brand-accent-ink',
+    bgClass: 'bg-brand-accent-ink/10',
     examples: 'Emergency fund, extra debt payoff, savings targets, investments',
   },
 ];
