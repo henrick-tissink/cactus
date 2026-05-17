@@ -21,40 +21,58 @@ export function VerifyEmailPage() {
   }, [token]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cactus-sandstone font-cactus px-6">
+    <div className="min-h-screen flex items-center justify-center bg-brand-cream font-sans-brand px-6">
       <div className="w-full max-w-md animate-fade-in">
-        <div className="bg-white rounded-2xl border border-cactus-overlay p-8 text-center">
-          <div className="flex justify-center mb-6">
+        <div className="bg-brand-surface rounded-3xl border border-brand-border p-8 text-center shadow-[0_32px_72px_-32px_rgba(31,111,74,0.20)]">
+          <div className="flex justify-center mb-7">
             <CactusLogo />
           </div>
 
+          <p className="font-sans-brand text-[11px] uppercase tracking-[0.18em] font-semibold text-brand-text-muted mb-2">
+            Email verification
+          </p>
+
           {status === 'loading' && (
-            <p className="font-cactus text-cactus-charcoal/60">Verifying your email...</p>
+            <>
+              <h1 className="font-display font-medium text-[1.5rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-3">
+                Verifying…
+              </h1>
+              <p className="text-[14px] text-brand-text-muted">Hold tight for a moment.</p>
+            </>
           )}
 
           {status === 'success' && (
             <>
-              <div className="bg-cactus-sage-light border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-6 flex items-center gap-2 justify-center">
-                <Check className="w-4 h-4 text-cactus-sage shrink-0" />
-                <span>Your email has been verified successfully!</span>
+              <h1 className="font-display font-medium text-[1.5rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-3">
+                You're verified.
+              </h1>
+              <div className="bg-brand-sage-soft border-l-[3px] border-brand-sage rounded-r-xl pl-4 pr-3 py-3 text-[14px] text-brand-text flex items-center gap-2 mb-6 text-left">
+                <Check className="w-4 h-4 shrink-0 text-brand-sage" />
+                <span>Your email has been verified successfully.</span>
               </div>
-              <Link to="/" className="font-cactus font-semibold text-cactus-sage hover:underline">
-                Go to Dashboard
+              <Link
+                to="/"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-semibold text-[13px] text-white bg-brand-sage shadow-[0_8px_24px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_12px_32px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface transition-all"
+              >
+                Go to dashboard
               </Link>
             </>
           )}
 
           {status === 'error' && (
             <>
-              <div className="bg-cactus-goals-bg border border-cactus-overlay text-cactus-charcoal rounded-xl p-3 font-cactus text-sm mb-6 flex items-center gap-2 justify-center">
-                <AlertCircle className="w-4 h-4 text-cactus-prickly shrink-0" />
+              <h1 className="font-display font-medium text-[1.5rem] leading-[1.1] tracking-[-0.018em] text-brand-text mb-3">
+                That link didn't work.
+              </h1>
+              <div className="bg-brand-terracotta-soft border-l-[3px] border-brand-terracotta rounded-r-xl pl-4 pr-3 py-3 text-[14px] text-brand-accent-ink flex items-center gap-2 mb-6 text-left">
+                <AlertCircle className="w-4 h-4 shrink-0 text-brand-terracotta" />
                 <span>Invalid or expired verification link.</span>
               </div>
               <Link
                 to="/settings"
-                className="font-cactus font-semibold text-cactus-sage hover:underline"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-semibold text-[13px] text-white bg-brand-sage shadow-[0_8px_24px_-6px_rgba(31,111,74,0.45)] hover:shadow-[0_12px_32px_-6px_rgba(31,111,74,0.55)] hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-sage focus-visible:ring-offset-2 focus-visible:ring-offset-brand-surface transition-all"
               >
-                Go to Settings to resend
+                Resend from settings
               </Link>
             </>
           )}
