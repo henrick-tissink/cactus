@@ -41,6 +41,22 @@ interface DashboardSummaryResponse {
   buckets: BucketStatusDto[];
   unclassifiedCount: number;
   recentTransactions: RecentTransactionDto[];
+  lastSyncAt: string | null;
+}
+
+function formatLastSync(iso: string): string {
+  const then = new Date(iso).getTime();
+  const now = Date.now();
+  const diffMs = Math.max(now - then, 0);
+  const day = 24 * 60 * 60 * 1000;
+  const days = Math.floor(diffMs / day);
+  if (days < 1) return 'today';
+  if (days < 2) return 'yesterday';
+  if (days < 7) return `${days} days ago`;
+  if (days < 14) return 'last week';
+  if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
+  if (days < 60) return 'last month';
+  return `${Math.floor(days / 30)} months ago`;
 }
 
 const BUCKET_FILL_CLASS: Record<MacroCategoryType, string> = {
@@ -283,6 +299,17 @@ export function DashboardPage() {
           <h1 className="font-display font-medium text-[2.75rem] leading-[1.05] tracking-[-0.018em] text-brand-text capitalize">
             {getMonthTitle()}
           </h1>
+          {summary.lastSyncAt && (
+            <p className="mt-3 font-sans-brand text-[12px] text-brand-text-faint">
+              Last sync {formatLastSync(summary.lastSyncAt)} ·{' '}
+              <Link
+                to="/import"
+                className="text-brand-sage hover:text-brand-accent-ink underline-offset-4 hover:underline focus-visible:outline-none focus-visible:underline transition-colors"
+              >
+                Import
+              </Link>
+            </p>
+          )}
         </header>
 
         {/* Unclassified banner — left-accent terracotta strip */}

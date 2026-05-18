@@ -12,7 +12,8 @@ public record DashboardSummaryResult(
     decimal TotalSpent,
     List<BucketStatusDto> Buckets,
     int UnclassifiedCount,
-    List<RecentTransactionDto> RecentTransactions
+    List<RecentTransactionDto> RecentTransactions,
+    DateTime? LastSyncAt
 );
 
 public record BucketStatusDto(
@@ -110,6 +111,14 @@ public class GetDashboardSummaryQueryHandler : IRequestHandler<GetDashboardSumma
             .Where(t => userAccounts.Contains(t.AccountId) && !t.IsClassified)
             .CountAsync(cancellationToken);
 
+        var lastSyncAt = userAccounts.Count == 0
+            ? (DateTime?)null
+            : await _context.Transactions
+                .Where(t => userAccounts.Contains(t.AccountId))
+                .OrderByDescending(t => t.CreatedAt)
+                .Select(t => (DateTime?)t.CreatedAt)
+                .FirstOrDefaultAsync(cancellationToken);
+
         var recentTransactions = await _context.Transactions
             .Where(t => userAccounts.Contains(t.AccountId))
             .OrderByDescending(t => t.TransactionDate)
@@ -172,7 +181,8 @@ public class GetDashboardSummaryQueryHandler : IRequestHandler<GetDashboardSumma
             totalSpent,
             buckets,
             unclassifiedCount,
-            recentTransactions
+            recentTransactions,
+            lastSyncAt
         );
     }
 }

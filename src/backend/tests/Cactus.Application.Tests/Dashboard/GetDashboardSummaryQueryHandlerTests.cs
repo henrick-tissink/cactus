@@ -33,5 +33,6 @@ public class GetDashboardSummaryQueryHandlerTests : HandlerTestBase
         result.UnclassifiedCount.Should().Be(0);
         result.RecentTransactions.Should().BeEmpty();
         result.Buckets.Should().BeEmpty(); // no macro categories seeded
+        result.LastSyncAt.Should().BeNull();
     }
 }
